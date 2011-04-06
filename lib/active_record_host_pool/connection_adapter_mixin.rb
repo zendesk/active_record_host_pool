@@ -4,24 +4,44 @@ module ActiveRecordHostPool
       base.class_eval do
         attr_accessor(:_host_pool_current_database)
         alias_method_chain :execute, :switching
+        alias_method_chain :drop_database, :no_switching
+        alias_method_chain :create_database, :no_switching
       end
     end
 
-
     def execute_with_switching(*args)
-      if _host_pool_current_database
+      if _host_pool_current_database && ! @_no_switch
         _switch_connection
       end
       execute_without_switching(*args)
     end
 
+    def drop_database_with_no_switching(*args)
+      begin
+        @_no_switch = true
+        drop_database_without_no_switching(*args)
+      ensure
+        @_no_switch = false
+      end
+    end
+
+    def create_database_with_no_switching(*args)
+      begin
+        @_no_switch = true
+        create_database_without_no_switching(*args)
+      ensure
+        @_no_switch = false
+      end
+    end
+
     private
 
     def _switch_connection
-      if raw_connection.respond_to?(:select_db)
-        raw_connection.select_db(_host_pool_current_database)
-      else
-        execute_without_switching("use #{self._host_pool_current_database}")
+      if _host_pool_current_database && (_host_pool_current_database != @_cached_current_database)
+        log("select_db #{_host_pool_current_database}", "SQL") do
+          raw_connection.select_db(_host_pool_current_database)
+        end
+        @_cached_current_database = _host_pool_current_database
       end
     end
   end
