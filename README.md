@@ -23,5 +23,5 @@ and make sure to require 'active\_record\_host\_pooling' in some way.
 Copyright (c) 2011 Zendesk. See LICENSE for details.
 
 ## Authors
-Ben Osheroff <ben@gimbo.net>
+Ben Osheroff <ben@gimbo.net>,  
 Mick Staugaard <mick@staugaard.com>
