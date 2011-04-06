@@ -14,13 +14,13 @@ module ActiveRecordHostPool
       @cx
     end
 
-    # this enables mocha and friends as well as folks who monkey patch execute() to work.
-    ActiveRecord::ConnectionAdapters::AbstractAdapter.instance_methods.each do |method|
-      class_eval <<-EOL
-        def #{method}(*args, &block)
-          method_missing(:#{method}, *args, &block)
-        end
-      EOL
+    def unproxied
+      @cx
+    end
+
+    # this helps along folks who want to muck around with our delegatee's methods
+    def class
+      @cx.class
     end
   end
 end
