@@ -37,6 +37,39 @@ class ActiveRecordHostPoolTest < ActiveSupport::TestCase
     assert !Test1.find_by_val('bar')
   end
 
+  def test_underlying_assumption_about_test_db
+    debug_me = false
+    # ensure connection
+    Test1.first
+
+    # which is the "default" DB to connect to?
+    first_db = Test1.connection.unproxied.instance_variable_get("@connection_options")[3]
+    puts "\nOk, we started on #{first_db}" if debug_me
+
+    switch_to_klass = case first_db
+      when "arhp_test_2"
+        Test1
+      when "arhp_test_1"
+        Test2
+    end
+    expected_database = switch_to_klass.connection.instance_variable_get("@database")
+
+    # switch to the other database
+    switch_to_klass.first
+    puts "\nAnd now we're on #{current_database(switch_to_klass)}" if debug_me
+
+    # get the current thread id so we can shoot ourselves in the head
+    thread_id = switch_to_klass.connection.select_value("select @@pseudo_thread_id")
+
+    # now, disable our auto-switching and trigger a mysql reconnect
+    switch_to_klass.connection.unproxied.stubs(:_switch_connection).returns(true)
+    switch_to_klass.connection.execute("KILL #{thread_id}")
+
+    # and finally, did mysql reconnect correctly?
+    puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
+    assert_equal expected_database, current_database(switch_to_klass)
+  end
+
   def teardown
     arhp_drop_databases
   end
