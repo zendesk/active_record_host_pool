@@ -5,6 +5,7 @@ require 'delegate'
 module ActiveRecordHostPool
   class ConnectionProxy < Delegator
     def initialize(cx, database)
+      super(cx)
       @cx = cx
       @database = database
     end
