@@ -18,6 +18,10 @@ module ActiveRecordHostPool
     def unproxied
       @cx
     end
+
+    def class
+      @cx.class
+    end
   end
 end
 
