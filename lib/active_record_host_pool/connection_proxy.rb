@@ -18,11 +18,6 @@ module ActiveRecordHostPool
     def unproxied
       @cx
     end
-
-    # this helps along folks who want to muck around with our delegatee's methods
-    def class
-      @cx.class
-    end
   end
 end
 

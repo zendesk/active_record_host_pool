@@ -11,6 +11,7 @@ require 'delegate'
 module ActiveRecordHostPool
   class PoolProxy < Delegator
     def initialize(spec)
+      super(spec)
       @spec = spec
       @config = spec.config.with_indifferent_access
     end
