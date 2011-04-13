@@ -18,8 +18,9 @@ module ActiveRecordHostPool
       @cx
     end
 
-    def self.class_eval(*args, &block)
-      @cx.class.class_eval(*args, &block)
+    # this helps along folks who want to muck around with our delegatee's methods
+    def class
+      @cx.class
     end
   end
 end
