@@ -22,12 +22,36 @@ module ActiveRecordHostPool
 
     def connection(*args)
       cx = _connection_pool.connection(*args)
-      if !cx.respond_to?(:_host_pool_current_database)
-        cx.class.class_eval { include ActiveRecordHostPool::DatabaseSwitch }
-      end
-      # we could in theory keep a cache here to prevent so much object creation.
-      # should do a speed test to see if this matters.
-      ActiveRecordHostPool::ConnectionProxy.new(cx, @config[:database])
+      _connection_proxy_for(cx, @config[:database])
+    end
+
+    # by the time we are patched into ActiveRecord, the current thread has already established
+    # a connection.  thus we need to patch both connection and checkout/checkin
+    def checkout(*args, &block)
+      cx = _connection_pool.checkout(*args, &block)
+      _connection_proxy_for(cx, @config[:database])
+    end
+
+    def checkin(cx)
+      cx = cx.unproxied
+      _connection_pool.checkin(cx)
+    end
+
+    def with_connection
+      cx = checkout
+        yield cx
+      ensure
+        checkin cx
+    end
+
+    def disconnect!
+      _clear_connection_proxy_cache
+      _connection_pool.disconnect!
+    end
+
+    def clear_reloadable_connections!
+      _connection_proxy_cache.clear
+      _connection_pool.clear_reloadable_connections!
     end
 
   private
@@ -45,6 +69,24 @@ module ActiveRecordHostPool
         pool = _connection_pools[_pool_key] = ActiveRecord::ConnectionAdapters::ConnectionPool.new(@spec)
       end
       pool
+    end
+
+    def _connection_proxy_for(connection, database)
+      @connection_proxy_cache ||= {}
+      if !connection.respond_to?(:_host_pool_current_database)
+        connection.class.class_eval { include ActiveRecordHostPool::DatabaseSwitch }
+      end
+      key = [connection, database]
+
+      proxy = @connection_proxy_cache[key]
+      if !proxy
+        proxy = @connection_proxy_cache[key] = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
+      end
+      proxy
+    end
+
+    def _clear_connection_proxy_cache
+      @connection_proxy_cache = {}
     end
   end
 end

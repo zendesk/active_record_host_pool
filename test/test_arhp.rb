@@ -23,6 +23,10 @@ class ActiveRecordHostPoolTest < ActiveSupport::TestCase
     action_should_use_correct_database(:insert, "insert into tests values(NULL, 'foo')")
   end
 
+  def test_connection_returns_a_proxy
+    assert Test1.connection.is_a?(ActiveRecordHostPool::ConnectionProxy)
+  end
+
   def test_object_creation
     Test1.create(:val => 'foo')
     assert_equal("arhp_test_1", current_database(Test1))
@@ -36,6 +40,23 @@ class ActiveRecordHostPoolTest < ActiveSupport::TestCase
     assert Test2.find_by_val('bar')
     assert !Test1.find_by_val('bar')
   end
+
+  def test_disconnect
+    Test1.create(:val => 'foo')
+    unproxied = Test1.connection.unproxied
+    Test1.connection_handler.clear_all_connections!
+    Test1.create(:val => 'foo')
+    assert(unproxied != Test1.connection.unproxied)
+  end
+
+  def test_checkout
+    connection = ActiveRecord::Base.connection_pool.checkout
+    assert(connection.is_a?(ActiveRecordHostPool::ConnectionProxy))
+    ActiveRecord::Base.connection_pool.checkin(connection)
+    c2 = ActiveRecord::Base.connection_pool.checkout
+    assert(c2 == connection)
+  end
+
 
   def test_underlying_assumption_about_test_db
     debug_me = false
