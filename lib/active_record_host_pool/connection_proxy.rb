@@ -19,8 +19,18 @@ module ActiveRecordHostPool
       @cx
     end
 
+    # this is bad.  I know.  but it allows folks who class_eval on connection.class to do so
     def class
       @cx.class
+    end
+
+    def expects(*args)
+      @cx.send(:expects, *args)
+    end
+
+    private
+    def select(*args)
+      @cx.__send__(:select, *args)
     end
   end
 end
