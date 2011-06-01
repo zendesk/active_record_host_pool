@@ -50,7 +50,7 @@ module ActiveRecordHostPool
     end
 
     def clear_reloadable_connections!
-      _connection_proxy_cache.clear
+      _clear_connection_proxy_cache
       _connection_pool.clear_reloadable_connections!
     end
 
