@@ -10,9 +10,9 @@ never support the concept of one server connection sharing multiple dbs.
 
 ## Installation
 
-    $ gem install active_record_host_pooling
+    $ gem install active_record_host_pool
 
-and make sure to require 'active\_record\_host\_pooling' in some way.
+and make sure to require 'active\_record\_host\_pool' in some way.
 
 
 ## Copyright
