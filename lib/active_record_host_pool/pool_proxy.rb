@@ -20,6 +20,12 @@ module ActiveRecordHostPool
       _connection_pool
     end
 
+    def __setobj__(spec)
+      @spec = spec
+      @config = spec.config.with_indifferent_access
+    end
+
+
     def connection(*args)
       cx = _connection_pool.connection(*args)
       _connection_proxy_for(cx, @config[:database])

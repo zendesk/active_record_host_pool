@@ -15,6 +15,10 @@ module ActiveRecordHostPool
       @cx
     end
 
+    def __setobj__(cx)
+      @cx = cx
+    end
+
     def unproxied
       @cx
     end
