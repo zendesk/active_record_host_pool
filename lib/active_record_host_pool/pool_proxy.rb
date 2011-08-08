@@ -51,13 +51,13 @@ module ActiveRecordHostPool
     end
 
     def disconnect!
-      _clear_connection_proxy_cache
       _connection_pool.disconnect!
+      _clear_connection_proxy_cache
     end
 
     def clear_reloadable_connections!
-      _clear_connection_proxy_cache
       _connection_pool.clear_reloadable_connections!
+      _clear_connection_proxy_cache
     end
 
   private

@@ -6,6 +6,7 @@ module ActiveRecordHostPool
         alias_method_chain :execute, :switching
         alias_method_chain :drop_database, :no_switching
         alias_method_chain :create_database, :no_switching
+        alias_method_chain :disconnect!, :host_pooling
       end
     end
 
@@ -34,9 +35,15 @@ module ActiveRecordHostPool
       end
     end
 
+    def disconnect_with_host_pooling!
+      @_cached_current_database = nil
+      disconnect_without_host_pooling!
+    end
+
     private
 
     def _switch_connection
+      log("evaluating switchability: #{_host_pool_current_database} vs. #{@_cached_current_database} (I am #{$$})", "INFO")
       if _host_pool_current_database && (_host_pool_current_database != @_cached_current_database)
         log("select_db #{_host_pool_current_database}", "SQL") do
           raw_connection.select_db(_host_pool_current_database)
