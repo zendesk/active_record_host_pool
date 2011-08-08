@@ -43,7 +43,6 @@ module ActiveRecordHostPool
     private
 
     def _switch_connection
-      log("evaluating switchability: #{_host_pool_current_database} vs. #{@_cached_current_database} (I am #{$$})", "INFO")
       if _host_pool_current_database && (_host_pool_current_database != @_cached_current_database)
         log("select_db #{_host_pool_current_database}", "SQL") do
           raw_connection.select_db(_host_pool_current_database)
