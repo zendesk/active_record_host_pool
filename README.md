@@ -5,8 +5,9 @@ It accomplishes this by calling select_db() as necessary to switch databases bet
 
 ## Support
 
-For now, the only backend known to work is mysql.  Postgres, from an informal reading of the docs, will 
-never support the concept of one server connection sharing multiple dbs.
+For now, the only backend known to work is mysql (and not with the mysql2 library, yet).  
+Postgres, from an informal reading of the docs, will never support the concept of one 
+server connection sharing multiple dbs.
 
 ## Installation
 
