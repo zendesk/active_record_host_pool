@@ -23,11 +23,12 @@ Gem::Specification.new do |s|
   s.summary = %q{When connecting to databases on one host, use just one connection}
   s.test_files = ["test/database.yml", "test/helper.rb", "test/schema.rb", "test/test_arhp.rb"]
 
-  s.add_runtime_dependency(%q<activerecord>, [">= 0"])
-  s.add_development_dependency(%q<rake>, [">= 0"])
-  s.add_development_dependency(%q<bundler>, [">= 0"])
-  s.add_development_dependency(%q<shoulda>, [">= 0"])
-  s.add_development_dependency(%q<mocha>, [">= 0"])
-  s.add_development_dependency(%q<ruby-debug>, [">= 0"])
+  s.add_runtime_dependency("activerecord")
+  s.add_development_dependency("rake", [">= 0"])
+  s.add_development_dependency("mysql", [">= 0"])
+  s.add_development_dependency("bundler", [">= 0"])
+  s.add_development_dependency("shoulda", [">= 0"])
+  s.add_development_dependency("mocha", [">= 0"])
+  s.add_development_dependency("ruby-debug", [">= 0"])
 end
 
