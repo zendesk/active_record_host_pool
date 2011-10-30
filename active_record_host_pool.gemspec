@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{active_record_host_pool}
-  s.version = "0.4.0"
+  s.version = "0.5.0"
 
   s.authors = ["Ben Osheroff"]
   s.date = %q{2011-10-28}
