@@ -35,10 +35,10 @@ class ActiveRecordHostPoolTest < ActiveSupport::TestCase
     assert_equal("arhp_test_1", current_database(Test1))
     assert_equal("arhp_test_3", current_database(Test3))
 
-    Test2.create(:val => 'bar')
+    Test2.create!(:val => 'bar_distinct')
     assert_equal("arhp_test_2", current_database(Test2))
-    assert Test2.find_by_val('bar')
-    assert !Test1.find_by_val('bar')
+    assert Test2.find_by_val('bar_distinct')
+    assert !Test1.find_by_val('bar_distinct')
   end
 
   def test_disconnect
