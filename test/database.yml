@@ -4,7 +4,6 @@ test_host_1_db_1:
   database: arhp_test_1
   username: root
   password:
-  socket: /var/mysql/mysql.sock
   host: localhost
   reconnect: true
 
@@ -14,7 +13,6 @@ test_host_1_db_2:
   database: arhp_test_2
   username: root
   password:
-  socket: /var/mysql/mysql.sock
   host: localhost
   reconnect: true
 
@@ -33,6 +31,16 @@ test_host_2_db_4:
   encoding: utf8
   database: arhp_test_4
   username: root
+  password:
+  host: 127.0.0.1
+  port: 3306
+  reconnect: true
+
+test_host_2_db_5:
+  adapter: mysql
+  encoding: utf8
+  database: arhp_test_4
+  username: snoopy
   password:
   host: 127.0.0.1
   port: 3306

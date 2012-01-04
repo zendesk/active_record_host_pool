@@ -67,7 +67,7 @@ module ActiveRecordHostPool
     end
 
     def _pool_key
-      [@config[:host], @config[:port], @config[:socket]]
+      [@config[:host], @config[:port], @config[:socket], @config[:username]]
     end
 
     def _connection_pool

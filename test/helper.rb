@@ -34,7 +34,7 @@ class ActiveSupport::TestCase
 
   def arhp_drop_databases
     ActiveRecord::Base.configurations.each do |name, conf|
-      ActiveRecord::Base.connection.execute("DROP DATABASE #{conf['database']}")
+      ActiveRecord::Base.connection.execute("DROP DATABASE if exists #{conf['database']}")
     end
   end
 
@@ -59,6 +59,11 @@ class ActiveSupport::TestCase
       class Test4 < ActiveRecord::Base
         set_table_name "tests"
         establish_connection("test_host_2_db_4")
+      end
+
+      class Test5 < ActiveRecord::Base
+        set_table_name "tests"
+        establish_connection("test_host_2_db_5")
       end
     EOL
   end
