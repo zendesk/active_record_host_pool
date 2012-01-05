@@ -4,7 +4,7 @@ module ActiveRecordHostPool
       base.class_eval do
         attr_accessor(:_host_pool_current_database)
         alias_method_chain :execute, :switching
-        alias_method_chain :exec_stmt, :switching if respond_to?(:exec_stmt)
+        alias_method_chain :exec_stmt, :switching if private_instance_methods.map(&:to_sym).include?(:exec_stmt)
         alias_method_chain :drop_database, :no_switching
         alias_method_chain :create_database, :no_switching
         alias_method_chain :disconnect!, :host_pooling
