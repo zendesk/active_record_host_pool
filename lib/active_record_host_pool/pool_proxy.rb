@@ -85,11 +85,7 @@ module ActiveRecordHostPool
       end
       key = [connection, database]
 
-      proxy = @connection_proxy_cache[key]
-      if !proxy
-        proxy = @connection_proxy_cache[key] = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-      end
-      proxy
+      @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(connection, database)
     end
 
     def _clear_connection_proxy_cache
