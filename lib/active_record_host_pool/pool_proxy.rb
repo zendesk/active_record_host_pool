@@ -1,4 +1,7 @@
 require 'delegate'
+require 'active_record'
+require 'active_record/connection_adapters/mysql_adapter'
+require 'active_record_host_pool/connection_adapter_mixin'
 
 # this module sits in between ConnectionHandler and a bunch of different ConnectionPools (one per host).
 # when a connection is requested, it goes like:
@@ -80,9 +83,6 @@ module ActiveRecordHostPool
 
     def _connection_proxy_for(connection, database)
       @connection_proxy_cache ||= {}
-      if !connection.respond_to?(:_host_pool_current_database)
-        connection.class.class_eval { include ActiveRecordHostPool::DatabaseSwitch }
-      end
       key = [connection, database]
 
       @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(connection, database)
@@ -93,3 +93,5 @@ module ActiveRecordHostPool
     end
   end
 end
+
+ActiveRecord::ConnectionAdapters::MysqlAdapter.class_eval { include ActiveRecordHostPool::DatabaseSwitch }
