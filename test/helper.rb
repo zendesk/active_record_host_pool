@@ -42,27 +42,27 @@ class ActiveSupport::TestCase
     return if Object.const_defined?("Test1")
     eval <<-EOL
       class Test1 < ActiveRecord::Base
-        set_table_name "tests"
+        self.table_name = "tests"
         establish_connection("test_host_1_db_1")
       end
 
       class Test2 < ActiveRecord::Base
-        set_table_name "tests"
+        self.table_name =  "tests"
         establish_connection("test_host_1_db_2")
       end
 
       class Test3 < ActiveRecord::Base
-        set_table_name "tests"
+        self.table_name = "tests"
         establish_connection("test_host_2_db_3")
       end
 
       class Test4 < ActiveRecord::Base
-        set_table_name "tests"
+        self.table_name = "tests"
         establish_connection("test_host_2_db_4")
       end
 
       class Test5 < ActiveRecord::Base
-        set_table_name "tests"
+        self.table_name = "tests"
         establish_connection("test_host_2_db_5")
       end
     EOL
