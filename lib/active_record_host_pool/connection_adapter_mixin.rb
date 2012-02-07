@@ -66,8 +66,15 @@ module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
       def establish_connection(name, spec)
-        @connection_pools[name] = ActiveRecordHostPool::PoolProxy.new(spec)
+        if @class_to_pool # AR 3.2
+          @connection_pools[spec] ||= ActiveRecordHostPool::PoolProxy.new(spec)
+          @class_to_pool[name] = @connection_pools[spec]
+        else # AR 3.1 and lower
+          @connection_pools[name] = ActiveRecordHostPool::PoolProxy.new(spec)
+        end
       end
     end
   end
 end
+
+ActiveRecord::ConnectionAdapters::MysqlAdapter.class_eval { include ActiveRecordHostPool::DatabaseSwitch }

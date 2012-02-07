@@ -94,4 +94,3 @@ module ActiveRecordHostPool
   end
 end
 
-ActiveRecord::ConnectionAdapters::MysqlAdapter.class_eval { include ActiveRecordHostPool::DatabaseSwitch }
