@@ -1,6 +1,5 @@
 require 'delegate'
 require 'active_record'
-require 'active_record/connection_adapters/mysql_adapter'
 require 'active_record_host_pool/connection_adapter_mixin'
 
 # this module sits in between ConnectionHandler and a bunch of different ConnectionPools (one per host).

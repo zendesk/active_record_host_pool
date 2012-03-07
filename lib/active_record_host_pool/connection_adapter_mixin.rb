@@ -1,3 +1,6 @@
+require 'active_record/connection_adapters/mysql_adapter'
+require 'active_record/connection_adapters/mysql2_adapter' rescue nil
+
 module ActiveRecordHostPool
   module DatabaseSwitch
     def self.included(base)
@@ -77,4 +80,7 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::ConnectionAdapters::MysqlAdapter.class_eval { include ActiveRecordHostPool::DatabaseSwitch }
+["MysqlAdapter", "Mysql2Adapter"].each do |k|
+  next unless ActiveRecord::ConnectionAdapters.const_defined?(k)
+  ActiveRecord::ConnectionAdapters.const_get(k).class_eval { include ActiveRecordHostPool::DatabaseSwitch }
+end
