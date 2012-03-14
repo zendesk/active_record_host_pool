@@ -1,7 +1,7 @@
 require 'rubygems'
+require 'appraisal'
 require 'bundler/setup'
 
-require 'appraisal'
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'

@@ -16,7 +16,17 @@ require 'logger'
 RAILS_ENV = "test"
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
-ActiveRecord::Base.configurations = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
+
+config =  YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
+
+if ENV["BUNDLE_GEMFILE"] =~ /mysql2/
+  config.each do |k, v|
+    v['adapter'] = 'mysql2'
+  end
+end
+
+ActiveRecord::Base.configurations = config
+
 
 require 'active_support/test_case'
 

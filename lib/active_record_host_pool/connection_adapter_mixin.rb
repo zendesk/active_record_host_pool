@@ -1,5 +1,8 @@
 require 'active_record/connection_adapters/mysql_adapter'
-require 'active_record/connection_adapters/mysql2_adapter' rescue nil
+begin
+  require 'active_record/connection_adapters/mysql2_adapter'
+rescue LoadError
+end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
