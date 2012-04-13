@@ -1,7 +1,8 @@
-require 'active_record/connection_adapters/mysql_adapter'
-begin
-  require 'active_record/connection_adapters/mysql2_adapter'
-rescue LoadError
+['mysql_adapter', 'mysql2_adapter'].each do |adapter|
+  begin
+    require "active_record/connection_adapters/#{adapter}"
+  rescue LoadError
+  end
 end
 
 module ActiveRecordHostPool
