@@ -28,6 +28,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency("mysql")
   s.add_development_dependency("shoulda")
   s.add_development_dependency("mocha")
-  s.add_development_dependency("ruby-debug") if RUBY_VERSION < "1.9.0"
+  if RUBY_VERSION < "1.9.0"
+    s.add_development_dependency("ruby-debug") 
+  else
+    s.add_development_dependency("debugger")
+  end
 end
 

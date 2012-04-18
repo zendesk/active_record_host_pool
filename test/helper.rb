@@ -34,6 +34,7 @@ class ActiveSupport::TestCase
   private
   def arhp_create_databases
     ActiveRecord::Base.configurations.each do |name, conf|
+      next if name =~ /not_there/
       `echo "drop DATABASE IF EXISTS #{conf['database']}" | mysql --user=#{conf['username']}`
       `echo "create DATABASE #{conf['database']}" | mysql --user=#{conf['username']}`
       ActiveRecord::Base.establish_connection(name)

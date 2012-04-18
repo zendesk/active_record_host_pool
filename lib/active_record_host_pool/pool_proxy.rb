@@ -29,7 +29,13 @@ module ActiveRecordHostPool
 
 
     def connection(*args)
-      cx = _connection_pool.connection(*args)
+      cx = nil
+      begin
+        cx = _connection_pool.connection(*args)
+      rescue Mysql::Error => e
+        _connection_pools[_pool_key] = nil
+        raise(e)
+      end
       _connection_proxy_for(cx, @config[:database])
     end
 
