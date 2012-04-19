@@ -27,16 +27,20 @@ module ActiveRecordHostPool
       @config = spec.config.with_indifferent_access
     end
 
+    def spec
+      @spec
+    end
 
     def connection(*args)
-      cx = nil
       begin
-        cx = _connection_pool.connection(*args)
-      rescue Mysql::Error => e
-        _connection_pools[_pool_key] = nil
+        real_connection = _connection_pool.connection(*args)
+        _connection_proxy_for(real_connection, @config[:database])
+      rescue Exception => e
+        if rescuable_errors.any? { |r| e.is_a?(r) }
+          _connection_pools.delete(_pool_key)
+        end
         raise(e)
       end
-      _connection_proxy_for(cx, @config[:database])
     end
 
     # by the time we are patched into ActiveRecord, the current thread has already established
@@ -59,6 +63,8 @@ module ActiveRecordHostPool
     end
 
     def disconnect!
+      p = _connection_pool(false)
+      return unless p
       _connection_pool.disconnect!
       _connection_pool.automatic_reconnect = true if _connection_pool.respond_to?(:automatic_reconnect=)
       _clear_connection_proxy_cache
@@ -70,17 +76,30 @@ module ActiveRecordHostPool
     end
 
   private
+    def rescuable_errors
+      @rescuable_errors ||= begin
+        e = []
+        if Object.const_defined?("Mysql")
+          e << Mysql::Error
+        end
+        if Object.const_defined?("Mysql2")
+          e << Mysql2::Error
+        end
+        e
+      end
+    end
+
     def _connection_pools
-      @@connection_pools ||= {}
+      @@_connection_pools ||= {}
     end
 
     def _pool_key
-      [@config[:host], @config[:port], @config[:socket], @config[:username]]
+      [@config[:host], @config[:port], @config[:socket], @config[:username]].map(&:to_s).join("/")
     end
 
-    def _connection_pool
+    def _connection_pool(auto_create=true)
       pool = _connection_pools[_pool_key]
-      if pool.nil?
+      if pool.nil? && auto_create
         pool = _connection_pools[_pool_key] = ActiveRecord::ConnectionAdapters::ConnectionPool.new(@spec)
       end
       pool
@@ -90,7 +109,11 @@ module ActiveRecordHostPool
       @connection_proxy_cache ||= {}
       key = [connection, database]
 
-      @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(connection, database)
+      @connection_proxy_cache[key] ||= begin
+        cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
+        cx.execute('select 1')
+        cx
+      end
     end
 
     def _clear_connection_proxy_cache
