@@ -25,6 +25,7 @@ module ActiveRecordHostPool
     def __setobj__(spec)
       @spec = spec
       @config = spec.config.with_indifferent_access
+      @_pool_key = nil
     end
 
     def spec
@@ -94,7 +95,7 @@ module ActiveRecordHostPool
     end
 
     def _pool_key
-      [@config[:host], @config[:port], @config[:socket], @config[:username]].map(&:to_s).join("/")
+      @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/#{@config[:username]}"
     end
 
     def _connection_pool(auto_create=true)
