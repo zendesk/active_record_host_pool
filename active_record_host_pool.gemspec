@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.version = "0.6.3"
 
   s.authors = ["Ben Osheroff"]
-  s.date = %q{2011-10-28}
+  s.date = %q{2012-06-11}
   s.summary = "Allow ActiveRecord to share a connection to multiple databases on the same host"
   s.description = ""
   s.email = ["ben@gimbo.net"]
