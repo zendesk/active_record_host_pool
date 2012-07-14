@@ -33,19 +33,26 @@ require 'active_support/test_case'
 class ActiveSupport::TestCase
   private
   def arhp_create_databases
-    ActiveRecord::Base.configurations.each do |name, conf|
+    ActiveRecord::Base.configurations.each do |name, config|
       next if name =~ /not_there/
-      `echo "drop DATABASE IF EXISTS #{conf['database']}" | mysql --user=#{conf['username']}`
-      `echo "create DATABASE #{conf['database']}" | mysql --user=#{conf['username']}`
+      ActiveRecord::Base.establish_connection(config.merge('database' => nil))
+
+      # clear out everything
+      ActiveRecord::Base.connection.drop_database config['database']
+      ActiveRecord::Base.connection.create_database config['database']
+
+      # connect and check
       ActiveRecord::Base.establish_connection(name)
+      ActiveRecord::Base.connection.execute('select 1')
+
       ActiveRecord::Migration.verbose = false
       load(File.dirname(__FILE__) + "/schema.rb")
     end
   end
 
   def arhp_drop_databases
-    ActiveRecord::Base.configurations.each do |name, conf|
-      ActiveRecord::Base.connection.execute("DROP DATABASE if exists #{conf['database']}")
+    ActiveRecord::Base.configurations.each do |name, config|
+      ActiveRecord::Base.connection.drop_database config['database']
     end
   end
 
