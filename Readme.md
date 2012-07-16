@@ -25,7 +25,7 @@ You need a local user called snoopy.
 
 ## Copyright
 
-Copyright (c) 2011 Zendesk. See LICENSE for details.
+Copyright (c) 2011 Zendesk. See MIT-LICENSE for details.
 
 ## Authors
 Ben Osheroff <ben@gimbo.net>,  
