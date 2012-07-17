@@ -3,8 +3,8 @@ require 'appraisal'
 require 'bundler/setup'
 
 require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
+Rake::TestTask.new do |test|
+  test.libs << 'lib'
   test.pattern = 'test/test_arhp.rb'
   test.verbose = true
 end
