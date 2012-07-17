@@ -25,7 +25,8 @@ Gem::Specification.new "active_record_host_pool", "0.6.3" do |s|
   s.add_development_dependency("shoulda")
   s.add_development_dependency("mysql")
   s.add_development_dependency("mysql2")
-  s.add_development_dependency("mocha")
+  s.add_development_dependency("mocha", "~>0.11.0") # 0.12 removes dots from test output
+  s.add_development_dependency("test-unit", ">=2.5.1")
   s.add_development_dependency("appraisal")
   if RUBY_VERSION < "1.9.0"
     s.add_development_dependency("ruby-debug") 
