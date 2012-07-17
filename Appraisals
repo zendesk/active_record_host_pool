@@ -9,7 +9,12 @@ appraise "rails2.mysql2" do
   gem "mysql2", :git => "git://github.com/osheroff/mysql2.git", :ref => "a1ab7ba"
 end
 
+appraise "rails3.0.mysql2" do
+  gem "activerecord", "~> 3.0.15"
+  gem "mysql2", :git => "git://github.com/osheroff/mysql2.git", :ref => "a1ab7ba"
+end
+
 appraise "rails3.2.mysql2" do
-  gem "activerecord", "~> 3.2.0.rc2"
+  gem "activerecord", "~> 3.2.6"
   gem "mysql2", :git => "git://github.com/brianmario/mysql2.git", :ref => "d81ba9"
 end
