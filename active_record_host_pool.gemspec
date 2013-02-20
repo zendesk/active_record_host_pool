@@ -1,4 +1,4 @@
-Gem::Specification.new "active_record_host_pool", "0.6.3" do |s|
+Gem::Specification.new "active_record_host_pool", "0.6.4" do |s|
   s.authors = ["Ben Osheroff"]
   s.date = "2012-06-11"
   s.summary = "Allow ActiveRecord to share a connection to multiple databases on the same host"
@@ -28,10 +28,6 @@ Gem::Specification.new "active_record_host_pool", "0.6.3" do |s|
   s.add_development_dependency("mocha", "~>0.11.0") # 0.12 removes dots from test output
   s.add_development_dependency("test-unit", ">=2.5.1")
   s.add_development_dependency("appraisal")
-  if RUBY_VERSION < "1.9.0"
-    s.add_development_dependency("ruby-debug") 
-  else
-    s.add_development_dependency("debugger")
-  end
+  s.add_development_dependency("debugger")
 end
 
