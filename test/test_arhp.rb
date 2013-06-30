@@ -34,9 +34,9 @@ class ActiveRecordHostPoolTest < Test::Unit::TestCase
 
   def test_should_not_share_a_query_cache
     Test1.create(:val => 'foo')
-    Test3.create(:val => 'foobar')
-    ActiveRecord::Base.cache do
-      assert Test1.first.val != Test3.first.val
+    Test2.create(:val => 'foobar')
+    Test1.connection.cache do
+      assert Test1.first.val != Test2.first.val
     end
   end
 
