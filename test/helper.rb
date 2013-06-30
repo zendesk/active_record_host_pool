@@ -1,16 +1,9 @@
 require 'bundler/setup'
+require 'test/unit'
 
-Bundler.require(:default, :development)
-
-if defined?(Debugger)
-  ::Debugger.start
-  ::Debugger.settings[:autoeval] = true if ::Debugger.respond_to?(:settings)
-end
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'active_record_host_pool'
 require 'logger'
+require 'mocha/setup'
 
 RAILS_ENV = "test"
 
@@ -26,10 +19,7 @@ end
 
 ActiveRecord::Base.configurations = config
 
-
-require 'active_support/test_case'
-
-class ActiveSupport::TestCase
+module ARHPTestSetup
   private
   def arhp_create_databases
     ActiveRecord::Base.configurations.each do |name, conf|

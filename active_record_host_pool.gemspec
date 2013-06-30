@@ -20,18 +20,5 @@ Gem::Specification.new "active_record_host_pool", "0.6.4" do |s|
   s.license = "MIT"
 
   s.add_runtime_dependency("activerecord")
- 
-  # a word here.  there are very specific versions of mysql2 that we rely on, however....
-  #   it's either 0.2.19 or 0.3.12, which have the select_db feature.  and we can't
-  #   say that either are fine, afaik.
-  s.add_development_dependency("mysql2")
-
-  s.add_development_dependency("rake")
-  s.add_development_dependency("shoulda")
-  s.add_development_dependency("mysql")
-  s.add_development_dependency("mocha", "~>0.11.0") # 0.12 removes dots from test output
-  s.add_development_dependency("test-unit", ">=2.5.1")
-  s.add_development_dependency("appraisal")
-  s.add_development_dependency("debugger")
 end
 

@@ -1,6 +1,7 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
-class ActiveRecordHostPoolTest < ActiveSupport::TestCase
+class ActiveRecordHostPoolTest < Test::Unit::TestCase
+  include ARHPTestSetup
   def setup
     arhp_create_databases
     arhp_create_models
