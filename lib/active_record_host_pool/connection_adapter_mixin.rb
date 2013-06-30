@@ -69,8 +69,8 @@ module ActiveRecordHostPool
     end
 
     # prevent different databases from sharing the same query cache
-    def cache_sql(sql)
-      super(_host_pool_current_database.to_s + "/" + sql)
+    def cache_sql(sql, *args)
+      super(_host_pool_current_database.to_s + "/" + sql, *args)
     end
   end
 end
