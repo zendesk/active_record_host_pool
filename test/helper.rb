@@ -1,3 +1,5 @@
+require 'bundler/setup'
+
 Bundler.require(:default, :development)
 
 if defined?(Debugger)

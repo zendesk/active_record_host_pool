@@ -31,6 +31,14 @@ class ActiveRecordHostPoolTest < ActiveSupport::TestCase
     assert Test1.connection.is_a?(ActiveRecordHostPool::ConnectionProxy)
   end
 
+  def test_should_not_share_a_query_cache
+    Test1.create(:val => 'foo')
+    Test3.create(:val => 'foobar')
+    ActiveRecord::Base.cache do
+      assert Test1.first.val != Test3.first.val
+    end
+  end
+
   def test_object_creation
     Test1.create(:val => 'foo')
     assert_equal("arhp_test_1", current_database(Test1))
