@@ -1,4 +1,4 @@
-Gem::Specification.new "active_record_host_pool", "0.6.4" do |s|
+Gem::Specification.new "active_record_host_pool", "0.6.5" do |s|
   s.authors = ["Ben Osheroff"]
   s.date = "2012-06-11"
   s.summary = "Allow ActiveRecord to share a connection to multiple databases on the same host"
