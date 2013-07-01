@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'appraisal'
 require 'rake/testtask'
+require 'bump'
 
 Rake::TestTask.new do |test|
   test.libs << 'lib'
