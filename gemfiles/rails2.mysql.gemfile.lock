@@ -1,7 +1,7 @@
 PATH
   remote: /Users/ben/src/active_record_host_pool
   specs:
-    active_record_host_pool (0.6.4)
+    active_record_host_pool (0.6.5)
       activerecord
 
 GEM
@@ -13,18 +13,19 @@ GEM
     appraisal (0.5.2)
       bundler
       rake
+    bump (0.4.2)
     columnize (0.3.6)
-    debugger (1.6.0)
+    debugger (1.6.1)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.1)
+      debugger-ruby_core_source (~> 1.2.3)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.3)
     metaclass (0.0.1)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     mysql (2.9.1)
-    mysql2 (0.2.19b5)
+    mysql2 (0.2.19)
     rake (10.1.0)
     shoulda (3.0.1)
       shoulda-context (~> 1.0.0)
@@ -39,9 +40,10 @@ DEPENDENCIES
   active_record_host_pool!
   activerecord (= 2.3.14)
   appraisal
+  bump
   debugger
   mocha
   mysql
-  mysql2 (= 0.2.19b5)
+  mysql2 (= 0.2.19)
   rake
   shoulda
