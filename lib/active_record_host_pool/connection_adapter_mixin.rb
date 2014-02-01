@@ -79,10 +79,16 @@ module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
       def establish_connection(name, spec)
-        if @class_to_pool # AR 3.2
+        if ActiveRecord::VERSION::MAJOR >= 4
+          owner = name
+
+          @class_to_pool.clear
+          raise RuntimeError, "Anonymous class is not allowed." unless owner.name
+          owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
+        elsif ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 2
           @connection_pools[spec] ||= ActiveRecordHostPool::PoolProxy.new(spec)
           @class_to_pool[name] = @connection_pools[spec]
-        else # AR 3.1 and lower
+        else
           @connection_pools[name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
       end
