@@ -1,5 +1,5 @@
 test_host_1_db_1:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: arhp_test_1
   username: root
@@ -8,7 +8,7 @@ test_host_1_db_1:
   reconnect: true
 
 test_host_1_db_2:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: arhp_test_2
   username: root
@@ -17,7 +17,7 @@ test_host_1_db_2:
   reconnect: true
 
 test_host_2_db_3:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: arhp_test_3
   username: root
@@ -27,7 +27,7 @@ test_host_2_db_3:
   reconnect: true
 
 test_host_2_db_4:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: arhp_test_4
   username: root
@@ -37,7 +37,7 @@ test_host_2_db_4:
   reconnect: true
 
 test_host_2_db_5:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: arhp_test_4
   username: snoopy
@@ -47,7 +47,7 @@ test_host_2_db_5:
   reconnect: true
 
 test_host_1_db_not_there:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   database: arhp_test_no_create
   username: root
