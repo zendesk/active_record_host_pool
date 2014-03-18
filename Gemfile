@@ -3,7 +3,7 @@ gemspec
 
 gem 'rake'
 gem "shoulda"
-gem "mysql"
+gem "mysql2"
 gem "mocha"
 gem "appraisal"
 gem "debugger"

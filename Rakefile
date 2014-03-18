@@ -1,5 +1,4 @@
 require 'bundler/setup'
-require 'appraisal'
 require 'rake/testtask'
 require 'bump/tasks'
 
