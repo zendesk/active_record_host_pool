@@ -97,7 +97,7 @@ class ActiveRecordHostPoolTest < Test::Unit::TestCase
 
     # now, disable our auto-switching and trigger a mysql reconnect
     switch_to_klass.connection.unproxied.stubs(:_switch_connection).returns(true)
-    switch_to_klass.connection.execute("KILL #{thread_id}")
+    Test3.connection.execute("KILL #{thread_id}")
 
     # and finally, did mysql reconnect correctly?
     puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
