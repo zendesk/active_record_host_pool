@@ -1,5 +1,5 @@
 require 'bundler/setup'
-require 'test/unit'
+require 'minitest/autorun'
 
 require 'active_record_host_pool'
 require 'logger'
