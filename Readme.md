@@ -16,11 +16,11 @@ server connection sharing multiple dbs.
 and make sure to require 'active\_record\_host\_pool' in some way.
 
 ## Testing
-You need a local user called snoopy.
+You need a local user called 'travis'.
 
     mysql -uroot
-    CREATE USER 'snoopy'@'localhost';
-    GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX  ON *.* TO 'snoopy'@'localhost';
+    CREATE USER 'travis'@'localhost';
+    GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX  ON *.* TO 'travis'@'localhost';
     FLUSH PRIVILEGES;
 
 ## Copyright

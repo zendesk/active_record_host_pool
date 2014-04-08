@@ -40,7 +40,7 @@ test_host_2_db_5:
   adapter: mysql2
   encoding: utf8
   database: arhp_test_4
-  username: snoopy
+  username: travis
   password:
   host: 127.0.0.1
   port: 3306
