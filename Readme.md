@@ -5,9 +5,8 @@ It accomplishes this by calling select_db() as necessary to switch databases bet
 
 ## Support
 
-For now, the only backend known to work is mysql (and not with the mysql2 library, yet).  
-Postgres, from an informal reading of the docs, will never support the concept of one 
-server connection sharing multiple dbs.
+For now, the only backend known to work is MySQL, with the mysql2 gem.
+Postgres, from an informal reading of the docs, will never support the concept of one server connection sharing multiple dbs.
 
 ## Installation
 
@@ -28,5 +27,5 @@ You need a local user called 'travis'.
 Copyright (c) 2011 Zendesk. See MIT-LICENSE for details.
 
 ## Authors
-Ben Osheroff <ben@gimbo.net>,  
+Ben Osheroff <ben@gimbo.net>,
 Mick Staugaard <mick@staugaard.com>
