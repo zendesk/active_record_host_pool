@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zendesk/active_record_host_pool.svg?branch=master)](https://travis-ci.org/zendesk/active_record_host_pool)
+
 # ActiveRecord host pooling
 
 This gem allows for one ActiveRecord connection to be used to connect to multiple databases on a server.
