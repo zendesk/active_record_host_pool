@@ -5,7 +5,6 @@ gem 'rake'
 gem "shoulda"
 gem "mysql2"
 gem "mocha"
-gem "appraisal"
+gem "appraisal", "~> 1.0.0"
 gem "debugger"
-gem "activerecord", "~>3.2.0"
 gem "bump"
