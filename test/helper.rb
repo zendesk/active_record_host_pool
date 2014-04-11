@@ -26,7 +26,7 @@ module ARHPTestSetup
       next if name =~ /not_there/
       `echo "drop DATABASE IF EXISTS #{conf['database']}" | mysql --user=#{conf['username']}`
       `echo "create DATABASE #{conf['database']}" | mysql --user=#{conf['username']}`
-      ActiveRecord::Base.establish_connection(name)
+      ActiveRecord::Base.establish_connection(name.to_sym)
       ActiveRecord::Migration.verbose = false
       load(File.dirname(__FILE__) + "/schema.rb")
     end
@@ -43,27 +43,27 @@ module ARHPTestSetup
     eval <<-EOL
       class Test1 < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection("test_host_1_db_1")
+        establish_connection(:test_host_1_db_1)
       end
 
       class Test2 < ActiveRecord::Base
         self.table_name =  "tests"
-        establish_connection("test_host_1_db_2")
+        establish_connection(:test_host_1_db_2)
       end
 
       class Test3 < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection("test_host_2_db_3")
+        establish_connection(:test_host_2_db_3)
       end
 
       class Test4 < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection("test_host_2_db_4")
+        establish_connection(:test_host_2_db_4)
       end
 
       class Test5 < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection("test_host_2_db_5")
+        establish_connection(:test_host_2_db_5)
       end
     EOL
   end
