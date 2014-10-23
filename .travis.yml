@@ -5,4 +5,5 @@ rvm:
 gemfile:
   - gemfiles/ar_32.gemfile
   - gemfiles/ar_40.gemfile
+  - gemfiles/ar_41.gemfile
 script: "bundle exec rake test"
