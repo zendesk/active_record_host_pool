@@ -20,5 +20,6 @@ Gem::Specification.new "active_record_host_pool", "0.7.0" do |s|
   s.license = "MIT"
 
   s.add_runtime_dependency("activerecord")
-end
 
+  s.add_development_dependency("wwtd")
+end

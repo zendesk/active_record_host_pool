@@ -7,4 +7,5 @@ gemfile:
   - gemfiles/ar_40.gemfile
   - gemfiles/ar_41.gemfile
   - gemfiles/ar_42.gemfile
+bundler_args: --no-deployment
 script: "bundle exec rake test"

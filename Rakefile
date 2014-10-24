@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'rake/testtask'
 require 'bump/tasks'
+require 'wwtd/tasks'
 
 Rake::TestTask.new do |test|
   test.libs << 'lib'
@@ -8,4 +9,4 @@ Rake::TestTask.new do |test|
   test.verbose = true
 end
 
-task :default => :test
+task :default => 'wwtd:local'
