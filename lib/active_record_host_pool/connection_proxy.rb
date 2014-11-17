@@ -32,6 +32,11 @@ module ActiveRecordHostPool
       @cx.send(:expects, *args)
     end
 
+    # Override Delegator#respond_to_missing? to allow private methods to be accessed without warning
+    def respond_to_missing?(m, include_private)
+      __getobj__.respond_to?(m, include_private)
+    end
+
     private
     def select(*args)
       @cx.__send__(:select, *args)
