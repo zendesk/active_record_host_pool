@@ -32,7 +32,8 @@ class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
     assert Test1.connection.is_a?(ActiveRecordHostPool::ConnectionProxy)
   end
 
-  def test_connection_proxy_handles_private_responds_to_calls
+  def test_connection_proxy_handles_private_methods
+    # Relies on connection.class returning the real class
     Test1.connection.class.class_eval do
       private
       def test_private_method
@@ -41,6 +42,8 @@ class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
     end
     assert Test1.connection.respond_to?(:test_private_method, true)
     refute Test1.connection.respond_to?(:test_private_method)
+    assert_includes(Test1.connection.private_methods, :test_private_method)
+    assert(Test1.connection.send(:test_private_method) == true)
   end
 
   def test_should_not_share_a_query_cache
