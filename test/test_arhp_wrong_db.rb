@@ -16,7 +16,7 @@ class ActiveRecordHostPoolWrongDBTest < MiniTest::Unit::TestCase
     begin
       eval <<-EOC
         class TestNotThere < ActiveRecord::Base
-          establish_connection('test_host_1_db_not_there')
+          establish_connection(:test_host_1_db_not_there)
           connection
         end
       EOC
@@ -27,7 +27,7 @@ class ActiveRecordHostPoolWrongDBTest < MiniTest::Unit::TestCase
 
     assert reached_first_exception
 
-    Test1.establish_connection("test_host_1_db_1")
+    Test1.establish_connection(:test_host_1_db_1)
 
     begin
       Test1.connection
