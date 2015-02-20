@@ -118,31 +118,6 @@ class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
     assert_equal expected_database, current_database(switch_to_klass)
   end
 
-  # rake db:create uses a pattern where it tries to connect to a non-existant database.
-  # but then we had this left in the connection pool cache.
-  # It's also almost impossible to test at this level, so I'm stubbing out the test
-  def _test_connecting_to_wrong_db_first
-    pools = ActiveRecord::Base.connection_handler.connection_pools
-    if !pools.empty?
-      ActiveRecord::Base.connection_handler.connection_pools.values.first.send(:_connection_pools).clear
-      ActiveRecord::Base.connection_handler.connection_pools.clear
-    end
-
-    begin
-      eval <<-EOC
-        class TestNotThere < ActiveRecord::Base
-          establish_connection("test_host_1_db_not_there")
-        end
-      EOC
-    rescue Exception => e
-      assert e.message =~ /Unknown database/
-    end
-
-    Test1.establish_connection("test_host_1_db_1")
-    # assert it doesn't raise.
-    assert Test1.connection
-  end
-
   def teardown
     arhp_drop_databases
   end

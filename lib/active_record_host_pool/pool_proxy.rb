@@ -40,7 +40,7 @@ module ActiveRecordHostPool
         if rescuable_errors.any? { |r| e.is_a?(r) }
           _connection_pools.delete(_pool_key)
         end
-        raise(e)
+        Kernel.raise(e)
       end
     end
 
@@ -85,6 +85,9 @@ module ActiveRecordHostPool
         end
         if Object.const_defined?("Mysql2")
           e << Mysql2::Error
+        end
+        if ActiveRecord.const_defined?("NoDatabaseError")
+          e << ActiveRecord::NoDatabaseError
         end
         e
       end
