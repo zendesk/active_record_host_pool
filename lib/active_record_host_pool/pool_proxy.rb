@@ -12,6 +12,8 @@ require 'active_record_host_pool/connection_adapter_mixin'
 
 module ActiveRecordHostPool
   class PoolProxy < Delegator
+    include Kernel
+
     def initialize(spec)
       super(spec)
       @spec = spec

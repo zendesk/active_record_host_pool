@@ -5,7 +5,7 @@ require 'wwtd/tasks'
 
 Rake::TestTask.new do |test|
   test.libs << 'lib'
-  test.pattern = 'test/test_arhp.rb'
+  test.pattern = 'test/test_*.rb'
   test.verbose = true
 end
 
