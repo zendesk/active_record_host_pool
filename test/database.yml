@@ -54,4 +54,3 @@ test_host_1_db_not_there:
   password:
   host: 127.0.0.1
   reconnect: true
-
