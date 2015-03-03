@@ -3,7 +3,6 @@ require File.expand_path('helper', File.dirname(__FILE__))
 class ActiveRecordHostPoolWrongDBTest < MiniTest::Unit::TestCase
   include ARHPTestSetup
   def setup
-    arhp_create_models
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 
@@ -27,10 +26,10 @@ class ActiveRecordHostPoolWrongDBTest < MiniTest::Unit::TestCase
 
     assert reached_first_exception
 
-    Test1.establish_connection(:test_host_1_db_1)
+    TestNotThere.establish_connection(:test_host_1_db_1)
 
     begin
-      Test1.connection
+      TestNotThere.connection
     rescue Exception => e
       # If the pool is caching a bad connection, that connection will be used instead
       # of the intended connection.
