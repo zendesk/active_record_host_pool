@@ -15,7 +15,7 @@ module ActiveRecordHostPool
     def initialize(spec)
       super(spec)
       @spec = spec
-      @config = spec.config.with_indifferent_access
+      @config = spec.config
     end
 
     def __getobj__
@@ -24,7 +24,7 @@ module ActiveRecordHostPool
 
     def __setobj__(spec)
       @spec = spec
-      @config = spec.config.with_indifferent_access
+      @config = spec.config
       @_pool_key = nil
     end
 
