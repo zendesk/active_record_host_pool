@@ -1,6 +1,10 @@
-Gem::Specification.new "active_record_host_pool", File.read(File.dirname(__FILE__) + "/VERSION") do |s|
+# coding: utf-8
+require './lib/active_record_host_pool/version'
+
+Gem::Specification.new do |s|
+  s.name = "active_record_host_pool"
+  s.version = ActiveRecordHostPool::VERSION
   s.authors = ["Ben Osheroff"]
-  s.date = "2012-06-11"
   s.summary = "Allow ActiveRecord to share a connection to multiple databases on the same host"
   s.description = ""
   s.email = ["ben@gimbo.net"]
@@ -13,7 +17,8 @@ Gem::Specification.new "active_record_host_pool", File.read(File.dirname(__FILE_
     "lib/active_record_host_pool.rb",
     "lib/active_record_host_pool/connection_adapter_mixin.rb",
     "lib/active_record_host_pool/connection_proxy.rb",
-    "lib/active_record_host_pool/pool_proxy.rb"
+    "lib/active_record_host_pool/pool_proxy.rb",
+    "lib/active_record_host_pool/version.rb"
   ]
   s.homepage = "https://github.com/zendesk/active_record_host_pool"
   s.test_files = ["test/database.yml", "test/helper.rb", "test/schema.rb", "test/test_arhp.rb"]
