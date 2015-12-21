@@ -7,52 +7,47 @@ end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
-    def self.included(base)
+    def self.prepended(base)
       base.class_eval do
         attr_accessor(:_host_pool_current_database)
-        alias_method_chain :execute, :switching
-        alias_method_chain :exec_stmt, :switching if private_instance_methods.map(&:to_sym).include?(:exec_stmt)
-        alias_method_chain :drop_database, :no_switching
-        alias_method_chain :create_database, :no_switching
-        alias_method_chain :disconnect!, :host_pooling
       end
     end
 
-    def execute_with_switching(*args)
+    def execute(*args)
       if _host_pool_current_database && ! @_no_switch
         _switch_connection
       end
-      execute_without_switching(*args)
+      super
     end
 
-    def exec_stmt_with_switching(sql, name, binds, &block)
+    def exec_stmt(sql, name, binds, &block)
       if _host_pool_current_database && ! @_no_switch
         _switch_connection
       end
-      exec_stmt_without_switching(sql, name, binds, &block)
+      super
     end
 
-    def drop_database_with_no_switching(*args)
+    def drop_database(*args)
       begin
         @_no_switch = true
-        drop_database_without_no_switching(*args)
+        super
       ensure
         @_no_switch = false
       end
     end
 
-    def create_database_with_no_switching(*args)
+    def create_database(*args)
       begin
         @_no_switch = true
-        create_database_without_no_switching(*args)
+        super
       ensure
         @_no_switch = false
       end
     end
 
-    def disconnect_with_host_pooling!
+    def disconnect!
       @_cached_current_database = nil
-      disconnect_without_host_pooling!
+      super
     end
 
     private
@@ -98,5 +93,5 @@ end
 
 ["MysqlAdapter", "Mysql2Adapter"].each do |k|
   next unless ActiveRecord::ConnectionAdapters.const_defined?(k)
-  ActiveRecord::ConnectionAdapters.const_get(k).class_eval { include ActiveRecordHostPool::DatabaseSwitch }
+  ActiveRecord::ConnectionAdapters.const_get(k).class_eval { prepend ActiveRecordHostPool::DatabaseSwitch }
 end
