@@ -9,3 +9,6 @@ gemfile:
   - gemfiles/ar_42.gemfile
 bundler_args: --no-deployment
 script: "bundle exec rake test"
+before_install:
+  - gem update --system
+  - gem update bundler
