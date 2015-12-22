@@ -3,10 +3,10 @@ rvm:
   - 2.1.8
   - 2.2.4
 gemfile:
-  - gemfiles/ar_32.gemfile
-  - gemfiles/ar_40.gemfile
-  - gemfiles/ar_41.gemfile
-  - gemfiles/ar_42.gemfile
+  - gemfiles/rails3.2.gemfile
+  - gemfiles/rails4.0.gemfile
+  - gemfiles/rails4.1.gemfile
+  - gemfiles/rails4.2.gemfile
 bundler_args: --no-deployment
 script: "bundle exec rake test"
 before_install:
