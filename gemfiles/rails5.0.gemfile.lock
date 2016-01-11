@@ -7,29 +7,32 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.1.14)
-      activesupport (= 4.1.14)
+    activemodel (5.0.0.beta1)
+      activesupport (= 5.0.0.beta1)
       builder (~> 3.1)
-    activerecord (4.1.14)
-      activemodel (= 4.1.14)
-      activesupport (= 4.1.14)
-      arel (~> 5.0.0)
-    activesupport (4.1.14)
-      i18n (~> 0.6, >= 0.6.9)
+    activerecord (5.0.0.beta1)
+      activemodel (= 5.0.0.beta1)
+      activesupport (= 5.0.0.beta1)
+      arel (~> 7.0)
+    activesupport (5.0.0.beta1)
+      concurrent-ruby (~> 1.0)
+      i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
+      method_source
       minitest (~> 5.1)
-      thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    arel (5.0.1.20140414130214)
+    arel (7.0.0)
     builder (3.2.2)
     bump (0.5.3)
+    concurrent-ruby (1.0.0)
     i18n (0.7.0)
     json (1.8.3)
     metaclass (0.0.4)
+    method_source (0.8.2)
     minitest (5.8.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
-    mysql2 (0.3.20)
+    mysql2 (0.4.2)
     rake (10.4.2)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -47,10 +50,10 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_host_pool!
-  activerecord (~> 4.1.0)
+  activerecord (~> 5.0.0.beta1)
   bump
   mocha
-  mysql2 (~> 0.3.0)
+  mysql2
   rake
   shoulda
   wwtd
