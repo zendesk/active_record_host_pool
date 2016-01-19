@@ -8,6 +8,8 @@ require 'erb'
 
 RAILS_ENV = "test"
 
+Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
+
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
 
 config_content = IO.read(File.dirname(__FILE__) + '/database.yml')

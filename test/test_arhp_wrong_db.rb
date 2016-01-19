@@ -1,6 +1,6 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
-class ActiveRecordHostPoolWrongDBTest < MiniTest::Unit::TestCase
+class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
   def setup
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})

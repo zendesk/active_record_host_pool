@@ -1,6 +1,6 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
-class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
+class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
     arhp_drop_databases
@@ -96,7 +96,7 @@ class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
     Test1.first
 
     # which is the "default" DB to connect to?
-    first_db = Test1.connection.unproxied.instance_variable_get("@connection_options")[3]
+    first_db = Test1.connection.unproxied.instance_variable_get(:@_cached_current_database)
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
@@ -105,7 +105,7 @@ class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
       when "arhp_test_1"
         Test2
     end
-    expected_database = switch_to_klass.connection.instance_variable_get("@database")
+    expected_database = switch_to_klass.connection.instance_variable_get(:@database)
 
     # switch to the other database
     switch_to_klass.first

@@ -51,6 +51,7 @@ module ActiveRecordHostPool
         log("select_db #{_host_pool_current_database}", "SQL") do
           clear_cache! if respond_to?(:clear_cache!)
           raw_connection.select_db(_host_pool_current_database)
+          @config[:database] = _host_pool_current_database if ActiveRecord::VERSION::MAJOR >= 5
         end
         @_cached_current_database = _host_pool_current_database
         @_cached_connection_object_id = @connection.object_id
