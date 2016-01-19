@@ -3,8 +3,13 @@ require File.expand_path('helper', File.dirname(__FILE__))
 class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
   include ARHPTestSetup
   def setup
+    arhp_drop_databases
     arhp_create_databases
     arhp_create_models
+  end
+
+  def teardown
+    arhp_drop_databases
   end
 
   def test_models_with_matching_hosts_should_share_a_connection
@@ -116,10 +121,6 @@ class ActiveRecordHostPoolTest < MiniTest::Unit::TestCase
     # and finally, did mysql reconnect correctly?
     puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
     assert_equal expected_database, current_database(switch_to_klass)
-  end
-
-  def teardown
-    arhp_drop_databases
   end
 
   private
