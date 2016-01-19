@@ -20,13 +20,6 @@ module ActiveRecordHostPool
       super
     end
 
-    def exec_stmt(sql, name, binds, &block)
-      if _host_pool_current_database && ! @_no_switch
-        _switch_connection
-      end
-      super
-    end
-
     def drop_database(*args)
       begin
         @_no_switch = true
@@ -47,6 +40,7 @@ module ActiveRecordHostPool
 
     def disconnect!
       @_cached_current_database = nil
+      @_cached_connection_object_id = nil
       super
     end
 
@@ -73,18 +67,16 @@ end
 module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
-      def establish_connection(name, spec)
+      def establish_connection(owner, spec)
         if ActiveRecord::VERSION::MAJOR >= 4
-          owner = name
-
           @class_to_pool.clear
           raise RuntimeError, "Anonymous class is not allowed." unless owner.name
           owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         elsif ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 2
           @connection_pools[spec] ||= ActiveRecordHostPool::PoolProxy.new(spec)
-          @class_to_pool[name] = @connection_pools[spec]
+          @class_to_pool[owner] = @connection_pools[spec]
         else
-          @connection_pools[name] = ActiveRecordHostPool::PoolProxy.new(spec)
+          @connection_pools[owner] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
       end
     end
