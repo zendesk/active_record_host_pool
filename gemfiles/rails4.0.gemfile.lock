@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    active_record_host_pool (0.8.3)
+    active_record_host_pool (0.9.0)
       activerecord (>= 3.2.0, < 5.1)
 
 GEM
