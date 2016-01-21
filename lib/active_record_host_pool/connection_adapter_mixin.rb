@@ -10,10 +10,18 @@ module ActiveRecordHostPool
     def self.included(base)
       base.class_eval do
         attr_accessor(:_host_pool_current_database)
-        alias_method_chain :execute, :switching
-        alias_method_chain :drop_database, :no_switching
-        alias_method_chain :create_database, :no_switching
-        alias_method_chain :disconnect!, :host_pooling
+
+        alias_method :execute_without_switching, :execute
+        alias_method :execute, :execute_with_switching
+
+        alias_method :drop_database_without_no_switching, :drop_database
+        alias_method :drop_database, :drop_database_with_no_switching
+
+        alias_method :create_database_without_no_switching, :create_database
+        alias_method :create_database, :create_database_with_no_switching
+
+        alias_method :disconnect_without_host_pooling!, :disconnect!
+        alias_method :disconnect!, :disconnect_with_host_pooling!
       end
     end
 
