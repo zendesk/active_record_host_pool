@@ -7,41 +7,45 @@ end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
-    def self.prepended(base)
+    def self.included(base)
       base.class_eval do
         attr_accessor(:_host_pool_current_database)
+        alias_method_chain :execute, :switching
+        alias_method_chain :drop_database, :no_switching
+        alias_method_chain :create_database, :no_switching
+        alias_method_chain :disconnect!, :host_pooling
       end
     end
 
-    def execute(*args)
+    def execute_with_switching(*args)
       if _host_pool_current_database && ! @_no_switch
         _switch_connection
       end
-      super
+      execute_without_switching(*args)
     end
 
-    def drop_database(*args)
+    def drop_database_with_no_switching(*args)
       begin
         @_no_switch = true
-        super
+        drop_database_without_no_switching(*args)
       ensure
         @_no_switch = false
       end
     end
 
-    def create_database(*args)
+    def create_database_with_no_switching(*args)
       begin
         @_no_switch = true
-        super
+        create_database_without_no_switching(*args)
       ensure
         @_no_switch = false
       end
     end
 
-    def disconnect!
+    def disconnect_with_host_pooling!
       @_cached_current_database = nil
       @_cached_connection_object_id = nil
-      super
+      disconnect_without_host_pooling!
     end
 
     private
@@ -86,5 +90,5 @@ end
 
 ["MysqlAdapter", "Mysql2Adapter"].each do |k|
   next unless ActiveRecord::ConnectionAdapters.const_defined?(k)
-  ActiveRecord::ConnectionAdapters.const_get(k).class_eval { prepend ActiveRecordHostPool::DatabaseSwitch }
+  ActiveRecord::ConnectionAdapters.const_get(k).class_eval { include ActiveRecordHostPool::DatabaseSwitch }
 end
