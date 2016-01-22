@@ -1,15 +1,14 @@
-require File.expand_path('helper', File.dirname(__FILE__))
+require_relative 'helper'
 
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    arhp_drop_databases
-    arhp_create_databases
+    Phenix.rise!
     arhp_create_models
   end
 
   def teardown
-    arhp_drop_databases
+    Phenix.burn!
   end
 
   def test_models_with_matching_hosts_should_share_a_connection

@@ -25,6 +25,7 @@ GEM
     arel (4.0.2)
     builder (3.1.4)
     bump (0.5.3)
+    byebug (8.2.1)
     i18n (0.7.0)
     metaclass (0.0.4)
     minitest (4.7.5)
@@ -32,6 +33,9 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.11.2)
     mysql2 (0.3.20)
+    phenix (0.1.0)
+      activerecord (>= 3.2, < 5.1)
+      bundler
     rake (10.4.2)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -50,8 +54,10 @@ DEPENDENCIES
   active_record_host_pool!
   activerecord (~> 4.0.0)
   bump
+  byebug
   mocha
   mysql2 (~> 0.3.0)
+  phenix
   rake
   shoulda
   wwtd
