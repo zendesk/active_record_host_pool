@@ -1,8 +1,9 @@
-require File.expand_path('helper', File.dirname(__FILE__))
+require_relative 'helper'
 
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
   def setup
+    Phenix.load_database_config
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 

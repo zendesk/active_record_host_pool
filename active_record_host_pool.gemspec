@@ -27,4 +27,10 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("activerecord", ">= 3.2.0", "< 5.1")
 
   s.add_development_dependency("wwtd")
+  s.add_development_dependency("mysql2")
+  s.add_development_dependency("rake")
+  s.add_development_dependency("shoulda")
+  s.add_development_dependency("mocha")
+  s.add_development_dependency("bump")
+  s.add_development_dependency("phenix")
 end
