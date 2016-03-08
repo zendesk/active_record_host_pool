@@ -1,6 +1,3 @@
-before_install:
-  - gem update --system
-  - gem update bundler
 sudo: false
 cache: bundler
 bundler_args: --no-deployment
