@@ -24,6 +24,10 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert(Test4.connection.raw_connection != Test5.connection.raw_connection)
   end
 
+  def test_models_without_match_slave_status_should_not_share_a_connection
+    assert(Test1.connection.raw_connection != Test1Slave.connection.raw_connection)
+  end
+
   def test_should_select_on_correct_database
     action_should_use_correct_database(:select_all, "select 1")
   end

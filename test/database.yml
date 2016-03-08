@@ -8,6 +8,17 @@ test_host_1_db_1:
   host: <%= mysql.host %>
   reconnect: true
 
+# Mimic configurations as read by active_record_shards/ar_flexmaster
+test_host_1_db_1_slave:
+  adapter: mysql2
+  encoding: utf8
+  database: arhp_test_1_slave
+  username: <%= mysql.user %>
+  password: <%= mysql.password %>
+  host: <%= mysql.host %>
+  reconnect: true
+  slave: true
+
 test_host_1_db_2:
   adapter: mysql2
   encoding: utf8
