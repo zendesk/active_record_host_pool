@@ -119,11 +119,9 @@ module ActiveRecordHostPool
       @connection_proxy_cache ||= {}
       key = [connection, database]
 
-      @connection_proxy_cache[key] ||= begin
-        cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-        cx.execute('select 1')
-        cx
-      end
+      @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(
+        connection, database
+      ).tap(&:active?)
     end
 
     def _clear_connection_proxy_cache
