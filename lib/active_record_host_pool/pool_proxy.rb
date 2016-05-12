@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'delegate'
 require 'active_record'
 require 'active_record_host_pool/connection_adapter_mixin'

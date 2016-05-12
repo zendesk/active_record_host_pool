@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ['mysql_adapter', 'mysql2_adapter'].each do |adapter|
   begin
     require "active_record/connection_adapters/#{adapter}"
