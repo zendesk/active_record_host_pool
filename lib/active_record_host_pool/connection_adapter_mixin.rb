@@ -10,7 +10,12 @@ module ActiveRecordHostPool
   module DatabaseSwitch
     def self.included(base)
       base.class_eval do
-        attr_accessor(:_host_pool_current_database)
+        attr_reader(:_host_pool_current_database)
+
+        def _host_pool_current_database=(database)
+          @_host_pool_current_database = database
+          @config[:database] = _host_pool_current_database if ActiveRecord::VERSION::MAJOR >= 5
+        end
 
         alias_method :execute_without_switching, :execute
         alias_method :execute, :execute_with_switching
@@ -64,7 +69,6 @@ module ActiveRecordHostPool
         log("select_db #{_host_pool_current_database}", "SQL") do
           clear_cache! if respond_to?(:clear_cache!)
           raw_connection.select_db(_host_pool_current_database)
-          @config[:database] = _host_pool_current_database if ActiveRecord::VERSION::MAJOR >= 5
         end
         @_cached_current_database = _host_pool_current_database
         @_cached_connection_object_id = @connection.object_id
