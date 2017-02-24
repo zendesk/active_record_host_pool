@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.test_files = ["test/database.yml", "test/helper.rb", "test/schema.rb", "test/test_arhp.rb"]
   s.license = "MIT"
 
-  s.add_runtime_dependency("activerecord", ">= 3.2.0", "< 5.1")
+  s.add_runtime_dependency("activerecord", ">= 3.2.0", "< 5.2")
 
   s.add_development_dependency("wwtd")
   s.add_development_dependency("mysql2")
