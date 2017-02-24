@@ -86,10 +86,18 @@ module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
 
-      if ActiveRecord::VERSION::MAJOR >= 5
+      if ActiveRecord::VERSION::MAJOR == 5
+        if ActiveRecord::VERSION::MINOR == 0
+          def establish_connection(spec)
+            owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
+          end
+        else
+          def establish_connection(spec)
+            resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
+            spec = resolver.spec(spec)
 
-        def establish_connection(spec)
-          owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
+            owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
+          end
         end
 
       elsif ActiveRecord::VERSION::MAJOR == 4
