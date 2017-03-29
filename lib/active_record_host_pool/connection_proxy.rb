@@ -39,7 +39,7 @@ module ActiveRecordHostPool
       __getobj__.respond_to?(m, include_private)
     end
 
-    def private_methods(all=true)
+    def private_methods(all = true)
       __getobj__.private_methods(all) | super
     end
 

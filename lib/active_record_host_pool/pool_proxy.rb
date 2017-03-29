@@ -60,9 +60,9 @@ module ActiveRecordHostPool
 
     def with_connection
       cx = checkout
-        yield cx
-      ensure
-        checkin cx
+      yield cx
+    ensure
+      checkin cx
     end
 
     def disconnect!
@@ -84,7 +84,7 @@ module ActiveRecordHostPool
       _clear_connection_proxy_cache
     end
 
-  private
+    private
 
     def rescuable_errors
       @rescuable_errors ||= begin
@@ -110,7 +110,7 @@ module ActiveRecordHostPool
       @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/#{@config[:username]}/#{@config[:slave] && 'slave'}"
     end
 
-    def _connection_pool(auto_create=true)
+    def _connection_pool(auto_create = true)
       pool = _connection_pools[_pool_key]
       if pool.nil? && auto_create
         pool = _connection_pools[_pool_key] = ActiveRecord::ConnectionAdapters::ConnectionPool.new(@spec)

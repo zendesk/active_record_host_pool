@@ -104,10 +104,10 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-      when "arhp_test_2"
-        Test1
-      when "arhp_test_1"
-        Test2
+    when "arhp_test_2"
+      Test1
+    when "arhp_test_1"
+      Test2
     end
     expected_database = switch_to_klass.connection.instance_variable_get(:@database)
 

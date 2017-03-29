@@ -33,7 +33,7 @@ module ActiveRecordHostPool
     end
 
     def execute_with_switching(*args)
-      if _host_pool_current_database && ! @_no_switch
+      if _host_pool_current_database && !@_no_switch
         _switch_connection
       end
       execute_without_switching(*args)
