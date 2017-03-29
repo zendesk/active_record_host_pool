@@ -36,8 +36,8 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     rescue Exception => e
       # If the pool is caching a bad connection, that connection will be used instead
       # of the intended connection.
-      assert e.message !~ /Unknown database 'arhp_test_no_create'/
-      assert e.message =~ /Unknown database 'arhp_test_1'/
+      refute_includes e.message, "Unknown database 'arhp_test_no_create'"
+      assert_includes e.message, "Unknown database 'arhp_test_1'"
       reached_second_exception = true
     end
 
