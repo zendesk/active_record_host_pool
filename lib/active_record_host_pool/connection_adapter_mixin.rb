@@ -104,7 +104,7 @@ module ActiveRecord
           owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
 
-      elsif ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 2
+      elsif ActiveRecord::VERSION::MAJOR == 3
 
         def establish_connection(owner, spec)
           @connection_pools[spec] ||= ActiveRecordHostPool::PoolProxy.new(spec)
