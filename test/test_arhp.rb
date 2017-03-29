@@ -31,11 +31,11 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_should_select_on_correct_database
-    action_should_use_correct_database(:select_all, "select 1")
+    assert_action_uses_correct_database(:select_all, 'select 1')
   end
 
   def test_should_insert_on_correct_database
-    action_should_use_correct_database(:insert, "insert into tests values(NULL, 'foo')")
+    assert_action_uses_correct_database(:insert, "insert into tests values(NULL, 'foo')")
   end
 
   def test_connection_returns_a_proxy
@@ -104,9 +104,9 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-    when "arhp_test_2"
+    when 'arhp_test_2'
       Test1
-    when "arhp_test_1"
+    when 'arhp_test_1'
       Test2
     end
     expected_database = switch_to_klass.connection.instance_variable_get(:@database)
@@ -116,7 +116,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nAnd now we're on #{current_database(switch_to_klass)}" if debug_me
 
     # get the current thread id so we can shoot ourselves in the head
-    thread_id = switch_to_klass.connection.select_value("select @@pseudo_thread_id")
+    thread_id = switch_to_klass.connection.select_value('select @@pseudo_thread_id')
 
     # now, disable our auto-switching and trigger a mysql reconnect
     switch_to_klass.connection.unproxied.stubs(:_switch_connection).returns(true)
@@ -129,12 +129,12 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   private
 
-  def action_should_use_correct_database(action, sql)
-    (1..4).each { |i|
+  def assert_action_uses_correct_database(action, sql)
+    (1..4).each do |i|
       klass = eval "Test#{i}"
       desired_db = "arhp_test_#{i}"
       klass.connection.send(action, sql)
       assert_equal desired_db, current_database(klass)
-    }
+    end
   end
 end

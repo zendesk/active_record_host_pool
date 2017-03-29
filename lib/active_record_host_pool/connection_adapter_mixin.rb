@@ -116,7 +116,6 @@ module ActiveRecord
         def establish_connection(owner, spec)
           @connection_pools[owner] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
-
       end
     end
   end
