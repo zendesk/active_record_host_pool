@@ -35,15 +35,13 @@ module ActiveRecordHostPool
     end
 
     def connection(*args)
-      begin
-        real_connection = _connection_pool.connection(*args)
-        _connection_proxy_for(real_connection, @config[:database])
-      rescue Exception => e
-        if rescuable_errors.any? { |r| e.is_a?(r) }
-          _connection_pools.delete(_pool_key)
-        end
-        Kernel.raise(e)
+      real_connection = _connection_pool.connection(*args)
+      _connection_proxy_for(real_connection, @config[:database])
+    rescue Exception => e
+      if rescuable_errors.any? { |r| e.is_a?(r) }
+        _connection_pools.delete(_pool_key)
       end
+      Kernel.raise(e)
     end
 
     # by the time we are patched into ActiveRecord, the current thread has already established

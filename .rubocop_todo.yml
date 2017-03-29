@@ -65,19 +65,6 @@ Style/NumericPredicate:
     - 'spec/**/*'
     - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/RedundantBegin:
-  Exclude:
-    - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
-    - 'lib/active_record_host_pool/pool_proxy.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/RedundantException:
-  Exclude:
-    - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
-
 # Offense count: 59
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.

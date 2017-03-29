@@ -40,21 +40,17 @@ module ActiveRecordHostPool
     end
 
     def drop_database_with_no_switching(*args)
-      begin
-        @_no_switch = true
-        drop_database_without_no_switching(*args)
-      ensure
-        @_no_switch = false
-      end
+      @_no_switch = true
+      drop_database_without_no_switching(*args)
+    ensure
+      @_no_switch = false
     end
 
     def create_database_with_no_switching(*args)
-      begin
-        @_no_switch = true
-        create_database_without_no_switching(*args)
-      ensure
-        @_no_switch = false
-      end
+      @_no_switch = true
+      create_database_without_no_switching(*args)
+    ensure
+      @_no_switch = false
     end
 
     def disconnect_with_host_pooling!
@@ -104,7 +100,7 @@ module ActiveRecord
 
         def establish_connection(owner, spec)
           @class_to_pool.clear
-          raise RuntimeError, "Anonymous class is not allowed." unless owner.name
+          raise "Anonymous class is not allowed." unless owner.name
           owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
 
