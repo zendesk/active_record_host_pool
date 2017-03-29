@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'delegate'
 require 'active_record'
 require 'active_record_host_pool/connection_adapter_mixin'
@@ -34,15 +35,13 @@ module ActiveRecordHostPool
     end
 
     def connection(*args)
-      begin
-        real_connection = _connection_pool.connection(*args)
-        _connection_proxy_for(real_connection, @config[:database])
-      rescue Exception => e
-        if rescuable_errors.any? { |r| e.is_a?(r) }
-          _connection_pools.delete(_pool_key)
-        end
-        Kernel.raise(e)
+      real_connection = _connection_pool.connection(*args)
+      _connection_proxy_for(real_connection, @config[:database])
+    rescue Exception => e
+      if rescuable_errors.any? { |r| e.is_a?(r) }
+        _connection_pools.delete(_pool_key)
       end
+      Kernel.raise(e)
     end
 
     # by the time we are patched into ActiveRecord, the current thread has already established
@@ -59,9 +58,9 @@ module ActiveRecordHostPool
 
     def with_connection
       cx = checkout
-        yield cx
-      ensure
-        checkin cx
+      yield cx
+    ensure
+      checkin cx
     end
 
     def disconnect!
@@ -83,7 +82,8 @@ module ActiveRecordHostPool
       _clear_connection_proxy_cache
     end
 
-  private
+    private
+
     def rescuable_errors
       @rescuable_errors ||= begin
         e = []
@@ -108,7 +108,7 @@ module ActiveRecordHostPool
       @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/#{@config[:username]}/#{@config[:slave] && 'slave'}"
     end
 
-    def _connection_pool(auto_create=true)
+    def _connection_pool(auto_create = true)
       pool = _connection_pools[_pool_key]
       if pool.nil? && auto_create
         pool = _connection_pools[_pool_key] = ActiveRecord::ConnectionAdapters::ConnectionPool.new(@spec)
@@ -132,4 +132,3 @@ module ActiveRecordHostPool
     end
   end
 end
-

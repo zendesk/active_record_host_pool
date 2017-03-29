@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'helper'
 
 class ActiveRecordHostPoolTest < Minitest::Test
@@ -56,32 +57,32 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_should_not_share_a_query_cache
-    Test1.create(:val => 'foo')
-    Test2.create(:val => 'foobar')
+    Test1.create(val: 'foo')
+    Test2.create(val: 'foobar')
     Test1.connection.cache do
       assert Test1.first.val != Test2.first.val
     end
   end
 
   def test_object_creation
-    Test1.create(:val => 'foo')
+    Test1.create(val: 'foo')
     assert_equal("arhp_test_1", current_database(Test1))
 
-    Test3.create(:val => 'bar')
+    Test3.create(val: 'bar')
     assert_equal("arhp_test_1", current_database(Test1))
     assert_equal("arhp_test_3", current_database(Test3))
 
-    Test2.create!(:val => 'bar_distinct')
+    Test2.create!(val: 'bar_distinct')
     assert_equal("arhp_test_2", current_database(Test2))
     assert Test2.find_by_val('bar_distinct')
     assert !Test1.find_by_val('bar_distinct')
   end
 
   def test_disconnect
-    Test1.create(:val => 'foo')
+    Test1.create(val: 'foo')
     unproxied = Test1.connection.unproxied
     Test1.connection_handler.clear_all_connections!
-    Test1.create(:val => 'foo')
+    Test1.create(val: 'foo')
     assert(unproxied != Test1.connection.unproxied)
   end
 
@@ -93,7 +94,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert(c2 == connection)
   end
 
-
   def test_underlying_assumption_about_test_db
     debug_me = false
     # ensure connection
@@ -104,10 +104,10 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-      when "arhp_test_2"
-        Test1
-      when "arhp_test_1"
-        Test2
+    when "arhp_test_2"
+      Test1
+    when "arhp_test_1"
+      Test2
     end
     expected_database = switch_to_klass.connection.instance_variable_get(:@database)
 

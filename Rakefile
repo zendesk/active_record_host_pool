@@ -3,6 +3,7 @@ require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'bump/tasks'
 require 'wwtd/tasks'
+require 'rubocop/rake_task'
 
 Rake::TestTask.new do |test|
   test.pattern = 'test/test_*.rb'
@@ -10,4 +11,6 @@ Rake::TestTask.new do |test|
   test.warning = false
 end
 
-task :default => 'wwtd:local'
+task default: ['rubocop', 'wwtd:local']
+
+RuboCop::RakeTask.new

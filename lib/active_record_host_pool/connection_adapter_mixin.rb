@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ['mysql_adapter', 'mysql2_adapter'].each do |adapter|
   begin
     require "active_record/connection_adapters/#{adapter}"
@@ -32,28 +33,24 @@ module ActiveRecordHostPool
     end
 
     def execute_with_switching(*args)
-      if _host_pool_current_database && ! @_no_switch
+      if _host_pool_current_database && !@_no_switch
         _switch_connection
       end
       execute_without_switching(*args)
     end
 
     def drop_database_with_no_switching(*args)
-      begin
-        @_no_switch = true
-        drop_database_without_no_switching(*args)
-      ensure
-        @_no_switch = false
-      end
+      @_no_switch = true
+      drop_database_without_no_switching(*args)
+    ensure
+      @_no_switch = false
     end
 
     def create_database_with_no_switching(*args)
-      begin
-        @_no_switch = true
-        create_database_without_no_switching(*args)
-      ensure
-        @_no_switch = false
-      end
+      @_no_switch = true
+      create_database_without_no_switching(*args)
+    ensure
+      @_no_switch = false
     end
 
     def disconnect_with_host_pooling!
@@ -85,7 +82,6 @@ end
 module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
-
       if ActiveRecord::VERSION::MAJOR == 5
         if ActiveRecord::VERSION::MINOR == 0
           def establish_connection(spec)
@@ -104,7 +100,7 @@ module ActiveRecord
 
         def establish_connection(owner, spec)
           @class_to_pool.clear
-          raise RuntimeError, "Anonymous class is not allowed." unless owner.name
+          raise "Anonymous class is not allowed." unless owner.name
           owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
 
@@ -122,7 +118,6 @@ module ActiveRecord
         end
 
       end
-
     end
   end
 end

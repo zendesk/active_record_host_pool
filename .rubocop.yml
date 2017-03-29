@@ -1,0 +1,48 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  CacheRootDirectory: tmp
+  DisplayCopNames: true
+  Exclude:
+    - .git/**/*
+    - gemfiles/vendor/**/*
+    - vendor/**/*
+  TargetRubyVersion: 2.1
+Metrics:
+  Enabled: false
+
+#
+# Configured cops
+#
+
+# Align ends correctly.
+Lint/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+# Indentation of when in a case/when/[else/]end.
+Style/CaseIndentation:
+  EnforcedStyle: end
+
+#
+# Disabled lint cops
+#
+
+# Don't suppress exception.
+Lint/HandleExceptions:
+  Enabled: false
+
+#
+# Disabled style cops
+#
+
+# Avoid the use of class variables.
+Style/ClassVars:
+  Enabled: false
+
+# Check for conditionals that can be replaced with guard clauses
+Style/GuardClause:
+  Enabled: false
+
+# Favor modifier if/unless usage when you have a single-line body.
+Style/IfUnlessModifier:
+  Enabled: false

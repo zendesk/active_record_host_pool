@@ -3,3 +3,4 @@ pkg/*
 *.log
 localgems
 Gemfile.lock
+tmp
