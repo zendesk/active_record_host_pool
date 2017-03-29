@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'delegate'
 
 # the ConnectionProxy sits between user-code and a real connection and says "I expect to be on this database"
@@ -51,10 +52,9 @@ module ActiveRecordHostPool
     end
 
     private
+
     def select(*args)
       @cx.__send__(:select, *args)
     end
   end
 end
-
-

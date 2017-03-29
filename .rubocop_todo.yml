@@ -56,50 +56,6 @@ Style/Documentation:
     - 'lib/active_record_host_pool/connection_proxy.rb'
     - 'lib/active_record_host_pool/pool_proxy.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-Style/EmptyLineAfterMagicComment:
-  Exclude:
-    - 'active_record_host_pool.gemspec'
-    - 'gemfiles/common.rb'
-    - 'lib/active_record_host_pool.rb'
-    - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
-    - 'lib/active_record_host_pool/connection_proxy.rb'
-    - 'lib/active_record_host_pool/pool_proxy.rb'
-    - 'lib/active_record_host_pool/version.rb'
-    - 'test/helper.rb'
-    - 'test/schema.rb'
-    - 'test/test_arhp.rb'
-    - 'test/test_arhp_wrong_db.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
-Style/EmptyLineBetweenDefs:
-  Exclude:
-    - 'test/test_arhp.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'test/test_arhp.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundAccessModifier:
-  Exclude:
-    - 'lib/active_record_host_pool/connection_proxy.rb'
-    - 'lib/active_record_host_pool/pool_proxy.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
-Style/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
-
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
@@ -180,15 +136,6 @@ Style/StringLiterals:
     - 'test/helper.rb'
     - 'test/schema.rb'
     - 'test/test_arhp.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: final_newline, final_blank_line
-Style/TrailingBlankLines:
-  Exclude:
-    - 'lib/active_record_host_pool/connection_proxy.rb'
-    - 'lib/active_record_host_pool/pool_proxy.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

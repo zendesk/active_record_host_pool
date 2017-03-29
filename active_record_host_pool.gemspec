@@ -1,4 +1,5 @@
 # coding: utf-8
+
 require './lib/active_record_host_pool/version'
 
 Gem::Specification.new do |s|

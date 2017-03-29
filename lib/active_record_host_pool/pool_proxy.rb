@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'delegate'
 require 'active_record'
 require 'active_record_host_pool/connection_adapter_mixin'
@@ -84,6 +85,7 @@ module ActiveRecordHostPool
     end
 
   private
+
     def rescuable_errors
       @rescuable_errors ||= begin
         e = []
@@ -132,4 +134,3 @@ module ActiveRecordHostPool
     end
   end
 end
-

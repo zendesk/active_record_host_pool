@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'helper'
 
 class ActiveRecordHostPoolTest < Minitest::Test
@@ -92,7 +93,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
     c2 = ActiveRecord::Base.connection_pool.checkout
     assert(c2 == connection)
   end
-
 
   def test_underlying_assumption_about_test_db
     debug_me = false
