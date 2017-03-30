@@ -32,25 +32,30 @@ module ActiveRecordHostPool
       end
     end
 
+    def initialize(*)
+      @_cached_current_database = nil
+      super
+    end
+
     def execute_with_switching(*args)
-      if _host_pool_current_database && !@_no_switch
+      if _host_pool_current_database && !_no_switch
         _switch_connection
       end
       execute_without_switching(*args)
     end
 
     def drop_database_with_no_switching(*args)
-      @_no_switch = true
+      self._no_switch = true
       drop_database_without_no_switching(*args)
     ensure
-      @_no_switch = false
+      self._no_switch = false
     end
 
     def create_database_with_no_switching(*args)
-      @_no_switch = true
+      self._no_switch = true
       create_database_without_no_switching(*args)
     ensure
-      @_no_switch = false
+      self._no_switch = false
     end
 
     def disconnect_with_host_pooling!
@@ -61,8 +66,14 @@ module ActiveRecordHostPool
 
     private
 
+    attr_accessor :_no_switch
+
     def _switch_connection
-      if _host_pool_current_database && ((_host_pool_current_database != @_cached_current_database) || @connection.object_id != @_cached_connection_object_id)
+      if _host_pool_current_database &&
+         (
+           (_host_pool_current_database != @_cached_current_database) ||
+           @connection.object_id != @_cached_connection_object_id
+         )
         log("select_db #{_host_pool_current_database}", "SQL") do
           clear_cache! if respond_to?(:clear_cache!)
           raw_connection.select_db(_host_pool_current_database)
@@ -116,7 +127,6 @@ module ActiveRecord
         def establish_connection(owner, spec)
           @connection_pools[owner] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
-
       end
     end
   end

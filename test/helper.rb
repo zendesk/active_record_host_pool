@@ -8,11 +8,11 @@ require 'logger'
 require 'mocha/setup'
 require 'phenix'
 
-RAILS_ENV = "test"
+RAILS_ENV = 'test'
 
 Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
 
-ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
+ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
 Phenix.configure do |config|
   config.skip_database = ->(name, conf) { name =~ /not_there/ || conf['username'] == 'travis' }
@@ -22,7 +22,7 @@ module ARHPTestSetup
   private
 
   def arhp_create_models
-    return if Object.const_defined?("Test1")
+    return if Object.const_defined?('Test1')
     eval <<-EOL
       class Test1 < ActiveRecord::Base
         self.table_name = "tests"
@@ -57,6 +57,6 @@ module ARHPTestSetup
   end
 
   def current_database(klass)
-    klass.connection.select_value("select DATABASE()")
+    klass.connection.select_value('select DATABASE()')
   end
 end

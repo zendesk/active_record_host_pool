@@ -8,7 +8,7 @@ require 'rubocop/rake_task'
 Rake::TestTask.new do |test|
   test.pattern = 'test/test_*.rb'
   test.verbose = true
-  test.warning = false
+  test.warning = true
 end
 
 task default: ['rubocop', 'wwtd:local']
