@@ -1,19 +1,19 @@
 PATH
   remote: ..
   specs:
-    active_record_host_pool (0.10.0)
+    active_record_host_pool (0.10.1)
       activerecord (>= 3.2.0, < 5.2)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (5.1.0.rc1)
-      activesupport (= 5.1.0.rc1)
-    activerecord (5.1.0.rc1)
-      activemodel (= 5.1.0.rc1)
-      activesupport (= 5.1.0.rc1)
+    activemodel (5.1.3)
+      activesupport (= 5.1.3)
+    activerecord (5.1.3)
+      activemodel (= 5.1.3)
+      activesupport (= 5.1.3)
       arel (~> 8.0)
-    activesupport (5.1.0.rc1)
+    activesupport (5.1.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
       minitest (~> 5.1)
@@ -23,16 +23,16 @@ GEM
     bump (0.5.3)
     byebug (9.0.6)
     concurrent-ruby (1.0.5)
-    i18n (0.8.1)
+    i18n (0.8.6)
     metaclass (0.0.4)
-    minitest (5.10.1)
+    minitest (5.10.3)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
     mysql2 (0.4.5)
     parser (2.4.0.0)
       ast (~> 2.2)
-    phenix (0.2.0)
-      activerecord (>= 3.2, < 5.1)
+    phenix (0.3.0)
+      activerecord (>= 3.2, < 5.2)
       bundler
     powerpack (0.1.1)
     rainbow (2.2.1)
@@ -61,7 +61,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_host_pool!
-  activerecord (~> 5.1.0.rc1)
+  activerecord (~> 5.1.3)
   bump
   byebug
   mocha
@@ -73,4 +73,4 @@ DEPENDENCIES
   wwtd
 
 BUNDLED WITH
-   1.14.6
+   1.15.4
