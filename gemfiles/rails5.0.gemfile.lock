@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    active_record_host_pool (0.10.0)
+    active_record_host_pool (0.10.1)
       activerecord (>= 3.2.0, < 5.2)
 
 GEM
@@ -73,4 +73,4 @@ DEPENDENCIES
   wwtd
 
 BUNDLED WITH
-   1.14.6
+   1.15.4
