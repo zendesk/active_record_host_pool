@@ -46,6 +46,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     # Relies on connection.class returning the real class
     Test1.connection.class.class_eval do
       private
+
       def test_private_method
         true
       end

@@ -23,7 +23,7 @@ module ARHPTestSetup
 
   def arhp_create_models
     return if Object.const_defined?('Test1')
-    eval <<-EOL
+    eval <<-RUBY
       class Test1 < ActiveRecord::Base
         self.table_name = "tests"
         establish_connection(:test_host_1_db_1)
@@ -53,7 +53,7 @@ module ARHPTestSetup
         self.table_name = "tests"
         establish_connection(:test_host_2_db_5)
       end
-    EOL
+    RUBY
   end
 
   def current_database(klass)

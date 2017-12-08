@@ -1,5 +1,3 @@
-# coding: utf-8
-
 require './lib/active_record_host_pool/version'
 
 Gem::Specification.new do |s|
@@ -27,12 +25,12 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency("activerecord", ">= 3.2.0", "< 5.2")
 
-  s.add_development_dependency("wwtd")
-  s.add_development_dependency("mysql2")
-  s.add_development_dependency("rake", '>= 12.0.0')
-  s.add_development_dependency("shoulda")
-  s.add_development_dependency("mocha")
   s.add_development_dependency("bump")
+  s.add_development_dependency("mocha")
+  s.add_development_dependency("mysql2")
   s.add_development_dependency("phenix")
+  s.add_development_dependency("rake", '>= 12.0.0')
   s.add_development_dependency('rubocop', '>= 0.48.0')
+  s.add_development_dependency("shoulda")
+  s.add_development_dependency("wwtd")
 end
