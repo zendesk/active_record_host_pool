@@ -16,12 +16,12 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     reached_second_exception = false
 
     begin
-      eval <<-EOC
+      eval <<-RUBY
         class TestNotThere < ActiveRecord::Base
           establish_connection(:test_host_1_db_not_there)
           connection
         end
-      EOC
+      RUBY
     rescue Exception => e
       assert e.message =~ /Unknown database 'arhp_test_no_create'/
       reached_first_exception = true

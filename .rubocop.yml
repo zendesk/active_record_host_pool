@@ -20,7 +20,7 @@ Lint/EndAlignment:
   EnforcedStyleAlignWith: variable
 
 # Indentation of when in a case/when/[else/]end.
-Style/CaseIndentation:
+Layout/CaseIndentation:
   EnforcedStyle: end
 
 #

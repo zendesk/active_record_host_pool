@@ -6,4 +6,4 @@ gem "mysql2", "~> 0.3.0"
 gem "activerecord", "~> 3.2.22"
 gem "test-unit-minitest"
 
-eval_gemfile 'gemfiles/common.rb'
+eval_gemfile 'common.rb'
