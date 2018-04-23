@@ -15,13 +15,13 @@ Metrics:
 # Configured cops
 #
 
-# Align ends correctly.
-Lint/EndAlignment:
-  EnforcedStyleAlignWith: variable
-
 # Indentation of when in a case/when/[else/]end.
 Layout/CaseIndentation:
   EnforcedStyle: end
+
+# Align ends correctly.
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
 
 #
 # Disabled lint cops
@@ -46,3 +46,14 @@ Style/GuardClause:
 # Favor modifier if/unless usage when you have a single-line body.
 Style/IfUnlessModifier:
   Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - at
+    - by
+    - cx
+    - id
+    - in
+    - io
+    - on
+    - to
