@@ -1,9 +1,9 @@
 source "https://rubygems.org"
 
-gemspec :path => "../"
+gemspec path: "../"
 
-gem "mysql2", "~> 0.3.0"
 gem "activerecord", "~> 3.2.22"
+gem "mysql2", "~> 0.3.0"
 gem "test-unit-minitest"
 
 eval_gemfile 'common.rb'

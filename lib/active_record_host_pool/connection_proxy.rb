@@ -35,8 +35,8 @@ module ActiveRecordHostPool
     end
 
     # Override Delegator#respond_to_missing? to allow private methods to be accessed without warning
-    def respond_to_missing?(m, include_private)
-      __getobj__.respond_to?(m, include_private)
+    def respond_to_missing?(name, include_private)
+      __getobj__.respond_to?(name, include_private)
     end
 
     def private_methods(all = true)
