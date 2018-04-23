@@ -3,6 +3,7 @@ PATH
   specs:
     active_record_host_pool (0.10.1)
       activerecord (>= 3.2.0, < 5.2)
+      mysql2
 
 GEM
   remote: https://rubygems.org/
@@ -67,7 +68,6 @@ DEPENDENCIES
   bump
   byebug
   mocha
-  mysql2
   phenix
   rake (>= 12.0.0)
   rubocop (>= 0.55.0)

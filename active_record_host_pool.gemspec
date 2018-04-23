@@ -24,10 +24,10 @@ Gem::Specification.new do |s|
   s.license = "MIT"
 
   s.add_runtime_dependency("activerecord", ">= 3.2.0", "< 5.2")
+  s.add_runtime_dependency("mysql2")
 
   s.add_development_dependency("bump")
   s.add_development_dependency("mocha")
-  s.add_development_dependency("mysql2")
   s.add_development_dependency("phenix")
   s.add_development_dependency("rake", '>= 12.0.0')
   s.add_development_dependency('rubocop', '>= 0.55.0')

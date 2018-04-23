@@ -3,6 +3,7 @@ PATH
   specs:
     active_record_host_pool (0.10.1)
       activerecord (>= 3.2.0, < 5.2)
+      mysql2
 
 GEM
   remote: https://rubygems.org/
