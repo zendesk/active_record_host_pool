@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gemspec path: "../"
 
 gem "activerecord", "~> 3.2.22"
-gem "mysql2", "~> 0.3.0"
+gem "mysql2", "~> 0.3.10"
 gem "test-unit-minitest"
 
 eval_gemfile 'common.rb'
