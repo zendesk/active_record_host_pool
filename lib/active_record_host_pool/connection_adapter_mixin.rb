@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-['mysql_adapter', 'mysql2_adapter'].each do |adapter|
-  begin
-    require "active_record/connection_adapters/#{adapter}"
-  rescue LoadError
-  end
-end
+require "active_record/connection_adapters/mysql2_adapter"
 
 module ActiveRecordHostPool
   module DatabaseSwitch
@@ -132,7 +127,4 @@ module ActiveRecord
   end
 end
 
-["MysqlAdapter", "Mysql2Adapter"].each do |k|
-  next unless ActiveRecord::ConnectionAdapters.const_defined?(k)
-  ActiveRecord::ConnectionAdapters.const_get(k).class_eval { include ActiveRecordHostPool::DatabaseSwitch }
-end
+ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)

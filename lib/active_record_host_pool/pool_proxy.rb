@@ -86,13 +86,7 @@ module ActiveRecordHostPool
 
     def rescuable_errors
       @rescuable_errors ||= begin
-        e = []
-        if Object.const_defined?("Mysql")
-          e << Mysql::Error
-        end
-        if Object.const_defined?("Mysql2")
-          e << Mysql2::Error
-        end
+        e = [Mysql2::Error]
         if ActiveRecord.const_defined?("NoDatabaseError")
           e << ActiveRecord::NoDatabaseError
         end
