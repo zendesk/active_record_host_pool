@@ -150,7 +150,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def assert_action_uses_correct_database(action, sql)
     (1..4).each do |i|
-      klass = eval "Test#{i}"
+      klass = ARHPTestSetup.const_get("Test#{i}")
       desired_db = "arhp_test_#{i}"
       klass.connection.send(action, sql)
       assert_equal desired_db, current_database(klass)

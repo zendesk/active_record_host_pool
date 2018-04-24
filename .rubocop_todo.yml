@@ -12,11 +12,6 @@ Lint/RescueException:
     - 'lib/active_record_host_pool/pool_proxy.rb'
     - 'test/test_arhp_wrong_db.rb'
 
-# Offense count: 1
-Security/Eval:
-  Exclude:
-    - 'test/test_arhp.rb'
-
 # Offense count: 5
 Style/Documentation:
   Exclude:
@@ -27,11 +22,10 @@ Style/Documentation:
     - 'lib/active_record_host_pool/connection_proxy.rb'
     - 'lib/active_record_host_pool/pool_proxy.rb'
 
-# Offense count: 3
+# Offense count: 2
 Style/EvalWithLocation:
   Exclude:
     - 'test/helper.rb'
-    - 'test/test_arhp.rb'
     - 'test/test_arhp_wrong_db.rb'
 
 # Offense count: 8
