@@ -22,7 +22,7 @@ module ARHPTestSetup
   private
 
   def arhp_create_models
-    return if Object.const_defined?('Test1')
+    return if ARHPTestSetup.const_defined?('Test1')
     eval <<-RUBY
       class Test1 < ActiveRecord::Base
         self.table_name = "tests"
