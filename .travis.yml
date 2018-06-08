@@ -14,12 +14,17 @@ gemfile:
   - gemfiles/rails5.0.gemfile
   - gemfiles/rails5.1.gemfile
   - gemfiles/rails5.2.gemfile
+script: bundle exec rake $TASK
+env:
+  global:
+    - TASK=test
 matrix:
   exclude:
     - rvm: 2.4
       gemfile: gemfiles/rails3.2.gemfile
     - rvm: 2.4
       gemfile: gemfiles/rails4.2.gemfile
-script:
-  - bundle exec rake rubocop
-  - bundle exec rake test
+  include:
+    - rvm: 2.4
+      env:
+        - TASK=rubocop
