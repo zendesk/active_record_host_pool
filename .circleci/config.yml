@@ -1,0 +1,159 @@
+version: 2
+
+test_steps: &test_steps
+  - checkout
+  - run: sudo apt install -y mysql-client
+  - run: bundle install
+  - run:
+      name: Wait for MySQL to be ready
+      command: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
+  - run:
+      name: Create user 'travis' in MySQL
+      command: mysql --host 127.0.0.1 --user root -e "CREATE USER 'travis'@'127.0.0.1'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'travis'@'127.0.0.1'; FLUSH PRIVILEGES;"
+  - run: bundle exec rake test
+
+jobs:
+
+  # Ruby 2.2
+  test-2.2-with-3.2:
+    docker:
+      - image: circleci/ruby:2.2
+      - image: circleci/mysql:5.6 # Old MySQL version
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails3.2.gemfile
+    steps:
+      *test_steps
+  test-2.2-with-4.2:
+    docker:
+      - image: circleci/ruby:2.2
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails4.2.gemfile
+    steps:
+      *test_steps
+  test-2.2-with-5.0:
+    docker:
+      - image: circleci/ruby:2.2
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.0.gemfile
+    steps:
+      *test_steps
+  test-2.2-with-5.1:
+    docker:
+      - image: circleci/ruby:2.2
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.1.gemfile
+    steps:
+      *test_steps
+  test-2.2-with-5.2:
+    docker:
+      - image: circleci/ruby:2.2
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
+    steps:
+      *test_steps
+
+  # Ruby 2.3
+  test-2.3-with-3.2:
+    docker:
+      - image: circleci/ruby:2.3
+      - image: circleci/mysql:5.6 # Old MySQL version
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails3.2.gemfile
+    steps:
+      *test_steps
+  test-2.3-with-4.2:
+    docker:
+      - image: circleci/ruby:2.3
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails4.2.gemfile
+    steps:
+      *test_steps
+  test-2.3-with-5.0:
+    docker:
+      - image: circleci/ruby:2.3
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.0.gemfile
+    steps:
+      *test_steps
+  test-2.3-with-5.1:
+    docker:
+      - image: circleci/ruby:2.3
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.1.gemfile
+    steps:
+      *test_steps
+  test-2.3-with-5.2:
+    docker:
+      - image: circleci/ruby:2.3
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
+    steps:
+      *test_steps
+
+  # Ruby 2.4
+  test-2.4-with-5.0:
+    docker:
+      - image: circleci/ruby:2.4
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.0.gemfile
+    steps:
+      *test_steps
+  test-2.4-with-5.1:
+    docker:
+      - image: circleci/ruby:2.4
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.1.gemfile
+    steps:
+      *test_steps
+  test-2.4-with-5.2:
+    docker:
+      - image: circleci/ruby:2.4
+      - image: circleci/mysql:5.7
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
+    steps:
+      *test_steps
+
+  # RuboCop
+  rubocop:
+    docker:
+      - image: circleci/ruby
+    environment:
+      BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec rubocop
+
+workflows:
+  version: 2
+  build:
+    jobs:
+
+      - test-2.2-with-3.2
+      - test-2.2-with-4.2
+      - test-2.2-with-5.0
+      - test-2.2-with-5.1
+      - test-2.2-with-5.2
+
+      - test-2.3-with-3.2
+      - test-2.3-with-4.2
+      - test-2.3-with-5.0
+      - test-2.3-with-5.1
+      - test-2.3-with-5.2
+
+      - test-2.4-with-5.0
+      - test-2.4-with-5.1
+      - test-2.4-with-5.2
+
+      - rubocop

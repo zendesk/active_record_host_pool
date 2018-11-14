@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/zendesk/active_record_host_pool.svg?branch=master)](https://travis-ci.org/zendesk/active_record_host_pool)
+[![Build status](https://circleci.com/gh/zendesk/active_record_host_pool.svg?style=svg)](https://circleci.com/gh/zendesk/active_record_host_pool)
 
 # ActiveRecord host pooling
 
