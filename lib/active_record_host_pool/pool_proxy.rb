@@ -66,6 +66,7 @@ module ActiveRecordHostPool
     def disconnect!
       p = _connection_pool(false)
       return unless p
+
       p.disconnect!
       p.automatic_reconnect = true if p.respond_to?(:automatic_reconnect=)
       _clear_connection_proxy_cache
@@ -74,6 +75,7 @@ module ActiveRecordHostPool
     def automatic_reconnect=(value)
       p = _connection_pool(false)
       return unless p
+
       p.automatic_reconnect = value if p.respond_to?(:automatic_reconnect=)
     end
 

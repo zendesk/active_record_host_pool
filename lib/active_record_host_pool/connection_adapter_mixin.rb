@@ -107,6 +107,7 @@ module ActiveRecord
         def establish_connection(owner, spec)
           @class_to_pool.clear
           raise "Anonymous class is not allowed." unless owner.name
+
           owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
 
