@@ -90,9 +90,7 @@ module ActiveRecord
     class ConnectionHandler
       if ActiveRecord::VERSION::MAJOR == 5
         if ActiveRecord::VERSION::MINOR == 0
-          def establish_connection(spec)
-            owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
-          end
+          raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
         else
           def establish_connection(spec)
             resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
