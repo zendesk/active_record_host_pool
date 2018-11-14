@@ -18,7 +18,7 @@ jobs:
   test-2.2-with-3.2:
     docker:
       - image: circleci/ruby:2.2
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.6 # Old MySQL version
     environment:
       BUNDLE_GEMFILE: gemfiles/rails3.2.gemfile
     steps:
@@ -60,7 +60,7 @@ jobs:
   test-2.3-with-3.2:
     docker:
       - image: circleci/ruby:2.3
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.6 # Old MySQL version
     environment:
       BUNDLE_GEMFILE: gemfiles/rails3.2.gemfile
     steps:
