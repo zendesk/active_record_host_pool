@@ -23,6 +23,23 @@ Layout/CaseIndentation:
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
+# Checks for method parameter names that contain capital letters, end in
+# numbers, or do not meet a minimal length.
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - at
+    - by
+    - cx
+    - id
+    - in
+    - io
+    - on
+    - to
+
+# Memoized method name should match memo instance variable name.
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: optional
+
 #
 # Disabled lint cops
 #
@@ -46,14 +63,3 @@ Style/GuardClause:
 # Favor modifier if/unless usage when you have a single-line body.
 Style/IfUnlessModifier:
   Enabled: false
-
-Naming/UncommunicativeMethodParamName:
-  AllowedNames:
-    - at
-    - by
-    - cx
-    - id
-    - in
-    - io
-    - on
-    - to
