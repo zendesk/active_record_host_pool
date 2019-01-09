@@ -18,7 +18,7 @@ jobs:
   test-2.3-with-4.2:
     docker:
       - image: circleci/ruby:2.3
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails4.2.gemfile
     steps:
@@ -26,7 +26,7 @@ jobs:
   test-2.3-with-5.1:
     docker:
       - image: circleci/ruby:2.3
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails5.1.gemfile
     steps:
@@ -34,7 +34,7 @@ jobs:
   test-2.3-with-5.2:
     docker:
       - image: circleci/ruby:2.3
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
     steps:
@@ -44,7 +44,7 @@ jobs:
   test-2.4-with-4.2:
     docker:
       - image: circleci/ruby:2.4
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails4.2.gemfile
     steps:
@@ -52,7 +52,7 @@ jobs:
   test-2.4-with-5.1:
     docker:
       - image: circleci/ruby:2.4
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails5.1.gemfile
     steps:
@@ -60,7 +60,7 @@ jobs:
   test-2.4-with-5.2:
     docker:
       - image: circleci/ruby:2.4
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
     steps:
@@ -70,7 +70,7 @@ jobs:
   test-2.5-with-4.2:
     docker:
       - image: circleci/ruby:2.5
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails4.2.gemfile
     steps:
@@ -78,7 +78,7 @@ jobs:
   test-2.5-with-5.1:
     docker:
       - image: circleci/ruby:2.5
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails5.1.gemfile
     steps:
@@ -86,7 +86,7 @@ jobs:
   test-2.5-with-5.2:
     docker:
       - image: circleci/ruby:2.5
-      - image: circleci/mysql:5.7
+      - image: circleci/mysql:5.7-ram
     environment:
       BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
     steps:
