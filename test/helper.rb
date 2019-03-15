@@ -15,7 +15,7 @@ Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
 Phenix.configure do |config|
-  config.skip_database = ->(name, conf) { name =~ /not_there/ || conf['username'] == 'travis' }
+  config.skip_database = ->(name, conf) { name =~ /not_there/ || conf['username'] == 'john-doe' }
 end
 
 module ARHPTestSetup

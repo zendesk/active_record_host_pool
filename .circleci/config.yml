@@ -8,8 +8,8 @@ test_steps: &test_steps
       name: Wait for MySQL to be ready
       command: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
   - run:
-      name: Create user 'travis' in MySQL
-      command: mysql --host 127.0.0.1 --user root -e "CREATE USER 'travis'@'127.0.0.1'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'travis'@'127.0.0.1'; FLUSH PRIVILEGES;"
+      name: Create user 'john-doe' in MySQL
+      command: mysql --host 127.0.0.1 --user root -e "CREATE USER 'john-doe'@'127.0.0.1'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'@'127.0.0.1'; FLUSH PRIVILEGES;"
   - run: bundle exec rake test
 
 jobs:
