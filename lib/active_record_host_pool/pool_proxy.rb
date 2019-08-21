@@ -84,6 +84,27 @@ module ActiveRecordHostPool
       _clear_connection_proxy_cache
     end
 
+    def release_connection(owner_thread = Thread.current)
+      p = _connection_pool(false)
+      return unless p
+
+      p.release_connection(owner_thread)
+    end
+
+    def flush!
+      p = _connection_pool(false)
+      return unless p
+
+      p.flush!
+    end
+
+    def discard!
+      p = _connection_pool(false)
+      return unless p
+
+      p.discard!
+    end
+
     private
 
     def rescuable_errors
