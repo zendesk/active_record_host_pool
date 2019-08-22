@@ -13,6 +13,23 @@ class ActiveRecordHostPoolTest < Minitest::Test
     Phenix.burn!
   end
 
+  def test_process_forking_with_connections
+    # Ensure we have a connection already
+    assert_equal(true, ActiveRecord::Base.connected?)
+
+    # Verify that when we fork, the process doesn't crash
+    pid = Process.fork do
+      if ActiveRecord::VERSION::MAJOR == 5 && ActiveRecord::VERSION::MINOR == 2
+        assert_equal(false, ActiveRecord::Base.connected?) # New to Rails 5.2
+      else
+        assert_equal(true, ActiveRecord::Base.connected?)
+      end
+    end
+    Process.wait(pid)
+    # Cleanup any connections we may have left around
+    ActiveRecord::Base.connection_handler.clear_all_connections!
+  end
+
   def test_models_with_matching_hosts_should_share_a_connection
     assert_equal(Test1.connection.raw_connection, Test2.connection.raw_connection)
     assert_equal(Test3.connection.raw_connection, Test4.connection.raw_connection)

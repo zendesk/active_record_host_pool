@@ -103,6 +103,13 @@ module ActiveRecordHostPool
       return unless p
 
       p.discard!
+
+      # All connections in the pool (even if they're currently
+      # leased!) have just been discarded, along with the pool itself.
+      # Any further interaction with the pool (except #spec and #schema_cache)
+      # is undefined.
+      # Remove the connection for the given key so a new one can be created in its place
+      _connection_pools.delete(_pool_key)
     end
 
     private
