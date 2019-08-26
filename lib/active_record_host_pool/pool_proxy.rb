@@ -84,6 +84,34 @@ module ActiveRecordHostPool
       _clear_connection_proxy_cache
     end
 
+    def release_connection(owner_thread = Thread.current)
+      p = _connection_pool(false)
+      return unless p
+
+      p.release_connection(owner_thread)
+    end
+
+    def flush!
+      p = _connection_pool(false)
+      return unless p
+
+      p.flush!
+    end
+
+    def discard!
+      p = _connection_pool(false)
+      return unless p
+
+      p.discard!
+
+      # All connections in the pool (even if they're currently
+      # leased!) have just been discarded, along with the pool itself.
+      # Any further interaction with the pool (except #spec and #schema_cache)
+      # is undefined.
+      # Remove the connection for the given key so a new one can be created in its place
+      _connection_pools.delete(_pool_key)
+    end
+
     private
 
     def rescuable_errors
