@@ -35,6 +35,6 @@ Rails compatibility:
 
 Upgrade Rubocop (https://github.com/zendesk/active_record_host_pool/pull/33/)
 
-### <= 0.12.1
+### <= 0.10.1
 
 Unwritten
