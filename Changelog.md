@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 _does not yet_ adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Support for Rails 6.0.x. (https://github.com/zendesk/active_record_host_pool/pull/53)
 
 ## [0.13.0] - 2019-08-26
 ### Added

@@ -85,22 +85,21 @@ module ActiveRecordHostPool
   end
 end
 
+# rubocop:disable Lint/DuplicateMethods
 module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
-      if ActiveRecord::VERSION::MAJOR == 5
-        if ActiveRecord::VERSION::MINOR == 0
-          raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
-        else
-          def establish_connection(spec)
-            resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
-            spec = resolver.spec(spec)
+      case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+      when '5.1', '5.2', '6.0'
 
-            owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
-          end
+        def establish_connection(spec)
+          resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
+          spec = resolver.spec(spec)
+
+          owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
 
-      elsif ActiveRecord::VERSION::MAJOR == 4
+      when '4.2'
 
         def establish_connection(owner, spec)
           @class_to_pool.clear
@@ -116,5 +115,6 @@ module ActiveRecord
     end
   end
 end
+# rubocop:enable Lint/DuplicateMethods
 
 ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
