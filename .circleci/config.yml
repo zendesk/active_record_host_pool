@@ -3,6 +3,11 @@ version: 2
 test_steps: &test_steps
   - checkout
   - run: sudo apt install -y default-mysql-client
+  - run:
+      name: Install the correct version of Bundler
+      command: |
+        bundler_version=$(grep -A1 'BUNDLED WITH' ${BUNDLE_GEMFILE:-Gemfile}.lock | tail -n1 | sed -e 's/^[[:space:]]*//')
+        gem install --no-document bundler -v $bundler_version
   - run: bundle install
   - run:
       name: Wait for MySQL to be ready
@@ -100,6 +105,11 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/rails5.2.gemfile
     steps:
       - checkout
+      - run:
+          name: Install the correct version of Bundler
+          command: |
+            bundler_version=$(grep -A1 'BUNDLED WITH' ${BUNDLE_GEMFILE:-Gemfile}.lock | tail -n1 | sed -e 's/^[[:space:]]*//')
+            gem install --no-document bundler -v $bundler_version
       - run: bundle install
       - run: bundle exec rubocop
 
