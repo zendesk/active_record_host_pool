@@ -1,12 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project
-_does not yet_ adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0] - 2020-02-25
 ### Added
 - Support for Rails 6.0.x. (https://github.com/zendesk/active_record_host_pool/pull/53)
+
+### Changed
+- This gem now adheres to semantic versioning.
 
 ## [0.13.0] - 2019-08-26
 ### Added
