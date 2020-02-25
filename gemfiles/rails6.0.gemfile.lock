@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    active_record_host_pool (0.13.0)
+    active_record_host_pool (1.0.0)
       activerecord (>= 4.2.0, < 6.1)
       mysql2
 
@@ -35,17 +35,17 @@ GEM
     phenix (0.6.0)
       activerecord (>= 4.2, < 6.1)
       bundler
-    powerpack (0.1.2)
     rainbow (3.0.0)
     rake (13.0.1)
-    rubocop (0.62.0)
+    rexml (3.2.4)
+    rubocop (0.80.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5, != 2.5.1.1)
-      powerpack (~> 0.1)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      rexml
       ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.4.0)
+      unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.10.1)
     shoulda (3.6.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -56,7 +56,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
-    unicode-display_width (1.4.1)
+    unicode-display_width (1.6.1)
     zeitwerk (2.2.2)
 
 PLATFORMS
@@ -71,7 +71,7 @@ DEPENDENCIES
   mysql2 (>= 0.4.4)
   phenix
   rake (>= 12.0.0)
-  rubocop (~> 0.62.0)
+  rubocop (~> 0.80.0)
   shoulda
 
 BUNDLED WITH
