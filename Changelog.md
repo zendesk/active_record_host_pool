@@ -6,6 +6,10 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [1.0.1] - 2020-03-30
+### Fixed
+- Fix connection leakage when calling `release_connection` on pre-Rails 5 applications. (https://github.com/zendesk/active_record_host_pool/pull/58)
+
 ## [1.0.0] - 2020-02-25
 ### Added
 - Support for Rails 6.0.x. (https://github.com/zendesk/active_record_host_pool/pull/53)
