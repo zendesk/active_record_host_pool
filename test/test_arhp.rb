@@ -163,6 +163,13 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert_equal expected_database, current_database(switch_to_klass)
   end
 
+  def test_release_connection
+    pool = ActiveRecord::Base.connection_pool
+    conn = pool.connection
+    pool.expects(:checkin).with(conn)
+    pool.release_connection
+  end
+
   private
 
   def assert_action_uses_correct_database(action, sql)

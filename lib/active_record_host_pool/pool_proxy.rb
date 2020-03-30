@@ -84,11 +84,11 @@ module ActiveRecordHostPool
       _clear_connection_proxy_cache
     end
 
-    def release_connection(owner_thread = Thread.current)
+    def release_connection(*args)
       p = _connection_pool(false)
       return unless p
 
-      p.release_connection(owner_thread)
+      p.release_connection(*args)
     end
 
     def flush!
