@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    active_record_host_pool (1.0.0)
+    active_record_host_pool (1.0.1)
       activerecord (>= 4.2.0, < 6.1)
       mysql2
 
