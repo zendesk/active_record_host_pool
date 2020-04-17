@@ -19,7 +19,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     # Verify that when we fork, the process doesn't crash
     pid = Process.fork do
-      if ActiveRecord::VERSION::MAJOR == 5 && ActiveRecord::VERSION::MINOR == 2
+      if ActiveRecord.version >= Gem::Version.new('5.2')
         assert_equal(false, ActiveRecord::Base.connected?) # New to Rails 5.2
       else
         assert_equal(true, ActiveRecord::Base.connected?)
@@ -53,6 +53,38 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_should_insert_on_correct_database
     assert_action_uses_correct_database(:insert, "insert into tests values(NULL, 'foo')")
+  end
+
+  def test_models_with_matching_hosts_and_non_matching_databases_should_share_a_connection
+    simulate_rails_app_active_record_railties
+    assert_equal(Test1.connection.raw_connection, Test1Shard.connection.raw_connection)
+  end
+
+  if ActiveRecord.version >= Gem::Version.new('6.0')
+    def test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
+      simulate_rails_app_active_record_railties
+
+      # Remove patch that fixes an issue in Rails 6+ to ensure it still
+      # exists. If this begins to fail then it may mean that Rails has fixed
+      # the issue so that it no longer occurs.
+      without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
+        exception = assert_raises(ActiveRecord::StatementInvalid) do
+          ActiveRecord::Base.cache { Test1Shard.create! }
+        end
+
+        assert_equal("Mysql2::Error: Table 'arhp_test_2.test1_shards' doesn't exist", exception.message)
+      end
+    end
+
+    def test_models_with_matching_hosts_and_non_matching_databases_do_not_mix_up_underlying_database
+      simulate_rails_app_active_record_railties
+
+      # ActiveRecord 6.0 introduced a change that surfaced a problematic code
+      # path in active_record_host_pool when clearing caches across connection
+      # handlers which can cause the database to change.
+      # See ActiveRecordHostPool::ClearQueryCachePatch
+      ActiveRecord::Base.cache { Test1Shard.create! }
+    end
   end
 
   def test_connection_returns_a_proxy
@@ -178,6 +210,18 @@ class ActiveRecordHostPoolTest < Minitest::Test
       desired_db = "arhp_test_#{i}"
       klass.connection.send(action, sql)
       assert_equal desired_db, current_database(klass)
+    end
+  end
+
+  def simulate_rails_app_active_record_railties
+    if ActiveRecord.version >= Gem::Version.new('6.0')
+      # Necessary for testing ActiveRecord 6.0 which uses the connection
+      # handlers when clearing query caches across all handlers when
+      # an operation that dirties the cache is involved (e.g. create/insert,
+      # update, delete/destroy, truncate, etc.)
+      ActiveRecord::Base.connection_handlers = {
+        ActiveRecord::Base.writing_role => ActiveRecord::Base.default_connection_handler
+      }
     end
   end
 end

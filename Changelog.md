@@ -6,6 +6,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Fixed
+- Fix unintended connection switching while clearing query cache in Rails 6.0. (https://github.com/zendesk/active_record_host_pool/pull/61)
+
 ## [1.0.1] - 2020-03-30
 ### Fixed
 - Fix connection leakage when calling `release_connection` on pre-Rails 5 applications. (https://github.com/zendesk/active_record_host_pool/pull/58)

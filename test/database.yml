@@ -66,3 +66,12 @@ test_host_1_db_not_there:
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   reconnect: true
+
+test_host_1_db_shard:
+  adapter: mysql2
+  encoding: utf8
+  database: arhp_test_1_shard
+  username: <%= mysql.user %>
+  password: <%= mysql.password %>
+  host: <%= mysql.host %>
+  reconnect: true
