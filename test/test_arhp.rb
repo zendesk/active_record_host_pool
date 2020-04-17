@@ -19,7 +19,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     # Verify that when we fork, the process doesn't crash
     pid = Process.fork do
-      if ActiveRecord::VERSION::MAJOR == 5 && ActiveRecord::VERSION::MINOR == 2
+      if ActiveRecord.version >= Gem::Version.new('5.2')
         assert_equal(false, ActiveRecord::Base.connected?) # New to Rails 5.2
       else
         assert_equal(true, ActiveRecord::Base.connected?)
@@ -30,9 +30,14 @@ class ActiveRecordHostPoolTest < Minitest::Test
     ActiveRecord::Base.connection_handler.clear_all_connections!
   end
 
-  def test_models_with_matching_hosts_should_share_a_connection
-    assert_equal(Test1.connection.raw_connection, Test2.connection.raw_connection)
-    assert_equal(Test3.connection.raw_connection, Test4.connection.raw_connection)
+  def test_models_with_matching_hosts_and_matching_databases_should_share_a_connection
+    assert_equal(Test1.connection.raw_connection, Test1Shard1.connection.raw_connection)
+    assert_equal(Test3.connection.raw_connection, Test3Shard1.connection.raw_connection)
+  end
+
+  def test_models_without_matching_databases_should_not_share_a_connection
+    refute_equal(Test1.connection.raw_connection, Test2.connection.raw_connection)
+    refute_equal(Test3.connection.raw_connection, Test4.connection.raw_connection)
   end
 
   def test_models_without_matching_hosts_should_not_share_a_connection

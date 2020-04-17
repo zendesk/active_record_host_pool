@@ -54,6 +54,14 @@ module ARHPTestSetup
         self.table_name = "tests"
         establish_connection(:test_host_2_db_5)
       end
+
+      class Test1Shard1 < ::ActiveRecord::Base
+        establish_connection(:test_host_1_db_1_shard_1)
+      end
+
+      class Test3Shard1 < ::ActiveRecord::Base
+        establish_connection(:test_host_2_db_3_shard_1)
+      end
     RUBY
   end
 

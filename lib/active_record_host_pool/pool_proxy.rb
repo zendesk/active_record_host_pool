@@ -129,7 +129,16 @@ module ActiveRecordHostPool
     end
 
     def _pool_key
-      @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/#{@config[:username]}/#{@config[:slave] && 'slave'}"
+      @_pool_key ||= begin
+        [
+          @config[:host],
+          @config[:port],
+          @config[:socket],
+          @config[:username],
+          @config[:database],
+          @config[:slave] ? 'slave' : ''
+        ].join('/')
+      end
     end
 
     def _connection_pool(auto_create = true)
