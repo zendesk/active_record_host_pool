@@ -134,7 +134,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     Test1.first
 
     # which is the "default" DB to connect to?
-    first_db = Test1.connection.unproxied.instance_variable_get(:@_cached_current_database)
+    first_db = Test1.connection.unproxied.current_database
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
