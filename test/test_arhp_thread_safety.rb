@@ -32,6 +32,38 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert_equal 'some_other_database', database_values.database_config_on_child_thread
   end
 
+  def test_inserting_and_querying_records_across_threads
+    assert_equal 0, Test1.count
+    assert_equal 0, Test2.count
+
+    # Let's test creating records concurrently in thread this number of times
+    number_of_test_iterations = 10
+
+    # Only test this number of threads at a time otherwise we will cause deadlocks
+    # based on the pool size
+    max_threads = (Test1.connection.pool.size - 1)
+
+    # Total number of records to be created for Test1 and Test2 models each
+    expected_number_of_records_created_per_model = (max_threads * number_of_test_iterations) / 2
+
+    threads = []
+    number_of_test_iterations.times do
+      max_threads.times do |index|
+        threads << Thread.new do
+          if index.odd?
+            Test1.create!
+          else
+            Test2.create!
+          end
+        end
+      end
+      threads.map(&:join)
+    end
+
+    assert_equal expected_number_of_records_created_per_model, Test1.count
+    assert_equal expected_number_of_records_created_per_model, Test2.count
+  end
+
   private
 
   def connection
