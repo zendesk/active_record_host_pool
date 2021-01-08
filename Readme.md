@@ -1,4 +1,4 @@
-[![Build status](https://circleci.com/gh/zendesk/active_record_host_pool.svg?style=svg)](https://circleci.com/gh/zendesk/active_record_host_pool)
+[![Build Status](https://github.com/zendesk/active_record_host_pool/workflows/CI/badge.svg)](https://github.com/zendesk/active_record_host_pool/actions?query=workflow%3ACI)
 
 # ActiveRecord host pooling
 
