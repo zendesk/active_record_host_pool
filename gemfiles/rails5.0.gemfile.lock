@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     active_record_host_pool (1.0.1)
-      activerecord (>= 4.2.0, < 6.1)
+      activerecord (>= 4.2.0, < 6.2)
       mysql2
 
 GEM
@@ -33,8 +33,8 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.2)
       ast (~> 2.4.0)
-    phenix (0.6.0)
-      activerecord (>= 4.2, < 6.1)
+    phenix (0.8.0)
+      activerecord (>= 4.2, < 6.2)
       bundler
     rainbow (3.0.0)
     rake (13.0.1)
@@ -61,6 +61,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   active_record_host_pool!
@@ -75,4 +76,4 @@ DEPENDENCIES
   shoulda
 
 BUNDLED WITH
-   2.1.4
+   2.2.5
