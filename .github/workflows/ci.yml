@@ -23,7 +23,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - 2.4
           - 2.5
           - 2.6
         gemfile:
@@ -31,11 +30,9 @@ jobs:
           - rails5.1
           - rails5.2
           - rails6.0
+          - rails6.1
         task:
           - "rake test"
-        exclude:
-          - ruby-version: 2.4
-            gemfile: rails6.0
         include:
           - ruby-version: 2.6
             gemfile: rails5.2
