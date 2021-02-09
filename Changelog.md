@@ -6,6 +6,10 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [1.0.3] - 2021-02-09
+### Fixed
+- Add missing file to the released gem. (https://github.com/zendesk/active_record_host_pool/pull/68)
+
 ## [1.0.2] - 2021-02-09
 ### Fixed
 - Fix unintended connection switching while clearing query cache in Rails 6.0. (https://github.com/zendesk/active_record_host_pool/pull/61)

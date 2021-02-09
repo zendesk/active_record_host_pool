@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.files = [
     "Readme.md",
     "lib/active_record_host_pool.rb",
+    "lib/active_record_host_pool/clear_query_cache_patch.rb",
     "lib/active_record_host_pool/connection_adapter_mixin.rb",
     "lib/active_record_host_pool/connection_proxy.rb",
     "lib/active_record_host_pool/pool_proxy.rb",
