@@ -111,6 +111,9 @@ module ActiveRecord
           owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
         end
 
+      when '5.0'
+        raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
+
       else
 
         raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
