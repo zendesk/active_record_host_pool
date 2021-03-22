@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Do not execute SELECT 1 query after creating a ConnectionProxy, rails already takes care of this (https://github.com/zendesk/active_record_host_pool/pull/69)
 
 ## [1.0.3] - 2021-02-09
 ### Fixed
