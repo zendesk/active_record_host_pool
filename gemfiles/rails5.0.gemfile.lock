@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     active_record_host_pool (1.0.3)
-      activerecord (>= 4.2.0, < 6.1)
+      activerecord (>= 4.2.0, < 7.0)
       mysql2
 
 GEM
@@ -75,4 +75,4 @@ DEPENDENCIES
   shoulda
 
 BUNDLED WITH
-   2.1.4
+   2.2.27
