@@ -90,7 +90,7 @@ module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
       case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-      when '5.1', '5.2', '6.0'
+      when '5.1', '5.2', '6.0', '6.1'
 
         def establish_connection(spec)
           resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
