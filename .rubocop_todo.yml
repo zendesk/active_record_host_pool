@@ -37,8 +37,6 @@ Style/FrozenStringLiteralComment:
     - 'Gemfile'
     - 'Rakefile'
     - 'active_record_host_pool.gemspec'
-    - 'gemfiles/rails4.2.gemfile'
-    - 'gemfiles/rails5.0.gemfile'
     - 'gemfiles/rails5.1.gemfile'
     - 'gemfiles/rails5.2.gemfile'
 
@@ -51,8 +49,6 @@ Style/StringLiterals:
     - 'Gemfile'
     - 'active_record_host_pool.gemspec'
     - 'gemfiles/common.rb'
-    - 'gemfiles/rails4.2.gemfile'
-    - 'gemfiles/rails5.0.gemfile'
     - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
     - 'lib/active_record_host_pool/pool_proxy.rb'
     - 'lib/active_record_host_pool/version.rb'

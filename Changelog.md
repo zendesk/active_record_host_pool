@@ -6,6 +6,10 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Removed
+
+- Removed compatibility with Rails 4.2.
+
 ## [1.0.3] - 2021-02-09
 ### Fixed
 - Add missing file to the released gem. (https://github.com/zendesk/active_record_host_pool/pull/68)
