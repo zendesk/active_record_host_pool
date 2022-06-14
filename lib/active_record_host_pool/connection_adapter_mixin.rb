@@ -83,6 +83,14 @@ module ActiveRecordHostPool
       super(_host_pool_current_database.to_s + "/" + sql, *args)
     end
   end
+
+  module PoolConfigPatch
+    def pool
+      ActiveSupport::ForkTracker.check!
+
+      @pool || synchronize { @pool ||= ActiveRecordHostPool::PoolProxy.new(self) }
+    end
+  end
 end
 
 # rubocop:disable Lint/DuplicateMethods
@@ -90,7 +98,11 @@ module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
       case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-      when '5.1', '5.2', '6.0', '6.1'
+      when '6.1'
+
+        :noop
+
+      when '5.1', '5.2', '6.0'
 
         def establish_connection(spec)
           resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
@@ -118,3 +130,7 @@ end
 # rubocop:enable Lint/DuplicateMethods
 
 ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
+
+if "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}" == '6.1'
+  ActiveRecord::ConnectionAdapters::PoolConfig.include(ActiveRecordHostPool::PoolConfigPatch)
+end
