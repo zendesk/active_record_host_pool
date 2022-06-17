@@ -149,7 +149,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     conn.expects(:execute_without_switching)
     conn.expects(:_switch_connection).never
     assert conn._host_pool_current_database
-    conn.create_database(:some_args)
+    conn.create_database(:some_args, charset: 'utf8mb4')
   end
 
   def test_no_switch_when_dropping_db
