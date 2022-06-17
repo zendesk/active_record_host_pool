@@ -19,9 +19,8 @@ module ActiveRecordHostPool
     class PoolProxy < Delegator
       def initialize(pool_config)
         super(pool_config)
-        byebug
         @pool_config = pool_config
-        @config = pool_config.config
+        @config = pool_config.db_config.configuration_hash
       end
 
       def __getobj__
@@ -30,7 +29,7 @@ module ActiveRecordHostPool
 
       def __setobj__(pool_config)
         @pool_config = pool_config
-        @config = pool_config.config
+        @config = pool_config.db_config.configuration_hash
         @_pool_key = nil
       end
 
