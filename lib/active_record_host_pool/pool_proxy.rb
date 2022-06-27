@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/DuplicateMethods
+
 require 'delegate'
 require 'active_record'
 require 'active_record_host_pool/connection_adapter_mixin'
@@ -132,7 +134,8 @@ module ActiveRecordHostPool
       end
 
       def _pool_key
-        @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/#{@config[:username]}/#{@config[:slave] && 'slave'}"
+        @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/" \
+                       "#{@config[:username]}/#{@config[:slave] && 'slave'}"
       end
 
       def _connection_pool(auto_create = true)
@@ -277,7 +280,8 @@ module ActiveRecordHostPool
       end
 
       def _pool_key
-        @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/#{@config[:username]}/#{@config[:slave] && 'slave'}"
+        @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/" \
+                       "#{@config[:username]}/#{@config[:slave] && 'slave'}"
       end
 
       def _connection_pool(auto_create = true)
@@ -306,3 +310,5 @@ module ActiveRecordHostPool
 
   end
 end
+
+# rubocop:enable Lint/DuplicateMethods
