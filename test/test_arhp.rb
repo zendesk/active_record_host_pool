@@ -214,7 +214,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def simulate_rails_app_active_record_railties
-    if ActiveRecord.version >= Gem::Version.new('6.0')
+    if ActiveRecord.version >= Gem::Version.new('6.0') && ActiveRecord.version < Gem::Version.new('6.1')
       # Necessary for testing ActiveRecord 6.0 which uses the connection
       # handlers when clearing query caches across all handlers when
       # an operation that dirties the cache is involved (e.g. create/insert,
