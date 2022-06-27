@@ -67,6 +67,7 @@ DEPENDENCIES
   activerecord (~> 5.1.6)
   bump
   byebug
+  minitest (>= 5.10.0)
   mocha
   mysql2 (>= 0.3.18, < 0.6.0)
   phenix
