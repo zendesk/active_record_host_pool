@@ -7,6 +7,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   def setup
     Phenix.rise!
     arhp_create_models
+    ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
   end
 
   def teardown
