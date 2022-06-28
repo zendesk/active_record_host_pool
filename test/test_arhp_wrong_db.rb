@@ -5,7 +5,11 @@ require_relative 'helper'
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    Phenix.load_database_config
+    if !ActiveRecord::Base.legacy_connection_handling && ActiveRecord.version >= Gem::Version.new('6.1')
+      Phenix.load_database_config "test/new_database.yml"
+    else
+      Phenix.load_database_config
+    end
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 
