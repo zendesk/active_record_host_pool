@@ -1,0 +1,73 @@
+<% mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306') %>
+
+test:
+  primary:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+    database: arhp_test_1
+
+  primary_replica:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+    database: arhp_test_1_slave
+
+  test_host_1_db_2:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+    database: arhp_test_2
+
+  test_host_2_db_3:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+    database: arhp_test_3
+
+  test_host_2_db_4:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+    database: arhp_test_4
+
+  test_host_2_db_5:
+    database: arhp_test_4
+    username: john-doe
+    password:
+    encoding: utf8
+    adapter: mysql2
+    ssl_mode: :disabled
+    reconnect: true
+
+  test_host_1_db_not_there:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+
+  test_host_1_db_shard:
+    adapter: mysql2
+    encoding: utf8
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+    database: arhp_test_1_shard
