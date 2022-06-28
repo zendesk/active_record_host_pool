@@ -5,9 +5,13 @@ require_relative 'helper'
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    Phenix.rise!
-    arhp_create_models
     ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
+    if !ActiveRecord::Base.legacy_connection_handling && ActiveRecord.version >= Gem::Version.new('6.1')
+      Phenix.rise! config_path: "test/new_database.yml"
+    else
+      Phenix.rise!
+    end
+    arhp_create_models
   end
 
   def teardown
@@ -220,7 +224,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   private
 
   def simulate_rails_app_active_record_railties
-    if ActiveRecord.version >= Gem::Version.new('6.0') && ActiveRecord.version < Gem::Version.new('6.1')
+    if ActiveRecord.version >= Gem::Version.new('6.0') &&  ActiveRecord.version < Gem::Version.new('6.1')
       # Necessary for testing ActiveRecord 6.0 which uses the connection
       # handlers when clearing query caches across all handlers when
       # an operation that dirties the cache is involved (e.g. create/insert,
