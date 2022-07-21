@@ -5,7 +5,7 @@ require 'bump/tasks'
 require 'rubocop/rake_task'
 
 Rake::TestTask.new do |test|
-  test.pattern = 'test/test_*.rb'
+  test.pattern = 'test/test_arhp.rb'
   test.verbose = true
   test.warning = true
 end

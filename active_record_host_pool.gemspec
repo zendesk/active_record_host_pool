@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("minitest", ">= 5.10.0")
   s.add_development_dependency("minitest-fail-fast")
   s.add_development_dependency("mocha")
-  s.add_development_dependency("phenix")
   s.add_development_dependency("pry-byebug")
   s.add_development_dependency("rake", '>= 12.0.0')
   s.add_development_dependency('rubocop', '~> 0.80.0')

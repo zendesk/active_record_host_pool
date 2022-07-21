@@ -34,6 +34,7 @@ test:
     username: <%= mysql.user %>
     password: <%= mysql.password %>
     host: <%= mysql.host %>
+    port: <%= mysql.port %>
     reconnect: true
     database: arhp_test_3
 
@@ -43,6 +44,7 @@ test:
     username: <%= mysql.user %>
     password: <%= mysql.password %>
     host: <%= mysql.host %>
+    port: <%= mysql.port %>
     reconnect: true
     database: arhp_test_4
 
@@ -52,6 +54,8 @@ test:
     password:
     encoding: utf8
     adapter: mysql2
+    host: <%= mysql.host %>
+    port: <%= mysql.port %>
     ssl_mode: :disabled
     reconnect: true
 
