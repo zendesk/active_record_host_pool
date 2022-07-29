@@ -18,26 +18,26 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     begin
       eval <<-RUBY
         class TestNotThere < ActiveRecord::Base
-          establish_connection(:test_host_1_db_not_there)
+          establish_connection(:test_pool_1_db_not_there)
           connection
         end
       RUBY
     rescue Exception => e
-      assert e.message =~ /Unknown database 'arhp_test_no_create'/
+      assert e.message =~ /Unknown database 'arhp_test_db_not_there'/
       reached_first_exception = true
     end
 
     assert reached_first_exception
 
-    TestNotThere.establish_connection(:test_host_1_db_1)
+    TestNotThere.establish_connection(:test_pool_1_db_a)
 
     begin
       TestNotThere.connection
     rescue Exception => e
       # If the pool is caching a bad connection, that connection will be used instead
       # of the intended connection.
-      refute_includes e.message, "Unknown database 'arhp_test_no_create'"
-      assert_includes e.message, "Unknown database 'arhp_test_1'"
+      refute_includes e.message, "Unknown database 'arhp_test_db_not_there'"
+      assert_includes e.message, "Unknown database 'arhp_test_db_a'"
       reached_second_exception = true
     end
 

@@ -30,34 +30,48 @@ class ActiveRecordHostPoolTest < Minitest::Test
     ActiveRecord::Base.connection_handler.clear_all_connections!
   end
 
-  def test_models_with_matching_hosts_should_share_a_connection
-    assert_equal(Test1.connection.raw_connection, Test2.connection.raw_connection)
-    assert_equal(Test3.connection.raw_connection, Test4.connection.raw_connection)
+  def test_models_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
+    assert_equal(Pool1DbA.connection.raw_connection, Pool1DbB.connection.raw_connection)
+    assert_equal(Pool2DbD.connection.raw_connection, Pool2DbE.connection.raw_connection)
   end
 
-  def test_models_without_matching_hosts_should_not_share_a_connection
-    refute_equal(Test1.connection.raw_connection, Test4.connection.raw_connection)
+  def test_models_without_matching_ports_should_not_share_a_connection
+    refute_equal(Pool1DbA.connection.raw_connection, Pool2DbD.connection.raw_connection)
   end
 
   def test_models_without_matching_usernames_should_not_share_a_connection
-    refute_equal(Test4.connection.raw_connection, Test5.connection.raw_connection)
+    refute_equal(Pool2DbE.connection.raw_connection, Pool3DbE.connection.raw_connection)
   end
 
-  def test_models_without_match_slave_status_should_not_share_a_connection
-    refute_equal(Test1.connection.raw_connection, Test1Slave.connection.raw_connection)
+  def test_models_without_match_replica_status_should_not_share_a_connection
+    refute_equal(Pool1DbA.connection.raw_connection, Pool1DbAReplica.connection.raw_connection)
   end
 
   def test_should_select_on_correct_database
-    assert_action_uses_correct_database(:select_all, 'select 1')
+    Pool1DbA.connection.send(:select_all, 'select 1')
+    assert_equal 'arhp_test_db_a', current_database(Pool1DbA)
+
+    Pool2DbD.connection.send(:select_all, 'select 1')
+    assert_equal 'arhp_test_db_d', current_database(Pool2DbD)
+
+    Pool3DbE.connection.send(:select_all, 'select 1')
+    assert_equal 'arhp_test_db_e', current_database(Pool3DbE)
   end
 
   def test_should_insert_on_correct_database
-    assert_action_uses_correct_database(:insert, "insert into tests values(NULL, 'foo')")
+    Pool1DbA.connection.send(:insert, "insert into tests values(NULL, 'foo')")
+    assert_equal 'arhp_test_db_a', current_database(Pool1DbA)
+
+    Pool2DbD.connection.send(:insert, "insert into tests values(NULL, 'foo')")
+    assert_equal 'arhp_test_db_d', current_database(Pool2DbD)
+
+    Pool3DbE.connection.send(:insert, "insert into tests values(NULL, 'foo')")
+    assert_equal 'arhp_test_db_e', current_database(Pool3DbE)
   end
 
   def test_models_with_matching_hosts_and_non_matching_databases_should_share_a_connection
     simulate_rails_app_active_record_railties
-    assert_equal(Test1.connection.raw_connection, Test1Shard.connection.raw_connection)
+    assert_equal(Pool1DbA.connection.raw_connection, Pool1DbC.connection.raw_connection)
   end
 
   if ActiveRecord.version >= Gem::Version.new('6.0')
@@ -69,10 +83,10 @@ class ActiveRecordHostPoolTest < Minitest::Test
       # the issue so that it no longer occurs.
       without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
         exception = assert_raises(ActiveRecord::StatementInvalid) do
-          ActiveRecord::Base.cache { Test1Shard.create! }
+          ActiveRecord::Base.cache { Pool1DbC.create! }
         end
 
-        assert_equal("Mysql2::Error: Table 'arhp_test_2.test1_shards' doesn't exist", exception.message)
+        assert_equal("Mysql2::Error: Table 'arhp_test_db_b.pool1_db_cs' doesn't exist", exception.message)
       end
     end
 
@@ -83,57 +97,57 @@ class ActiveRecordHostPoolTest < Minitest::Test
       # path in active_record_host_pool when clearing caches across connection
       # handlers which can cause the database to change.
       # See ActiveRecordHostPool::ClearQueryCachePatch
-      ActiveRecord::Base.cache { Test1Shard.create! }
+      ActiveRecord::Base.cache { Pool1DbC.create! }
     end
   end
 
   def test_connection_returns_a_proxy
-    assert_kind_of ActiveRecordHostPool::ConnectionProxy, Test1.connection
+    assert_kind_of ActiveRecordHostPool::ConnectionProxy, Pool1DbA.connection
   end
 
   def test_connection_proxy_handles_private_methods
     # Relies on connection.class returning the real class
-    Test1.connection.class.class_eval do
+    Pool1DbA.connection.class.class_eval do
       private
 
       def test_private_method
         true
       end
     end
-    assert Test1.connection.respond_to?(:test_private_method, true)
-    refute Test1.connection.respond_to?(:test_private_method)
-    assert_includes(Test1.connection.private_methods, :test_private_method)
-    assert_equal true, Test1.connection.send(:test_private_method)
+    assert Pool1DbA.connection.respond_to?(:test_private_method, true)
+    refute Pool1DbA.connection.respond_to?(:test_private_method)
+    assert_includes(Pool1DbA.connection.private_methods, :test_private_method)
+    assert_equal true, Pool1DbA.connection.send(:test_private_method)
   end
 
   def test_should_not_share_a_query_cache
-    Test1.create(val: 'foo')
-    Test2.create(val: 'foobar')
-    Test1.connection.cache do
-      refute_equal Test1.first.val, Test2.first.val
+    Pool1DbA.create(val: 'foo')
+    Pool1DbB.create(val: 'foobar')
+    Pool1DbA.connection.cache do
+      refute_equal Pool1DbA.first.val, Pool1DbB.first.val
     end
   end
 
   def test_object_creation
-    Test1.create(val: 'foo')
-    assert_equal('arhp_test_1', current_database(Test1))
+    Pool1DbA.create(val: 'foo')
+    assert_equal('arhp_test_db_a', current_database(Pool1DbA))
 
-    Test3.create(val: 'bar')
-    assert_equal('arhp_test_1', current_database(Test1))
-    assert_equal('arhp_test_3', current_database(Test3))
+    Pool2DbD.create(val: 'bar')
+    assert_equal('arhp_test_db_a', current_database(Pool1DbA))
+    assert_equal('arhp_test_db_d', current_database(Pool2DbD))
 
-    Test2.create!(val: 'bar_distinct')
-    assert_equal('arhp_test_2', current_database(Test2))
-    assert Test2.find_by_val('bar_distinct')
-    refute Test1.find_by_val('bar_distinct')
+    Pool1DbB.create!(val: 'bar_distinct')
+    assert_equal('arhp_test_db_b', current_database(Pool1DbB))
+    assert Pool1DbB.find_by_val('bar_distinct')
+    refute Pool1DbA.find_by_val('bar_distinct')
   end
 
   def test_disconnect
-    Test1.create(val: 'foo')
-    unproxied = Test1.connection.unproxied
-    Test1.connection_handler.clear_all_connections!
-    Test1.create(val: 'foo')
-    assert(unproxied != Test1.connection.unproxied)
+    Pool1DbA.create(val: 'foo')
+    unproxied = Pool1DbA.connection.unproxied
+    Pool1DbA.connection_handler.clear_all_connections!
+    Pool1DbA.create(val: 'foo')
+    assert(unproxied != Pool1DbA.connection.unproxied)
   end
 
   def test_checkout
@@ -145,7 +159,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_no_switch_when_creating_db
-    conn = Test1.connection
+    conn = Pool1DbA.connection
     conn.expects(:execute_without_switching)
     conn.expects(:_switch_connection).never
     assert conn._host_pool_current_database
@@ -153,7 +167,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_no_switch_when_dropping_db
-    conn = Test1.connection
+    conn = Pool1DbA.connection
     conn.expects(:execute_without_switching)
     conn.expects(:_switch_connection).never
     assert conn._host_pool_current_database
@@ -163,17 +177,17 @@ class ActiveRecordHostPoolTest < Minitest::Test
   def test_underlying_assumption_about_test_db
     debug_me = false
     # ensure connection
-    Test1.first
+    Pool1DbA.first
 
     # which is the "default" DB to connect to?
-    first_db = Test1.connection.unproxied.instance_variable_get(:@_cached_current_database)
+    first_db = Pool1DbA.connection.unproxied.instance_variable_get(:@_cached_current_database)
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-    when 'arhp_test_2'
-      Test1
-    when 'arhp_test_1'
-      Test2
+    when 'arhp_test_db_b'
+      Pool1DbA
+    when 'arhp_test_db_a'
+      Pool1DbB
     else
       raise "Expected a database name, got #{first_db.inspect}"
     end
@@ -188,7 +202,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     # now, disable our auto-switching and trigger a mysql reconnect
     switch_to_klass.connection.unproxied.stubs(:_switch_connection).returns(true)
-    Test3.connection.execute("KILL #{thread_id}")
+    Pool2DbD.connection.execute("KILL #{thread_id}")
 
     # and finally, did mysql reconnect correctly?
     puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
@@ -203,15 +217,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   private
-
-  def assert_action_uses_correct_database(action, sql)
-    (1..4).each do |i|
-      klass = ARHPTestSetup.const_get("Test#{i}")
-      desired_db = "arhp_test_#{i}"
-      klass.connection.send(action, sql)
-      assert_equal desired_db, current_database(klass)
-    end
-  end
 
   def simulate_rails_app_active_record_railties
     if ActiveRecord.version >= Gem::Version.new('6.0')

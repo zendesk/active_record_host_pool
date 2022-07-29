@@ -22,44 +22,44 @@ module ARHPTestSetup
   private
 
   def arhp_create_models
-    return if ARHPTestSetup.const_defined?('Test1')
+    return if ARHPTestSetup.const_defined?('Pool1DbA')
 
     eval <<-RUBY
-      # The placement of the Test1Shard class is important so that its
+      # The placement of the Pool1DbC class is important so that its
       # connection will not be the most recent connection established
-      # for test_host_1.
-      class Test1Shard < ::ActiveRecord::Base
-        establish_connection(:test_host_1_db_shard)
+      # for test_pool_1.
+      class Pool1DbC < ::ActiveRecord::Base
+        establish_connection(:test_pool_1_db_c)
       end
 
-      class Test1 < ActiveRecord::Base
+      class Pool1DbA < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection(:test_host_1_db_1)
+        establish_connection(:test_pool_1_db_a)
       end
 
-      class Test1Slave < ActiveRecord::Base
+      class Pool1DbAReplica < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection(:test_host_1_db_1_slave)
+        establish_connection(:test_pool_1_db_a_replica)
       end
 
-      class Test2 < ActiveRecord::Base
+      class Pool1DbB < ActiveRecord::Base
         self.table_name =  "tests"
-        establish_connection(:test_host_1_db_2)
+        establish_connection(:test_pool_1_db_b)
       end
 
-      class Test3 < ActiveRecord::Base
+      class Pool2DbD < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection(:test_host_2_db_3)
+        establish_connection(:test_pool_2_db_d)
       end
 
-      class Test4 < ActiveRecord::Base
+      class Pool2DbE < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection(:test_host_2_db_4)
+        establish_connection(:test_pool_2_db_e)
       end
 
-      class Test5 < ActiveRecord::Base
+      class Pool3DbE < ActiveRecord::Base
         self.table_name = "tests"
-        establish_connection(:test_host_2_db_5)
+        establish_connection(:test_pool_3_db_e)
       end
     RUBY
   end
