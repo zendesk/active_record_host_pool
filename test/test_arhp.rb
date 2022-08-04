@@ -9,8 +9,19 @@ end
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
-    if !ActiveRecord::Base.legacy_connection_handling && ActiveRecord.version >= Gem::Version.new('6.1')
+    patch = Module.new do
+      def create_databases(with_schema)
+        for_each_database do |name, conf|
+          run_mysql_command(conf, "CREATE DATABASE IF NOT EXISTS #{conf['database']}")
+        end
+        for_each_database do |name, conf|
+          ActiveRecord::Base.establish_connection(conf)
+          populate_database if with_schema
+        end
+      end
+    end
+    Phenix.singleton_class.prepend(patch)
+    if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
       Phenix.rise! config_path: "test/three_tier_database.yml"
     else
       Phenix.rise!
@@ -52,13 +63,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
     refute_equal(Pool2DbE.connection.raw_connection, Pool3DbE.connection.raw_connection)
   end
 
-  # The new connection handling has writing & reading roles and we test those differently
-  if ActiveRecord::Base.legacy_connection_handling
-    def test_models_without_matching_replica_status_should_not_share_a_connection
-      refute_equal(Pool1DbA.connection.raw_connection, Pool1DbAReplica.connection.raw_connection)
-    end
-  end
-
   def test_should_select_on_correct_database
     Pool1DbA.connection.send(:select_all, 'select 1')
     assert_equal 'arhp_test_db_a', current_database(Pool1DbA)
@@ -82,37 +86,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_models_with_matching_hosts_and_non_matching_databases_should_share_a_connection
-    simulate_rails_app_active_record_railties
+    # simulate_rails_app_active_record_railties
     assert_equal(Pool1DbA.connection.raw_connection, Pool1DbC.connection.raw_connection)
-  end
-
-  if ActiveRecord.version >= Gem::Version.new('6.0')
-    def test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
-      simulate_rails_app_active_record_railties
-
-      # Remove patch that fixes an issue in Rails 6+ to ensure it still
-      # exists. If this begins to fail then it may mean that Rails has fixed
-      # the issue so that it no longer occurs.
-      without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
-        without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_on_handler) do
-        exception = assert_raises(ActiveRecord::StatementInvalid) do
-          ActiveRecord::Base.cache { Pool1DbC.create! }
-        end
-
-        assert_equal("Mysql2::Error: Table 'arhp_test_db_shard_c.pool1_db_cs' doesn't exist", exception.message)
-        end
-      end
-    end
-
-    def test_models_with_matching_hosts_and_non_matching_databases_do_not_mix_up_underlying_database
-      simulate_rails_app_active_record_railties
-
-      # ActiveRecord 6.0 introduced a change that surfaced a problematic code
-      # path in active_record_host_pool when clearing caches across connection
-      # handlers which can cause the database to change.
-      # See ActiveRecordHostPool::ClearQueryCachePatch
-      ActiveRecord::Base.cache { Pool1DbC.create! }
-    end
   end
 
   def test_connection_returns_a_proxy
@@ -228,64 +203,5 @@ class ActiveRecordHostPoolTest < Minitest::Test
     conn = pool.connection
     pool.expects(:checkin).with(conn)
     pool.release_connection
-  end
-
-  if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
-    def test_correctly_writes_to_sharded_databases
-      AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
-        ShardedModel.create!
-      end
-
-      AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
-        ShardedModel.create!
-      end
-
-      assert_equal (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
-                      ShardedModel.count
-                    end), 1
-
-      assert_equal (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
-                      ShardedModel.count
-                    end), 1
-      assert_equal ShardedModel.count, 0
-    end
-
-    def test_shards_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
-      assert_equal(ShardedModel.connection.raw_connection,
-                   (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
-                      ShardedModel.connection.raw_connection
-                    end))
-    end
-
-    def test_shards_without_matching_ports_should_not_share_a_connection
-      refute_equal(ShardedModel.connection.raw_connection,
-                   (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end))
-
-      refute_equal(
-        (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do;ShardedModel.connection.raw_connection;end),
-                   ((AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end)))
-
-    end
-
-    def test_reading_and_writing_roles_should_not_share_a_connection
-      refute_equal(
-        (AbstractPool1DbA.connected_to(role: :writing) do;Pool1DbA.connection.raw_connection;end),
-        (AbstractPool1DbA.connected_to(role: :reading) do;Pool1DbA.connection.raw_connection;end))
-    end
-
-  end
-
-  private
-
-  def simulate_rails_app_active_record_railties
-    if ActiveRecord.version >= Gem::Version.new('6.0') && ActiveRecord::Base.legacy_connection_handling
-      # Necessary for testing ActiveRecord 6.0 which uses the connection
-      # handlers when clearing query caches across all handlers when
-      # an operation that dirties the cache is involved (e.g. create/insert,
-      # update, delete/destroy, truncate, etc.)
-      ActiveRecord::Base.connection_handlers = {
-        ActiveRecord::Base.writing_role => ActiveRecord::Base.default_connection_handler
-      }
-    end
   end
 end

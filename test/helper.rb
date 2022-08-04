@@ -24,7 +24,7 @@ module ARHPTestSetup
   def arhp_create_models
     return if ARHPTestSetup.const_defined?('Pool1DbA')
 
-    if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+    if ActiveRecord.version >= Gem::Version.new('6.1') && !(ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
       eval <<-RUBY
         class AbstractPool1DbC < ::ActiveRecord::Base
           self.abstract_class = true
