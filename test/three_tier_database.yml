@@ -46,7 +46,6 @@ test:
     host: <%= mysql.host %>
     reconnect: true
 
-
   test_pool_1_db_shard_a:
     adapter: mysql2
     encoding: utf8
@@ -64,7 +63,6 @@ test:
     password: <%= mysql.password %>
     host: <%= mysql.host %>
     reconnect: true
-
 
   test_pool_1_db_shard_c:
     adapter: mysql2
