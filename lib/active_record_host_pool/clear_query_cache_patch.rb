@@ -21,10 +21,23 @@ if ActiveRecord.version >= Gem::Version.new('6.0')
     module ClearQueryCachePatch
       def clear_query_caches_for_current_thread
         host_pool_current_database_was = connection.unproxied._host_pool_current_database
+        # p "DB was: #{host_pool_current_database_was}"
         super
+      # rescue ActiveRecord::StatementInvalid
       ensure
         # restore in case clearing the cache changed the database
+        # p "DB is now #{connection.unproxied._host_pool_current_database}"
         connection.unproxied._host_pool_current_database = host_pool_current_database_was
+      end
+
+      if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+        def clear_on_handler(handler)
+          handler.all_connection_pools.each do |pool|
+            db_was = pool.connection.unproxied._host_pool_current_database
+            pool.connection.clear_query_cache if pool.active_connection?
+            pool.connection.unproxied._host_pool_current_database = db_was
+          end
+        end
       end
     end
   end
