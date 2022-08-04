@@ -36,6 +36,8 @@ jobs:
         task:
           - "scripts/test_with_connection_handling_switching.sh"
         exclude:
+          - ruby-version: 2.7
+            gemfile: rails4.2
           - ruby-version: 2.4
             gemfile: rails6.0
           - ruby-version: 2.4
