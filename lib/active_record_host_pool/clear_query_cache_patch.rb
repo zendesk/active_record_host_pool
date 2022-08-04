@@ -30,7 +30,7 @@ if ActiveRecord.version >= Gem::Version.new('6.0')
         connection.unproxied._host_pool_current_database = host_pool_current_database_was
       end
 
-      if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+      if ActiveRecord.version >= Gem::Version.new('6.1')
         def clear_on_handler(handler)
           handler.all_connection_pools.each do |pool|
             db_was = pool.connection.unproxied._host_pool_current_database
