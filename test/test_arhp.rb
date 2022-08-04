@@ -7,7 +7,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   def setup
     ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
     if !ActiveRecord::Base.legacy_connection_handling && ActiveRecord.version >= Gem::Version.new('6.1')
-      Phenix.rise! config_path: "test/new_database.yml"
+      Phenix.rise! config_path: "test/three_tier_database.yml"
     else
       Phenix.rise!
     end

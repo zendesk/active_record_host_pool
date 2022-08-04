@@ -46,6 +46,45 @@ test:
     host: <%= mysql.host %>
     reconnect: true
 
+
+  test_pool_1_db_shard_a:
+    adapter: mysql2
+    encoding: utf8
+    database: arhp_test_db_shard_a
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+
+  test_pool_1_db_shard_b:
+    adapter: mysql2
+    encoding: utf8
+    database: arhp_test_db_shard_b
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+
+
+  test_pool_1_db_shard_c:
+    adapter: mysql2
+    encoding: utf8
+    database: arhp_test_db_shard_c
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    reconnect: true
+
+  test_pool_2_db_shard_d:
+    adapter: mysql2
+    encoding: utf8
+    database: arhp_test_db_shard_d
+    username: <%= mysql.user %>
+    password: <%= mysql.password %>
+    host: <%= mysql.host %>
+    port: <%= mysql.port %>
+    reconnect: true
+
   test_pool_2_db_d:
     adapter: mysql2
     encoding: utf8
