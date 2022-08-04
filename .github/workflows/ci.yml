@@ -26,6 +26,7 @@ jobs:
           - 2.4
           - 2.5
           - 2.6
+          - 2.7
         gemfile:
           - rails4.2
           - rails5.1
@@ -33,7 +34,7 @@ jobs:
           - rails6.0
           - rails6.1
         task:
-          - "rake test"
+          - "scripts/test_with_connection_handling_switching.sh"
         exclude:
           - ruby-version: 2.4
             gemfile: rails6.0
@@ -55,6 +56,6 @@ jobs:
           bundler-cache: true
       - name: Create user 'john-doe' in MySQL
         run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
-        if: ${{ matrix.task == 'rake test' }}
+        if: ${{ matrix.task == 'scripts/test_with_connection_handling_switching.sh' }}
       - name: ${{ matrix.task }}
-        run: bundle exec ${{ matrix.task }}
+        run: ${{ matrix.task }}
