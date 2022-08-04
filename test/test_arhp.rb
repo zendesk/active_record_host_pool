@@ -52,8 +52,11 @@ class ActiveRecordHostPoolTest < Minitest::Test
     refute_equal(Pool2DbE.connection.raw_connection, Pool3DbE.connection.raw_connection)
   end
 
-  def test_models_without_matching_replica_status_should_not_share_a_connection
-    refute_equal(Pool1DbA.connection.raw_connection, Pool1DbAReplica.connection.raw_connection)
+  # The new connection handling has writing & reading roles and we test those differently
+  if ActiveRecord::Base.legacy_connection_handling
+    def test_models_without_matching_replica_status_should_not_share_a_connection
+      refute_equal(Pool1DbA.connection.raw_connection, Pool1DbAReplica.connection.raw_connection)
+    end
   end
 
   def test_should_select_on_correct_database
