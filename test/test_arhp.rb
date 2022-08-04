@@ -50,7 +50,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     refute_equal(Pool2DbE.connection.raw_connection, Pool3DbE.connection.raw_connection)
   end
 
-  def test_models_without_match_replica_status_should_not_share_a_connection
+  def test_models_without_matching_replica_status_should_not_share_a_connection
     refute_equal(Pool1DbA.connection.raw_connection, Pool1DbAReplica.connection.raw_connection)
   end
 
@@ -191,13 +191,13 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-    when 'arhp_test_db_b'
-      Pool1DbA
-    when 'arhp_test_db_a'
-      Pool1DbB
-    else
-      raise "Expected a database name, got #{first_db.inspect}"
-    end
+                      when 'arhp_test_db_b'
+                        Pool1DbA
+                      when 'arhp_test_db_a'
+                        Pool1DbB
+                      else
+                        raise "Expected a database name, got #{first_db.inspect}"
+                      end
     expected_database = switch_to_klass.connection.instance_variable_get(:@database)
 
     # switch to the other database
