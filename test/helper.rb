@@ -30,12 +30,12 @@ module ARHPTestSetup
           self.abstract_class = true
           connects_to database: { writing: :test_pool_1_db_c }
         end
-        class Pool1DbC <  AbstractPool1DbC
+        class Pool1DbC < AbstractPool1DbC
         end
 
         class AbstractPool1DbA < ActiveRecord::Base
           self.abstract_class = true
-          connects_to database: { writing: :test_pool_1_db_a }
+          connects_to database: { writing: :test_pool_1_db_a, reading: :test_pool_1_db_a_replica }
         end
 
         class Pool1DbA < AbstractPool1DbA
@@ -48,6 +48,20 @@ module ARHPTestSetup
         end
 
         class Pool1DbB < AbstractPool1DbB
+          self.table_name = "tests"
+        end
+
+        class AbstractShardedModel < ActiveRecord::Base
+          self.abstract_class = true
+          connects_to shards: {
+            default: { writing: :test_pool_1_db_shard_a },
+            shard_b: { writing: :test_pool_1_db_shard_b },
+            shard_c: { writing: :test_pool_1_db_shard_c },
+            shard_d: { writing: :test_pool_2_db_shard_d }
+            }
+        end
+
+        class ShardedModel < AbstractShardedModel
           self.table_name = "tests"
         end
 
