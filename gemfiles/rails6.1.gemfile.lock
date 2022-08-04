@@ -1,6 +1,6 @@
 GIT
-  remote: git@github.com:zendesk/phenix.git
-  revision: b08752a147d8b78011bdf5878a7019989f753e50
+  remote: https://github.com/zendesk/phenix.git
+  revision: 1003b218dfac61bb452ae0dd7cb676dd10019a9f
   branch: nony-rails-6-1-configurations
   specs:
     phenix (1.0.0)
