@@ -2,6 +2,8 @@
 
 require_relative 'helper'
 
+ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
+
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
