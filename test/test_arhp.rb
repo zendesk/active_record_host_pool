@@ -91,11 +91,13 @@ class ActiveRecordHostPoolTest < Minitest::Test
       # exists. If this begins to fail then it may mean that Rails has fixed
       # the issue so that it no longer occurs.
       without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
+        without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_on_handler) do
         exception = assert_raises(ActiveRecord::StatementInvalid) do
           ActiveRecord::Base.cache { Pool1DbC.create! }
         end
 
-        assert_equal("Mysql2::Error: Table 'arhp_test_db_b.pool1_db_cs' doesn't exist", exception.message)
+        assert_equal("Mysql2::Error: Table 'arhp_test_db_shard_c.pool1_db_cs' doesn't exist", exception.message)
+        end
       end
     end
 
