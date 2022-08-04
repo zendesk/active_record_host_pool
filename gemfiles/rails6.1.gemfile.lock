@@ -1,3 +1,12 @@
+GIT
+  remote: git@github.com:zendesk/phenix.git
+  revision: b08752a147d8b78011bdf5878a7019989f753e50
+  branch: nony-rails-6-1-configurations
+  specs:
+    phenix (1.0.0)
+      activerecord (>= 4.2, < 7.1)
+      bundler
+
 PATH
   remote: ..
   specs:
@@ -31,14 +40,13 @@ GEM
     minitest (5.15.0)
     minitest-fail-fast (0.1.0)
       minitest (~> 5)
+    minitest-line (0.6.5)
+      minitest (~> 5.0)
     mocha (1.13.0)
     mysql2 (0.5.3)
     parallel (1.22.1)
     parser (3.1.1.0)
       ast (~> 2.4.1)
-    phenix (1.0.0)
-      activerecord (>= 4.2, < 7.1)
-      bundler
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -69,6 +77,8 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
+  arm64-darwin-21
+  ruby
   x86_64-darwin-19
   x86_64-darwin-20
   x86_64-linux
@@ -80,13 +90,14 @@ DEPENDENCIES
   byebug
   minitest (>= 5.10.0)
   minitest-fail-fast
+  minitest-line
   mocha
   mysql2 (~> 0.5)
-  phenix
+  phenix!
   pry-byebug
   rake (>= 12.0.0)
   rubocop (~> 0.80.0)
   shoulda
 
 BUNDLED WITH
-   2.2.27
+   2.3.7

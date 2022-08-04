@@ -7,7 +7,18 @@ ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
+    patch = Module.new do
+      def create_databases(with_schema)
+        for_each_database do |name, conf|
+          run_mysql_command(conf, "CREATE DATABASE IF NOT EXISTS #{conf['database']}")
+        end
+        for_each_database do |name, conf|
+          ActiveRecord::Base.establish_connection(conf)
+          populate_database if with_schema
+        end
+      end
+    end
+    Phenix.singleton_class.prepend(patch)
     if !ActiveRecord::Base.legacy_connection_handling && ActiveRecord.version >= Gem::Version.new('6.1')
       Phenix.rise! config_path: "test/three_tier_database.yml"
     else
