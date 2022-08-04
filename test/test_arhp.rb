@@ -223,6 +223,51 @@ class ActiveRecordHostPoolTest < Minitest::Test
     pool.release_connection
   end
 
+  if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+    def test_correctly_writes_to_sharded_databases
+      AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
+        ShardedModel.create!
+      end
+
+      AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
+        ShardedModel.create!
+      end
+
+      assert_equal (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
+                      ShardedModel.count
+                    end), 1
+
+      assert_equal (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
+                      ShardedModel.count
+                    end), 1
+      assert_equal ShardedModel.count, 0
+    end
+
+    def test_shards_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
+      assert_equal(ShardedModel.connection.raw_connection,
+                   (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
+                      ShardedModel.connection.raw_connection
+                    end))
+    end
+
+    def test_shards_without_matching_ports_should_not_share_a_connection
+      refute_equal(ShardedModel.connection.raw_connection,
+                   (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end))
+
+      refute_equal(
+        (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do;ShardedModel.connection.raw_connection;end),
+                   ((AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end)))
+
+    end
+
+    def test_reading_and_writing_roles_should_not_share_a_connection
+      refute_equal(
+        (AbstractPool1DbA.connected_to(role: :writing) do;Pool1DbA.connection.raw_connection;end),
+        (AbstractPool1DbA.connected_to(role: :reading) do;Pool1DbA.connection.raw_connection;end))
+    end
+
+  end
+
   private
 
   def simulate_rails_app_active_record_railties
