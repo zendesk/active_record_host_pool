@@ -6,7 +6,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
   def setup
     if !ActiveRecord::Base.legacy_connection_handling && ActiveRecord.version >= Gem::Version.new('6.1')
-      Phenix.load_database_config "test/new_database.yml"
+      Phenix.load_database_config "test/three_tier_database.yml"
     else
       Phenix.load_database_config
     end
