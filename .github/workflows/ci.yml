@@ -35,6 +35,7 @@ jobs:
           - 2.4
           - 2.5
           - 2.6
+          - 2.7
         gemfile:
           - rails4.2
           - rails5.1
@@ -43,6 +44,8 @@ jobs:
         exclude:
           - ruby-version: 2.4
             gemfile: rails6.0
+          - ruby-version: 2.7
+            gemfile: rails4.2
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
