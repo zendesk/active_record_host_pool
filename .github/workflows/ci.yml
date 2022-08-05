@@ -1,11 +1,21 @@
 name: CI
-
 on: push
-
 jobs:
-  tests-and-rubocop:
+  linting:
     runs-on: ubuntu-latest
+    name: Linting of Ruby files
+    steps:
+      - uses: zendesk/checkout@v2
+      - name: Install Ruby, Bundler and gems
+        uses: zendesk/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+          bundler-cache: true
+      - run: bundle exec rake rubocop
 
+  tests:
+    runs-on: ubuntu-latest
+    name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }}
     services:
       mysql:
         image: mysql:5.7
@@ -18,7 +28,6 @@ jobs:
           --health-interval 2s
           --health-timeout 1s
           --health-retries 10
-
     strategy:
       fail-fast: false
       matrix:
@@ -31,27 +40,19 @@ jobs:
           - rails5.1
           - rails5.2
           - rails6.0
-        task:
-          - "rake test"
         exclude:
           - ruby-version: 2.4
             gemfile: rails6.0
-        include:
-          - ruby-version: 2.6
-            gemfile: rails5.2
-            task: rubocop
-    name: ${{ matrix.task }} ${{ matrix.gemfile }} Ruby ${{ matrix.ruby-version }}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
       - uses: zendesk/checkout@v2
-      - name: Set up Ruby
+      - name: Install Ruby, Bundler and gems
         uses: zendesk/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
       - name: Create user 'john-doe' in MySQL
         run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
-        if: ${{ matrix.task == 'rake test' }}
-      - name: ${{ matrix.task }}
-        run: bundle exec ${{ matrix.task }}
+      - name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }}
+        run: bundle exec rake test
