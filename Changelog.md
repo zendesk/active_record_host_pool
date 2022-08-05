@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- Removed compatibility with Rails 5.1 and lower. (https://github.com/zendesk/active_record_host_pool/pull/78)
+- Removed compatibility with Ruby 2.5 and lower. (https://github.com/zendesk/active_record_host_pool/pull/78)
 
 ## [1.0.3] - 2021-02-09
 ### Fixed
