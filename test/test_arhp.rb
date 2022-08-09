@@ -39,7 +39,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     refute_equal(Pool1DbA.connection.raw_connection, Pool2DbD.connection.raw_connection)
   end
 
-  def test_models_without_matching_usernames_should_not_share_a_connection
+  def test_models_with_different_usernames_should_not_share_a_connection
     refute_equal(Pool2DbE.connection.raw_connection, Pool3DbE.connection.raw_connection)
   end
 
