@@ -35,7 +35,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert_equal(Pool2DbD.connection.raw_connection, Pool2DbE.connection.raw_connection)
   end
 
-  def test_models_without_matching_ports_should_not_share_a_connection
+  def test_models_with_different_ports_should_not_share_a_connection
     refute_equal(Pool1DbA.connection.raw_connection, Pool2DbD.connection.raw_connection)
   end
 
