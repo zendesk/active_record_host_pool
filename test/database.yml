@@ -1,10 +1,10 @@
 <% mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306') %>
-# ARHP creates separate connection pools based on the pool key
-# The pool key is defined:
-# host / port / socket / username / replica
-# therefore two databases with the same host, port, socket, username, and replica status will share a connection pool
-# two databases with the same host, port, etc but different usernames will _not_ share a connection pool
-# Below pool_1 has a host & username but pool_2 has a host, port, and username
+# ARHP creates separate connection pools based on the pool key.
+# The pool key is defined as:
+#   host / port / socket / username / replica
+# Therefore two databases with identical host, port, socket, username, and replica status will share a connection pool.
+# If any part (host, port, etc.) of the pool key differ, two databases will _not_ share a connection pool.
+# Below, "test_pool_1..." and "test_pool_2..." have identical host and username, but the port information differ.
 
 test_pool_1_db_a:
   adapter: mysql2
