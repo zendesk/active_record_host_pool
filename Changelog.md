@@ -8,7 +8,8 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ### Removed
 
-- Removed compatibility with Rails 4.2.
+- Removed compatibility with Rails 4.2. (https://github.com/zendesk/active_record_host_pool/pull/71)
+- Removed compatibility with Ruby 2.5 and lower. (https://github.com/zendesk/active_record_host_pool/pull/80)
 
 ## [1.0.3] - 2021-02-09
 ### Fixed
