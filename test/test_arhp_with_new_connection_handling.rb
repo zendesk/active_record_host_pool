@@ -67,6 +67,7 @@ if ActiveRecord.version >= Gem::Version.new('6.1') && !(ENV['LEGACY_CONNECTION_H
       assert_equal (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
                       ShardedModel.count
                     end), 1
+
       assert_equal ShardedModel.count, 0
     end
 
@@ -84,7 +85,6 @@ if ActiveRecord.version >= Gem::Version.new('6.1') && !(ENV['LEGACY_CONNECTION_H
       refute_equal(
         (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do;ShardedModel.connection.raw_connection;end),
         ((AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end)))
-
     end
 
     def test_reading_and_writing_roles_should_not_share_a_connection
