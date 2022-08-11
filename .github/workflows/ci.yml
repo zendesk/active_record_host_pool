@@ -37,7 +37,6 @@ jobs:
           - 2.6
           - 2.7
         gemfile:
-          - rails4.2
           - rails5.1
           - rails5.2
           - rails6.0

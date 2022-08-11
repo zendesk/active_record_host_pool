@@ -85,36 +85,17 @@ module ActiveRecordHostPool
   end
 end
 
-# rubocop:disable Lint/DuplicateMethods
 module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
-      case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-      when '5.1', '5.2', '6.0'
+      def establish_connection(spec)
+        resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
+        spec = resolver.spec(spec)
 
-        def establish_connection(spec)
-          resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
-          spec = resolver.spec(spec)
-
-          owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
-        end
-
-      when '4.2'
-
-        def establish_connection(owner, spec)
-          @class_to_pool.clear
-          raise "Anonymous class is not allowed." unless owner.name
-
-          owner_to_pool[owner.name] = ActiveRecordHostPool::PoolProxy.new(spec)
-        end
-
-      else
-
-        raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
+        owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
       end
     end
   end
 end
-# rubocop:enable Lint/DuplicateMethods
 
 ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
