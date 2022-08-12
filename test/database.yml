@@ -1,76 +1,107 @@
 <% mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306') %>
-test_host_1_db_1:
+# ARHP creates separate connection pools based on the pool key.
+# The pool key is defined as:
+#   host / port / socket / username / replica
+#
+# Therefore two databases with identical host, port, socket, username, and replica status will share a connection pool.
+# If any part (host, port, etc.) of the pool key differ, two databases will _not_ share a connection pool.
+#
+# Below, "test_pool_1..." and "test_pool_2..." have identical host, username, socket, and replica status but the port information differs.
+# Here the yml configurations are reformatted as a table to give a visual example:
+#
+# |----------+----------------+----------------|
+# |          |  test_pool_1   |  test_pool_2   |
+# |----------+----------------+----------------+
+# | host     | 127.0.0.1      | 127.0.0.1      |
+# | port     |                | 3306           |
+# | socket   |                |                |
+# | username | root           | root           |
+# | replica  | false          | false          |
+# |----------+----------------+----------------|
+#
+# Note: The configuration items must be explicitly defined or will be blank in the pool key.
+#       Configurations with matching _implicit_ items but differing _explicit_ items will create separate pools.
+#       e.g. "test_pool_1" will default to port 3306 but because it is not explicitly defined it will not share a pool with test_pool_2
+#
+#       ARHP will therefore create the following pool keys:
+#       test_pool_1 => 127.0.0.1///root/false
+#       test_pool_2 => 127.0.0.1/3306//root/false
+
+test_pool_1_db_a:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_1
+  database: arhp_test_db_a
   username: <%= mysql.user %>
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   reconnect: true
 
 # Mimic configurations as read by active_record_shards/ar_flexmaster
-test_host_1_db_1_slave:
+test_pool_1_db_a_replica:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_1_slave
+  database: arhp_test_db_a_replica
   username: <%= mysql.user %>
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   reconnect: true
   slave: true
 
-test_host_1_db_2:
+test_pool_1_db_b:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_2
+  database: arhp_test_db_b
   username: <%= mysql.user %>
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   reconnect: true
 
-test_host_2_db_3:
+test_pool_1_db_not_there:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_3
+  database: arhp_test_db_not_there
+  username: <%= mysql.user %>
+  password: <%= mysql.password %>
+  host: <%= mysql.host %>
+  reconnect: true
+
+test_pool_2_db_d:
+  adapter: mysql2
+  encoding: utf8
+  database: arhp_test_db_d
   username: <%= mysql.user %>
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   port: <%= mysql.port %>
   reconnect: true
 
-test_host_2_db_4:
+test_pool_2_db_e:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_4
+  database: arhp_test_db_e
   username: <%= mysql.user %>
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   port: <%= mysql.port %>
   reconnect: true
 
-test_host_2_db_5:
+test_pool_3_db_e:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_4
+  database: arhp_test_db_e
   username: john-doe
   password:
   host: <%= mysql.host %>
   port: <%= mysql.port %>
   reconnect: true
 
-test_host_1_db_not_there:
+# test_pool_1_db_c needs to be the last database defined in the file
+# otherwise the test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
+# test fails
+test_pool_1_db_c:
   adapter: mysql2
   encoding: utf8
-  database: arhp_test_no_create
-  username: <%= mysql.user %>
-  password: <%= mysql.password %>
-  host: <%= mysql.host %>
-  reconnect: true
-
-test_host_1_db_shard:
-  adapter: mysql2
-  encoding: utf8
-  database: arhp_test_1_shard
+  database: arhp_test_db_c
   username: <%= mysql.user %>
   password: <%= mysql.password %>
   host: <%= mysql.host %>
