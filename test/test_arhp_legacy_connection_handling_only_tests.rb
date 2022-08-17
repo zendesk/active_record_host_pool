@@ -6,18 +6,6 @@ if ENV['LEGACY_CONNECTION_HANDLING'] == 'true'
   class ActiveRecordHostPoolLegacyConnectiongHandlingTest < Minitest::Test
     include ARHPTestSetup
     def setup
-      patch = Module.new do
-        def create_databases(with_schema)
-          for_each_database do |_name, conf|
-            run_mysql_command(conf, "CREATE DATABASE IF NOT EXISTS #{conf['database']}")
-          end
-          for_each_database do |_name, conf|
-            ActiveRecord::Base.establish_connection(conf)
-            populate_database if with_schema
-          end
-        end
-      end
-      Phenix.singleton_class.prepend(patch)
       Phenix.rise!
       arhp_create_models
     end
