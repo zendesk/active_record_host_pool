@@ -117,7 +117,6 @@ module ActiveRecord
     end
   end
 end
-# rubocop:enable Lint/DuplicateMethods
 
 ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
 

@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-if ActiveRecord.version >= Gem::Version.new('6.1') && !(ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
+if ActiveRecord.version >= Gem::Version.new('6.1') && ENV['LEGACY_CONNECTION_HANDLING'] != 'true'
   ActiveRecord::Base.legacy_connection_handling = false
 
   class ActiveRecordHostPoolTestWithNewConnectionHandling < Minitest::Test
@@ -10,17 +10,17 @@ if ActiveRecord.version >= Gem::Version.new('6.1') && !(ENV['LEGACY_CONNECTION_H
     def setup
       patch = Module.new do
         def create_databases(with_schema)
-          for_each_database do |name, conf|
+          for_each_database do |_name, conf|
             run_mysql_command(conf, "CREATE DATABASE IF NOT EXISTS #{conf['database']}")
           end
-          for_each_database do |name, conf|
+          for_each_database do |_name, conf|
             ActiveRecord::Base.establish_connection(conf)
             populate_database if with_schema
           end
         end
       end
       Phenix.singleton_class.prepend(patch)
-      Phenix.rise! config_path: "test/three_tier_database.yml"
+      Phenix.rise! config_path: 'test/three_tier_database.yml'
       arhp_create_models
     end
 
@@ -80,17 +80,25 @@ if ActiveRecord.version >= Gem::Version.new('6.1') && !(ENV['LEGACY_CONNECTION_H
 
     def test_shards_without_matching_ports_should_not_share_a_connection
       refute_equal(ShardedModel.connection.raw_connection,
-                   (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end))
+                   (AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
+                      ShardedModel.connection.raw_connection
+                    end))
 
       refute_equal(
-        (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do;ShardedModel.connection.raw_connection;end),
-        ((AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do;ShardedModel.connection.raw_connection;end)))
+        (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
+           ShardedModel.connection.raw_connection
+         end),
+        ((AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
+            ShardedModel.connection.raw_connection
+          end))
+      )
     end
 
     def test_reading_and_writing_roles_should_not_share_a_connection
       refute_equal(
-        (AbstractPool1DbA.connected_to(role: :writing) do;Pool1DbA.connection.raw_connection;end),
-        (AbstractPool1DbA.connected_to(role: :reading) do;Pool1DbA.connection.raw_connection;end))
+        (AbstractPool1DbA.connected_to(role: :writing) { ; Pool1DbA.connection.raw_connection; }),
+        (AbstractPool1DbA.connected_to(role: :reading) { ; Pool1DbA.connection.raw_connection; })
+      )
     end
   end
 end

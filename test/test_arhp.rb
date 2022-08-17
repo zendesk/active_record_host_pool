@@ -11,10 +11,10 @@ class ActiveRecordHostPoolTest < Minitest::Test
   def setup
     patch = Module.new do
       def create_databases(with_schema)
-        for_each_database do |name, conf|
+        for_each_database do |_name, conf|
           run_mysql_command(conf, "CREATE DATABASE IF NOT EXISTS #{conf['database']}")
         end
-        for_each_database do |name, conf|
+        for_each_database do |_name, conf|
           ActiveRecord::Base.establish_connection(conf)
           populate_database if with_schema
         end
@@ -22,7 +22,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     end
     Phenix.singleton_class.prepend(patch)
     if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
-      Phenix.rise! config_path: "test/three_tier_database.yml"
+      Phenix.rise! config_path: 'test/three_tier_database.yml'
     else
       Phenix.rise!
     end
@@ -173,13 +173,13 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-                      when 'arhp_test_db_b'
-                        Pool1DbA
-                      when 'arhp_test_db_a'
-                        Pool1DbB
-                      else
-                        raise "Expected a database name, got #{first_db.inspect}"
-                      end
+    when 'arhp_test_db_b'
+      Pool1DbA
+    when 'arhp_test_db_a'
+      Pool1DbB
+    else
+      raise "Expected a database name, got #{first_db.inspect}"
+    end
     expected_database = switch_to_klass.connection.instance_variable_get(:@database)
 
     # switch to the other database
