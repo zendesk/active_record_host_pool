@@ -8,7 +8,7 @@ require 'logger'
 require 'mocha/minitest'
 require 'phenix'
 
-RAILS_ENV = 'test'
+ENV['RAILS_ENV'] = 'test'
 ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].nil?
 
 if ActiveRecord.version >= Gem::Version.new('6.1')
