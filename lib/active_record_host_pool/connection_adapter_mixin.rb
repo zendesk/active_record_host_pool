@@ -10,7 +10,7 @@ module ActiveRecordHostPool
 
         def _host_pool_current_database=(database)
           @_host_pool_current_database = database
-          @config[:database] = _host_pool_current_database if ActiveRecord::VERSION::MAJOR >= 5
+          @config[:database] = _host_pool_current_database
         end
 
         alias_method :execute_without_switching, :execute
@@ -83,19 +83,43 @@ module ActiveRecordHostPool
       super(_host_pool_current_database.to_s + "/" + sql, *args)
     end
   end
+
+  module PoolConfigPatch
+    def pool
+      ActiveSupport::ForkTracker.check!
+
+      @pool || synchronize { @pool ||= ActiveRecordHostPool::PoolProxy.new(self) }
+    end
+  end
 end
 
 module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
-      def establish_connection(spec)
-        resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
-        spec = resolver.spec(spec)
+      case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+      when '6.1'
 
-        owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
+        :noop
+
+      when '5.1', '5.2', '6.0'
+
+        def establish_connection(spec)
+          resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
+          spec = resolver.spec(spec)
+
+          owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
+        end
+
+      else
+
+        raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
       end
     end
   end
 end
 
 ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
+
+if "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}" == '6.1'
+  ActiveRecord::ConnectionAdapters::PoolConfig.prepend(ActiveRecordHostPool::PoolConfigPatch)
+end
