@@ -55,9 +55,9 @@ module ARHPTestSetup
           self.abstract_class = true
           connects_to shards: {
                         default: { writing: :test_pool_1_db_shard_a },
-                        shard_b: { writing: :test_pool_1_db_shard_b },
-                        shard_c: { writing: :test_pool_1_db_shard_c },
-                        shard_d: { writing: :test_pool_2_db_shard_d }
+                        shard_b: { writing: :test_pool_1_db_shard_b, reading: :test_pool_1_db_shard_b_replica },
+                        shard_c: { writing: :test_pool_1_db_shard_c, reading: :test_pool_1_db_shard_c_replica },
+                        shard_d: { writing: :test_pool_2_db_shard_d, reading: :test_pool_2_db_shard_d_replica }
                       }
         end
 

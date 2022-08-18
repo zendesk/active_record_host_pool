@@ -88,5 +88,19 @@ if ActiveRecord.version >= Gem::Version.new('6.1') && ENV['LEGACY_CONNECTION_HAN
         (AbstractPool1DbA.connected_to(role: :reading) { ; Pool1DbA.connection.raw_connection; })
       )
     end
+
+    def test_sharded_reading_and_writing_roles_should_not_share_a_connection
+      refute_equal(
+        (AbstractShardedModel.connected_to(role: :writing, shard: :shard_c) { ; ShardedModel.connection.raw_connection; }),
+        (AbstractShardedModel.connected_to(role: :reading, shard: :shard_c) { ; ShardedModel.connection.raw_connection; })
+      )
+    end
+
+    def test_sharded_reading_roles_without_matching_ports_should_not_share_a_connection
+      refute_equal(
+        (AbstractShardedModel.connected_to(role: :reading, shard: :shard_c) { ; ShardedModel.connection.raw_connection; }),
+        (AbstractShardedModel.connected_to(role: :reading, shard: :shard_d) { ; ShardedModel.connection.raw_connection; })
+      )
+    end
   end
 end
