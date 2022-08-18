@@ -22,6 +22,7 @@ module ActiveRecordHostPool
   module PreventWritesPatch
     def preventing_writes?
       return false if ActiveRecordHostPool.allowing_writes && replica?
+
       super
     end
   end

@@ -161,8 +161,6 @@ module ActiveRecordHostPool
         @connection_proxy_cache = {}
       end
 
-      private
-
       def replica_configuration?
         @config[:replica] || @config[:slave]
       end

@@ -62,17 +62,16 @@ if ActiveRecord.version >= Gem::Version.new('6.1') && ENV['LEGACY_CONNECTION_HAN
     def test_shards_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
       default_shard_connection = ShardedModel.connection.raw_connection
       pool_1_shard_b_writing_connection = (AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
-                      ShardedModel.connection.raw_connection
-                    end)
-
+                                             ShardedModel.connection.raw_connection
+                                           end)
 
       pool_1_shard_b_reading_connection = (AbstractShardedModel.connected_to(role: :reading, shard: :shard_b) do
-                      ShardedModel.connection.raw_connection
-                    end)
+                                             ShardedModel.connection.raw_connection
+                                           end)
 
       pool_1_shard_c_reading_connection = (AbstractShardedModel.connected_to(role: :reading, shard: :shard_b) do
-                      ShardedModel.connection.raw_connection
-                    end)
+                                             ShardedModel.connection.raw_connection
+                                           end)
 
       assert_equal(default_shard_connection, pool_1_shard_b_writing_connection)
       assert_equal(pool_1_shard_b_reading_connection, pool_1_shard_c_reading_connection)
