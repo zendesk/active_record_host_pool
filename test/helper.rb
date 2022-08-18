@@ -14,6 +14,19 @@ Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
+module ActiveRecordHostPool
+  module PreventWritesPatch
+    def preventing_writes?
+      return false if replica?
+      super
+    end
+  end
+end
+
+if ActiveRecord.version >= Gem::Version.new('6.1')
+  # ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend ActiveRecordHostPool::PreventWritesPatch
+end
+
 Phenix.configure do |config|
   config.skip_database = ->(name, conf) { name =~ /not_there/ || conf['username'] == 'john-doe' }
 end
