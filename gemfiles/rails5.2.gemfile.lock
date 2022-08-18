@@ -2,44 +2,44 @@ PATH
   remote: ..
   specs:
     active_record_host_pool (1.0.3)
-      activerecord (>= 5.1.0, < 6.1)
+      activerecord (>= 5.1.0, < 7.0)
       mysql2
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (5.2.4.1)
-      activesupport (= 5.2.4.1)
-    activerecord (5.2.4.1)
-      activemodel (= 5.2.4.1)
-      activesupport (= 5.2.4.1)
+    activemodel (5.2.8.1)
+      activesupport (= 5.2.8.1)
+    activerecord (5.2.8.1)
+      activemodel (= 5.2.8.1)
+      activesupport (= 5.2.8.1)
       arel (>= 9.0)
-    activesupport (5.2.4.1)
+    activesupport (5.2.8.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (9.0.0)
-    ast (2.4.0)
-    bump (0.9.0)
-    byebug (11.1.1)
-    concurrent-ruby (1.1.6)
-    i18n (1.8.2)
+    ast (2.4.2)
+    bump (0.10.0)
+    byebug (11.1.3)
+    concurrent-ruby (1.1.10)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
-    minitest (5.14.0)
-    mocha (1.11.2)
-    mysql2 (0.5.3)
-    parallel (1.19.1)
-    parser (2.7.0.2)
-      ast (~> 2.4.0)
-    phenix (0.6.0)
-      activerecord (>= 4.2, < 6.1)
+    minitest (5.16.3)
+    mocha (1.14.0)
+    mysql2 (0.5.4)
+    parallel (1.22.1)
+    parser (3.1.2.1)
+      ast (~> 2.4.1)
+    phenix (1.0.1)
+      activerecord (>= 4.2, < 7.1)
       bundler
-    rainbow (3.0.0)
-    rake (13.0.1)
-    rexml (3.2.4)
-    rubocop (0.80.0)
+    rainbow (3.1.1)
+    rake (13.0.6)
+    rexml (3.2.5)
+    rubocop (0.80.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
@@ -47,19 +47,20 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    ruby-progressbar (1.10.1)
-    shoulda (3.6.0)
-      shoulda-context (~> 1.0, >= 1.0.1)
-      shoulda-matchers (~> 3.0)
-    shoulda-context (1.2.2)
-    shoulda-matchers (3.1.3)
-      activesupport (>= 4.0.0)
+    ruby-progressbar (1.11.0)
+    shoulda (4.0.0)
+      shoulda-context (~> 2.0)
+      shoulda-matchers (~> 4.0)
+    shoulda-context (2.0.0)
+    shoulda-matchers (4.5.1)
+      activesupport (>= 4.2.0)
     thread_safe (0.3.6)
-    tzinfo (1.2.6)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unicode-display_width (1.6.1)
 
 PLATFORMS
+  arm64-darwin-21
   ruby
 
 DEPENDENCIES
@@ -67,12 +68,13 @@ DEPENDENCIES
   activerecord (~> 5.2.0)
   bump
   byebug
+  minitest (>= 5.10.0)
   mocha
   mysql2 (>= 0.4.4, < 0.6.0)
-  phenix
+  phenix (>= 1.0.1)
   rake (>= 12.0.0)
   rubocop (~> 0.80.0)
   shoulda
 
 BUNDLED WITH
-   2.1.4
+   2.3.7
