@@ -17,6 +17,26 @@ end
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
+# BEGIN preventing_writes? patch
+## Rails 6.1 by default does not allow writing to replica databases which prevents
+## us from properly setting up the test databases. This patch is used in test/schema.rb
+## to allow us to write to the replicas but only during migrations
+module ActiveRecordHostPool
+  cattr_accessor :allowing_writes
+  module PreventWritesPatch
+    def preventing_writes?
+      return false if ActiveRecordHostPool.allowing_writes && replica?
+
+      super
+    end
+  end
+end
+
+if ActiveRecord.version >= Gem::Version.new('6.1')
+  ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend ActiveRecordHostPool::PreventWritesPatch
+end
+# END preventing_writes? patch
+
 Phenix.configure do |config|
   config.skip_database = ->(name, conf) { name =~ /not_there/ || conf['username'] == 'john-doe' }
 end
