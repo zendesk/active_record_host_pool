@@ -26,13 +26,13 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 2.6.0"
 
-  s.add_runtime_dependency("activerecord", ">= 5.1.0", "< 6.1")
+  s.add_runtime_dependency("activerecord", ">= 5.1.0", "< 7.0")
   s.add_runtime_dependency("mysql2")
 
   s.add_development_dependency("bump")
   s.add_development_dependency("minitest", ">= 5.10.0")
   s.add_development_dependency("mocha", ">= 1.4.0")
-  s.add_development_dependency("phenix")
+  s.add_development_dependency("phenix", ">= 1.0.1")
   s.add_development_dependency("rake", '>= 12.0.0')
   s.add_development_dependency('rubocop', '~> 0.80.0')
   s.add_development_dependency("shoulda")
