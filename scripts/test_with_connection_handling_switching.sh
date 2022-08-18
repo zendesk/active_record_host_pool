@@ -5,5 +5,5 @@ then
   LEGACY_CONNECTION_HANDLING=true RAILS_ENV=test bundle exec rake test
   LEGACY_CONNECTION_HANDLING=false RAILS_ENV=test bundle exec rake test
 else
-  LEGACY_CONNECTION_HANDLING=true RAILS_ENV=test bundle exec rake test
+  RAILS_ENV=test bundle exec rake test
 fi
