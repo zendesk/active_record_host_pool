@@ -21,9 +21,6 @@ ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 ## to allow us to write to the replicas but only during migrations
 module ActiveRecordHostPool
   cattr_accessor :allowing_writes
-end
-
-module ActiveRecordHostPool
   module PreventWritesPatch
     def preventing_writes?
       return false if ActiveRecordHostPool.allowing_writes && replica?
