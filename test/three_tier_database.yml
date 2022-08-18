@@ -46,6 +46,7 @@ test:
     password: <%= mysql.password %>
     host: <%= mysql.host %>
     reconnect: true
+    replica: true
     slave: true
 
   test_pool_1_db_b:
@@ -112,6 +113,7 @@ test:
     password: <%= mysql.password %>
     host: <%= mysql.host %>
     reconnect: true
+    replica: true
 
   test_pool_2_db_shard_d:
     adapter: mysql2
@@ -132,6 +134,7 @@ test:
     host: <%= mysql.host %>
     port: <%= mysql.port %>
     reconnect: true
+    replica: true
 
   test_pool_2_db_d:
     adapter: mysql2

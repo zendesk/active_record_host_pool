@@ -135,7 +135,7 @@ module ActiveRecordHostPool
 
       def _pool_key
         @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/" \
-                       "#{@config[:username]}/#{@config[:slave] && 'slave'}"
+                       "#{@config[:username]}/#{replica_configuration? && 'replica'}"
       end
 
       def _connection_pool(auto_create = true)
@@ -159,6 +159,12 @@ module ActiveRecordHostPool
 
       def _clear_connection_proxy_cache
         @connection_proxy_cache = {}
+      end
+
+      private
+
+      def replica_configuration?
+        @config[:replica] || @config[:slave]
       end
     end
 
