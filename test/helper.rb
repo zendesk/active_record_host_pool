@@ -10,8 +10,6 @@ require 'phenix'
 
 RAILS_ENV = 'test'
 
-Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
-
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
 Phenix.configure do |config|
