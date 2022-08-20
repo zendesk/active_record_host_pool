@@ -11,6 +11,10 @@ require 'phenix'
 ENV['RAILS_ENV'] = 'test'
 ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].nil?
 
+if ActiveRecord.version >= Gem::Version.new('6.1')
+  ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
+end
+
 Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
@@ -45,7 +49,7 @@ module ARHPTestSetup
   def arhp_create_models
     return if ARHPTestSetup.const_defined?('Pool1DbA')
 
-    if ActiveRecord.version >= Gem::Version.new('6.1') && ENV['LEGACY_CONNECTION_HANDLING'] != 'true'
+    if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
       eval <<-RUBY
         class AbstractPool1DbC < ActiveRecord::Base
           self.abstract_class = true
