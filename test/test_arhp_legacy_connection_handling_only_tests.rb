@@ -33,7 +33,7 @@ unless ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.le
         without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
           without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_on_handler) do
             exception = assert_raises(ActiveRecord::StatementInvalid) do
-              ActiveRecord::Base.establish_connection(:test_pool_1_db_a)
+              ActiveRecord::Base.establish_connection(:test_pool_1_db_test_only)
               ActiveRecord::Base.cache { Pool1DbC.create! }
             end
 

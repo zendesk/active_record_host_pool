@@ -106,3 +106,12 @@ test_pool_1_db_c:
   password: <%= mysql.password %>
   host: <%= mysql.host %>
   reconnect: true
+
+test_pool_1_db_test_only:
+  adapter: mysql2
+  encoding: utf8
+  database: arhp_test_db_test_only
+  username: <%= mysql.user %>
+  password: <%= mysql.password %>
+  host: <%= mysql.host %>
+  reconnect: true
