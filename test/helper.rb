@@ -5,12 +5,10 @@ require 'minitest/autorun'
 
 require 'active_record_host_pool'
 require 'logger'
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'phenix'
 
 RAILS_ENV = 'test'
-
-Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
