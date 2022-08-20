@@ -8,7 +8,7 @@ require 'logger'
 require 'mocha/setup'
 require 'phenix'
 
-RAILS_ENV = 'test'
+ENV['RAILS_ENV'] = 'test'
 ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].nil?
 
 Minitest::Test = MiniTest::Unit::TestCase unless defined?(::Minitest::Test)

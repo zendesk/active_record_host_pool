@@ -15,7 +15,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }}
+    name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }} (LCH ${{ matrix.legacy_connection_handling }})
     services:
       mysql:
         image: mysql:5.7
@@ -39,10 +39,18 @@ jobs:
           - rails5.2
           - rails6.0
           - rails6.1
-        task:
-          - "scripts/test_with_connection_handling_switching.sh"
+        legacy_connection_handling:
+          - "false"
+        include:
+          - ruby-version: "2.6"
+            gemfile: rails6.1
+            legacy_connection_handling: "true"
+          - ruby-version: "2.7"
+            gemfile: rails6.1
+            legacy_connection_handling: "true"
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"
     steps:
       - uses: zendesk/checkout@v2
       - name: Install Ruby, Bundler and gems
@@ -52,6 +60,4 @@ jobs:
           bundler-cache: true
       - name: Create user 'john-doe' in MySQL
         run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
-        if: ${{ matrix.task == 'scripts/test_with_connection_handling_switching.sh' }}
-      - name: ${{ matrix.task }}
-        run: ${{ matrix.task }}
+      - run: bundle exec rake test
