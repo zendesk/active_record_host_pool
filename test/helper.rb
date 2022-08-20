@@ -47,10 +47,14 @@ module ARHPTestSetup
 
     if ActiveRecord.version >= Gem::Version.new('6.1') && ENV['LEGACY_CONNECTION_HANDLING'] != 'true'
       eval <<-RUBY
-        class AbstractPool1DbC < ::ActiveRecord::Base
+        class AbstractPool1DbC < ActiveRecord::Base
           self.abstract_class = true
           connects_to database: { writing: :test_pool_1_db_c }
         end
+
+        # The placement of the Pool1DbC class is important so that its
+        # connection will not be the most recent connection established
+        # for test_pool_1.
         class Pool1DbC < AbstractPool1DbC
         end
 
@@ -118,7 +122,7 @@ module ARHPTestSetup
         # The placement of the Pool1DbC class is important so that its
         # connection will not be the most recent connection established
         # for test_pool_1.
-        class Pool1DbC < ::ActiveRecord::Base
+        class Pool1DbC < ActiveRecord::Base
           establish_connection(:test_pool_1_db_c)
         end
 

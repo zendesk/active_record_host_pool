@@ -57,7 +57,6 @@ test:
     host: <%= mysql.host %>
     reconnect: true
 
-
   test_pool_1_db_not_there:
     adapter: mysql2
     encoding: utf8
