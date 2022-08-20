@@ -37,11 +37,9 @@ module ActiveRecordHostPool
     def connection(*args)
       real_connection = _connection_pool.connection(*args)
       _connection_proxy_for(real_connection, @config[:database])
-    rescue Exception => e
-      if rescuable_errors.any? { |r| e.is_a?(r) }
-        _connection_pools.delete(_pool_key)
-      end
-      Kernel.raise(e)
+    rescue Mysql2::Error, ActiveRecord::NoDatabaseError
+      _connection_pools.delete(_pool_key)
+      Kernel.raise
     end
 
     # by the time we are patched into ActiveRecord, the current thread has already established
@@ -113,16 +111,6 @@ module ActiveRecordHostPool
     end
 
     private
-
-    def rescuable_errors
-      @rescuable_errors ||= begin
-        e = [Mysql2::Error]
-        if ActiveRecord.const_defined?("NoDatabaseError")
-          e << ActiveRecord::NoDatabaseError
-        end
-        e
-      end
-    end
 
     def _connection_pools
       @@_connection_pools ||= {}
