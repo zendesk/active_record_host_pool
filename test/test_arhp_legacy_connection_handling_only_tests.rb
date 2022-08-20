@@ -33,10 +33,11 @@ unless ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.le
         without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
           without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_on_handler) do
             exception = assert_raises(ActiveRecord::StatementInvalid) do
+              ActiveRecord::Base.establish_connection(:test_pool_1_db_a)
               ActiveRecord::Base.cache { Pool1DbC.create! }
             end
 
-            assert_equal("Mysql2::Error: Table 'arhp_test_db_b.pool1_db_cs' doesn't exist", exception.message)
+            assert_equal("Mysql2::Error: Table 'arhp_test_db_a.pool1_db_cs' doesn't exist", exception.message)
           end
         end
       end
