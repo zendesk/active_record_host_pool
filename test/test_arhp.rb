@@ -88,14 +88,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert_equal true, Pool1DbA.connection.send(:test_private_method)
   end
 
-  def test_should_not_share_a_query_cache
-    Pool1DbA.create(val: 'foo')
-    Pool1DbB.create(val: 'foobar')
-    Pool1DbA.connection.cache do
-      refute_equal Pool1DbA.first.val, Pool1DbB.first.val
-    end
-  end
-
   def test_object_creation
     Pool1DbA.create(val: 'foo')
     assert_equal('arhp_test_db_a', current_database(Pool1DbA))
