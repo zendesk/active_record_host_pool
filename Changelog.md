@@ -13,7 +13,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ### Fixed
 
-- Test compatibility with Ruby 3.0.
+- Test compatibility with Ruby 3.0 and 3.1.
 
 ## [1.0.3] - 2021-02-09
 ### Fixed
