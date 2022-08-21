@@ -14,6 +14,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def teardown
+    ActiveRecord::Base.connection.disconnect!
+    ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
     Phenix.burn!
   end
 

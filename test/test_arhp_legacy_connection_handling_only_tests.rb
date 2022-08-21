@@ -11,6 +11,8 @@ unless ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.le
     end
 
     def teardown
+      ActiveRecord::Base.connection.disconnect!
+      ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
       Phenix.burn!
     end
 
