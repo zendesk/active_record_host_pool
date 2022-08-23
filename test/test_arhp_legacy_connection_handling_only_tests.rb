@@ -21,7 +21,9 @@ unless RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
     end
 
     def test_models_with_matching_hosts_and_non_matching_databases_should_share_a_connection
-      simulate_rails_app_active_record_railties if ActiveRecord.version >= Gem::Version.new('6.1')
+      # ActiveRecord 6.0+ has additional behavior when an operation dirties the cache
+      simulate_rails_app_active_record_railties if ActiveRecord.version >= Gem::Version.new('6.0')
+
       assert_equal(Pool1DbA.connection.raw_connection, Pool1DbC.connection.raw_connection)
     end
   end
