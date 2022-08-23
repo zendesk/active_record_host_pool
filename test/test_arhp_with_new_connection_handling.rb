@@ -19,20 +19,26 @@ if RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
     def test_correctly_writes_to_sharded_databases
       AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
         ShardedModel.create!
+        ShardedModel.create!
       end
 
       AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
         ShardedModel.create!
       end
 
+      # Normally we would count the records using the replicas (`reading` role).
+      # However, ActiveRecord does not mirror data from the writing DB onto the
+      # replica database(s) for you so apps must implement that themselves.
+      # Therefore, for testing purposes, we count the records on the writer db.
       records_on_shard_b = AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
         ShardedModel.count
       end
+
       records_on_shard_d = AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
         ShardedModel.count
       end
 
-      assert_equal 1, records_on_shard_b
+      assert_equal 2, records_on_shard_b
       assert_equal 1, records_on_shard_d
       assert_equal 0, ShardedModel.count
     end
@@ -66,7 +72,9 @@ if RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
       refute_equal(pool_1_shard_b_writing_connection, pool_2_shard_d_writing_connection)
     end
 
-    def test_reading_and_writing_roles_should_not_share_a_connection
+    # The role name for a writer database is :writing
+    # The role name for a replica/reader database is :reading
+    def test_writers_should_not_share_a_connection_with_replicas
       refute_equal(
         (AbstractPool1DbA.connected_to(role: :writing) { Pool1DbA.connection.raw_connection }),
         (AbstractPool1DbA.connected_to(role: :reading) { Pool1DbA.connection.raw_connection })
