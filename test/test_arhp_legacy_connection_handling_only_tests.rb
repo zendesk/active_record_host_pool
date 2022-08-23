@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-unless ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+unless RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
   class ActiveRecordHostPoolLegacyConnectiongHandlingTest < Minitest::Test
     include ARHPTestSetup
     def setup

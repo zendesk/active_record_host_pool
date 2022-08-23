@@ -15,6 +15,10 @@ if ActiveRecord.version >= Gem::Version.new('6.1')
   ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
 end
 
+# rubocop:disable Layout/LineLength
+RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING = ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+# rubocop:enable Layout/LineLength
+
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
 # BEGIN preventing_writes? patch
@@ -47,7 +51,7 @@ module ARHPTestSetup
   def arhp_create_models
     return if ARHPTestSetup.const_defined?('Pool1DbA')
 
-    if ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+    if RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
       eval <<-RUBY
         class AbstractPool1DbC < ActiveRecord::Base
           self.abstract_class = true
@@ -178,7 +182,7 @@ module ARHPTestSetup
   end
 
   def simulate_rails_app_active_record_railties
-    if ActiveRecord.version < Gem::Version.new('6.1') || ENV['LEGACY_CONNECTION_HANDLING'] == 'true'
+    unless RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
       # Necessary for testing ActiveRecord 6.0 which uses the connection
       # handlers when clearing query caches across all handlers when
       # an operation that dirties the cache is involved (e.g. create/insert,
