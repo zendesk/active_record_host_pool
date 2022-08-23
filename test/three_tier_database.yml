@@ -1,4 +1,7 @@
 <% mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306') %>
+
+# This .yml file is loaded in Rails 6.1 when ActiveRecord::Base.legacy_connection_handling = false
+#
 # ARHP creates separate connection pools based on the pool key.
 # The pool key is defined as:
 #   host / port / socket / username / replica
@@ -6,26 +9,30 @@
 # Therefore two databases with identical host, port, socket, username, and replica status will share a connection pool.
 # If any part (host, port, etc.) of the pool key differ, two databases will _not_ share a connection pool.
 #
-# Below, "test_pool_1..." and "test_pool_2..." have identical host, username, socket, and replica status but the port information differs.
-# Here the yml configurations are reformatted as a table to give a visual example:
+# `replica` in the pool key is a boolean indicating if the database is a replica/reader (true) or writer database (false).
+# In Rails 6.1 models when you call:
+#  `connected_to(role: :writing)` it will access the writer/primary database
 #
-# |----------+----------------+----------------|
+#  `connected_to(role: :reading)` it will access the replica/reader database
+#
+# Below, `test_pool_1...` and `test_pool_2...` have identical host, username, socket, and replica status but the port information differs.
+# Here the database configurations are formatted as a table to give a visual example:
+#
 # |          |  test_pool_1   |  test_pool_2   |
-# |----------+----------------+----------------+
+# |----------|----------------|----------------|
 # | host     | 127.0.0.1      | 127.0.0.1      |
 # | port     |                | 3306           |
 # | socket   |                |                |
 # | username | root           | root           |
 # | replica  | false          | false          |
-# |----------+----------------+----------------|
 #
-# Note: The configuration items must be explicitly defined or will be blank in the pool key.
-#       Configurations with matching _implicit_ items but differing _explicit_ items will create separate pools.
-#       e.g. "test_pool_1" will default to port 3306 but because it is not explicitly defined it will not share a pool with test_pool_2
+# The configuration items must be explicitly defined or they will be blank in the pool key.
+# Configurations with matching _implicit_ items but differing _explicit_ items will create separate pools.
+# e.g. `test_pool_1` will default to port 3306 but because it is not explicitly defined it will not share a pool with `test_pool_2`
 #
-#       ARHP will therefore create the following pool keys:
-#       test_pool_1 => 127.0.0.1///root/false
-#       test_pool_2 => 127.0.0.1/3306//root/false
+# ARHP will therefore create the following pool keys:
+#   test_pool_1 => 127.0.0.1///root/false
+#   test_pool_2 => 127.0.0.1/3306//root/false
 
 test:
   test_pool_1_db_a:
