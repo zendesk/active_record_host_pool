@@ -2,8 +2,8 @@
 
 require_relative 'helper'
 
-if RAILS_6_1_WITH_NEW_CONNECTION_HANDLING
-  class ActiveRecordHostPoolTestWithNewConnectionHandling < Minitest::Test
+if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+  class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
     include ARHPTestSetup
     def setup
       Phenix.rise! config_path: 'test/three_tier_database.yml'
