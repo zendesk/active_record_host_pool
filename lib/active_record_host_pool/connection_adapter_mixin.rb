@@ -120,6 +120,8 @@ end
 
 ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
 
+# In Rails 6.1 Connection Pools are no longer instantiated in #establish_connection but in a
+# new pool method.
 if "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}" == '6.1'
   ActiveRecord::ConnectionAdapters::PoolConfig.prepend(ActiveRecordHostPool::PoolConfigPatch)
 end
