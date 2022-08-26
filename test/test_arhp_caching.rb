@@ -5,7 +5,11 @@ require_relative 'helper'
 class ActiveRecordHostCachingTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    Phenix.rise!
+    if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+      Phenix.rise! config_path: 'test/three_tier_database.yml'
+    else
+      Phenix.rise!
+    end
     arhp_create_models
   end
 
@@ -32,16 +36,26 @@ class ActiveRecordHostCachingTest < Minitest::Test
     def test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
       simulate_rails_app_active_record_railties
 
+      # Reset the connections post-setup so that we ensure the last DB isn't arhp_test_db_c
+      ActiveRecord::Base.connection.discard!
+      ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
+      ActiveRecord::Base.establish_connection(:test_pool_1_db_a)
+
+      # Ensure this works _with_ the patch
+      ActiveRecord::Base.cache { Pool1DbC.create! }
+
       # Remove patch that fixes an issue in Rails 6+ to ensure it still
       # exists. If this begins to fail then it may mean that Rails has fixed
       # the issue so that it no longer occurs.
       without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
-        exception = assert_raises(ActiveRecord::StatementInvalid) do
-          ActiveRecord::Base.cache { Pool1DbC.create! }
-        end
+        without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_on_handler) do
+          exception = assert_raises(ActiveRecord::StatementInvalid) do
+            ActiveRecord::Base.cache { Pool1DbC.create! }
+          end
 
-        cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
-        assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+          cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
+          assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+        end
       end
     end
 
