@@ -9,9 +9,10 @@ require 'mocha/minitest'
 require 'phenix'
 
 ENV['RAILS_ENV'] = 'test'
+ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].nil?
 
 if ActiveRecord.version >= Gem::Version.new('6.1')
-  ActiveRecord::Base.legacy_connection_handling = true
+  ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
 end
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
