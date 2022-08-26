@@ -5,7 +5,11 @@ require_relative 'helper'
 class ActiveRecordHostCachingTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    Phenix.rise!
+    if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+      Phenix.rise! config_path: 'test/three_tier_database.yml'
+    else
+      Phenix.rise!
+    end
     arhp_create_models
   end
 
