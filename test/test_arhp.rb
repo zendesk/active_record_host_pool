@@ -215,18 +215,4 @@ class ActiveRecordHostPoolTest < Minitest::Test
     pool.expects(:checkin).with(conn)
     pool.release_connection
   end
-
-  private
-
-  def simulate_rails_app_active_record_railties
-    if ActiveRecord.version >= Gem::Version.new('6.0')
-      # Necessary for testing ActiveRecord 6.0 which uses the connection
-      # handlers when clearing query caches across all handlers when
-      # an operation that dirties the cache is involved (e.g. create/insert,
-      # update, delete/destroy, truncate, etc.)
-      ActiveRecord::Base.connection_handlers = {
-        ActiveRecord::Base.writing_role => ActiveRecord::Base.default_connection_handler
-      }
-    end
-  end
 end
