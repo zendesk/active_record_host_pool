@@ -45,10 +45,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
     refute_equal(Pool2DbE.connection.raw_connection, Pool3DbE.connection.raw_connection)
   end
 
-  def test_models_with_different_replica_status_should_not_share_a_connection
-    refute_equal(Pool1DbA.connection.raw_connection, Pool1DbAReplica.connection.raw_connection)
-  end
-
   def test_should_select_on_correct_database
     Pool1DbA.connection.send(:select_all, 'select 1')
     assert_equal 'arhp_test_db_a', current_database(Pool1DbA)
@@ -69,11 +65,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     Pool3DbE.connection.send(:insert, "insert into tests values(NULL, 'foo')")
     assert_equal 'arhp_test_db_e', current_database(Pool3DbE)
-  end
-
-  def test_models_with_matching_hosts_and_non_matching_databases_should_share_a_connection
-    simulate_rails_app_active_record_railties
-    assert_equal(Pool1DbA.connection.raw_connection, Pool1DbC.connection.raw_connection)
   end
 
   def test_connection_returns_a_proxy
