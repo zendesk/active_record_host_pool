@@ -9,6 +9,10 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 
+  def teardown
+    Phenix.burn!
+  end
+
   # rake db:create uses a pattern where it tries to connect to a non-existant database.
   # but then we had this left in the connection pool cache.
   def test_connecting_to_wrong_db_first
