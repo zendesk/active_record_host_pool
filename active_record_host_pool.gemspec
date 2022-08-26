@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
     "lib/active_record_host_pool/connection_adapter_mixin.rb",
     "lib/active_record_host_pool/connection_proxy.rb",
     "lib/active_record_host_pool/pool_proxy.rb",
+    "lib/active_record_host_pool/pool_proxy_6_1.rb",
+    "lib/active_record_host_pool/pool_proxy_legacy.rb",
     "lib/active_record_host_pool/version.rb"
   ]
   s.homepage = "https://github.com/zendesk/active_record_host_pool"

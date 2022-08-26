@@ -6,6 +6,10 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [1.1.1] - 2022-08-26
+### Fixed
+- Ensure that recently added files "lib/active_record_host_pool/pool_proxy_6_1.rb" and "lib/active_record_host_pool/pool_proxy_legacy.rb" are built into the shipped gem. (https://github.com/zendesk/active_record_host_pool/pull/92)
+
 ## [1.1.0] - 2022-08-26
 ### Added
 - Support for Rails 6.1 with [legacy_connection_handling=false](https://github.com/zendesk/active_record_host_pool/pull/90) and [legacy_connection_handling=true](https://github.com/zendesk/active_record_host_pool/pull/88)
