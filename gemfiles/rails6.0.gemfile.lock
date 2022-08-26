@@ -32,8 +32,8 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.2)
       ast (~> 2.4.0)
-    phenix (0.6.0)
-      activerecord (>= 4.2, < 6.1)
+    phenix (1.0.1)
+      activerecord (>= 4.2, < 7.1)
       bundler
     rainbow (3.0.0)
     rake (13.0.1)
@@ -70,7 +70,7 @@ DEPENDENCIES
   minitest (>= 5.10.0)
   mocha (>= 1.4.0)
   mysql2 (>= 0.4.4)
-  phenix
+  phenix (>= 1.0.1)
   rake (>= 12.0.0)
   rubocop (~> 0.80.0)
   shoulda
