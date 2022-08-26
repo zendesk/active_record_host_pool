@@ -15,7 +15,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }}
+    name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }} (LCH ${{ matrix.legacy_connection_handling }})
     services:
       mysql:
         image: mysql:5.7
@@ -39,8 +39,11 @@ jobs:
           - rails5.2
           - rails6.0
           - rails6.1
+        legacy_connection_handling:
+          - "true"
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"
     steps:
       - uses: zendesk/checkout@v2
       - name: Install Ruby, Bundler and gems

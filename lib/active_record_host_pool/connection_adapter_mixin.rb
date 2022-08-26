@@ -10,7 +10,7 @@ module ActiveRecordHostPool
 
         def _host_pool_current_database=(database)
           @_host_pool_current_database = database
-          @config[:database] = _host_pool_current_database if ActiveRecord::VERSION::MAJOR >= 5
+          @config[:database] = _host_pool_current_database
         end
 
         alias_method :execute_without_switching, :execute
