@@ -8,7 +8,11 @@ require 'logger'
 require 'mocha/minitest'
 require 'phenix'
 
-RAILS_ENV = 'test'
+ENV['RAILS_ENV'] = 'test'
+
+if ActiveRecord.version >= Gem::Version.new('6.1')
+  ActiveRecord::Base.legacy_connection_handling = true
+end
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
