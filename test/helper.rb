@@ -20,6 +20,8 @@ RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING =
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
+Thread.abort_on_exception = true
+
 # BEGIN preventing_writes? patch
 ## Rails 6.1 by default does not allow writing to replica databases which prevents
 ## us from properly setting up the test databases. This patch is used in test/schema.rb
