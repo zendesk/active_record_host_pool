@@ -34,6 +34,8 @@ jobs:
         ruby-version:
           - 2.6
           - 2.7
+          - 3.0
+          - 3.1
         gemfile:
           - rails5.1
           - rails5.2
@@ -48,6 +50,25 @@ jobs:
           - ruby-version: "2.7"
             gemfile: rails6.1
             legacy_connection_handling: "true"
+          - ruby-version: "3.0"
+            gemfile: rails6.1
+            legacy_connection_handling: "true"
+          - ruby-version: "3.1"
+            gemfile: rails6.1
+            legacy_connection_handling: "true"
+        exclude:
+          - ruby-version: "3.0"
+            gemfile: rails5.1
+          - ruby-version: "3.0"
+            gemfile: rails5.2
+          - ruby-version: "3.0"
+            gemfile: rails6.0
+          - ruby-version: "3.1"
+            gemfile: rails5.1
+          - ruby-version: "3.1"
+            gemfile: rails5.2
+          - ruby-version: "3.1"
+            gemfile: rails6.0
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"
