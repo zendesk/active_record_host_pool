@@ -6,6 +6,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 ### Added
+- Support for Rails 7.0 with [legacy_connection_handling=false and legacy_connection_handling=true](https://github.com/zendesk/active_record_host_pool/pull/95)
 - Start testing with Ruby 3.0 & 3.1
 
 ## [1.1.1] - 2022-08-26
