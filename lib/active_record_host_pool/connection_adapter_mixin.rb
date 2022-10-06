@@ -32,7 +32,8 @@ module ActiveRecordHostPool
       super
     end
 
-    def execute_with_switching(*args)
+    def self.ruby2_keywords(*); end unless respond_to?(:ruby2_keywords, true)
+    ruby2_keywords def execute_with_switching(*args)
       if _host_pool_current_database && !_no_switch
         _switch_connection
       end
@@ -97,7 +98,7 @@ module ActiveRecord
   module ConnectionAdapters
     class ConnectionHandler
       case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-      when '6.1'
+      when '6.1', '7.0'
 
         :noop
 
@@ -122,6 +123,7 @@ ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::Da
 
 # In Rails 6.1 Connection Pools are no longer instantiated in #establish_connection but in a
 # new pool method.
-if "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}" == '6.1'
+case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+when '6.1', '7.0'
   ActiveRecord::ConnectionAdapters::PoolConfig.prepend(ActiveRecordHostPool::PoolConfigPatch)
 end

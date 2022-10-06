@@ -31,7 +31,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
         end
       RUBY
     rescue Exception => e
-      assert e.message =~ /Unknown database 'arhp_test_db_not_there'/
+      assert_match(/(Unknown database|We could not find your database:) '?arhp_test_db_not_there/, e.message)
       reached_first_exception = true
     end
 
@@ -44,8 +44,8 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     rescue Exception => e
       # If the pool is caching a bad connection, that connection will be used instead
       # of the intended connection.
-      refute_includes e.message, "Unknown database 'arhp_test_db_not_there'"
-      assert_includes e.message, "Unknown database 'arhp_test_db_a'"
+      refute_match(/(Unknown database|We could not find your database:) '?arhp_test_db_not_there/, e.message)
+      assert_match(/(Unknown database|We could not find your database:) '?arhp_test_db_a/, e.message)
       reached_second_exception = true
     end
 
