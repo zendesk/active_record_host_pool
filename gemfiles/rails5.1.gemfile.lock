@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    active_record_host_pool (1.1.1)
+    active_record_host_pool (1.2.0)
       activerecord (>= 5.1.0, < 7.1)
       mysql2
 
@@ -27,7 +27,7 @@ GEM
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
-    minitest (5.14.0)
+    minitest (5.16.3)
     mocha (1.11.2)
     mysql2 (0.5.3)
     parallel (1.19.1)
@@ -76,4 +76,4 @@ DEPENDENCIES
   shoulda
 
 BUNDLED WITH
-   2.1.4
+   2.3.7
