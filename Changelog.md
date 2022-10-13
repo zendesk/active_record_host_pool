@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.0] - 2022-10-13
 ### Added
 - Support for Rails 7.0 with [legacy_connection_handling=false and legacy_connection_handling=true](https://github.com/zendesk/active_record_host_pool/pull/95)
 - Start testing with Ruby 3.0 & 3.1
