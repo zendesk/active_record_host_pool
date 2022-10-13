@@ -4,6 +4,9 @@ require 'rake/testtask'
 require 'bump/tasks'
 require 'rubocop/rake_task'
 
+# Pushing to rubygems is handled by a github workflow
+ENV['gem_push'] = 'false'
+
 Rake::TestTask.new do |test|
   test.pattern = 'test/test_*.rb'
   test.verbose = true
