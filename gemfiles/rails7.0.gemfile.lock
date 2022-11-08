@@ -46,12 +46,6 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.11.0)
-    shoulda (4.0.0)
-      shoulda-context (~> 2.0)
-      shoulda-matchers (~> 4.0)
-    shoulda-context (2.0.0)
-    shoulda-matchers (4.5.1)
-      activesupport (>= 4.2.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.6.1)
@@ -70,7 +64,6 @@ DEPENDENCIES
   phenix (>= 1.0.1)
   rake (>= 12.0.0)
   rubocop (~> 0.80.0)
-  shoulda
 
 BUNDLED WITH
    2.3.7
