@@ -2,14 +2,13 @@
 
 require_relative 'helper'
 
-class ThreadSafetyTest < Minitest::Test
+ThreadSafetyTest = Class.new(Minitest::Test) do
+  break if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+
   include ARHPTestSetup
   def setup
-    if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
-      Phenix.rise! config_path: 'test/three_tier_database.yml'
-    else
-      Phenix.rise!
-    end
+    Phenix.rise!
+
     arhp_create_models
 
     Pool1DbA.create!(val: 'test_Pool1DbA_value')
