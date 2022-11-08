@@ -122,18 +122,22 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_creating_db
     conn = Pool1DbA.connection
-    conn.expects(:execute_without_switching)
-    conn.expects(:_switch_connection).never
-    assert conn._host_pool_current_database
-    conn.create_database(:some_args)
+    assert_called(conn, :execute_without_switching) do
+      refute_called(conn, :_switch_connection) do
+        assert conn._host_pool_current_database
+        conn.create_database(:some_args)
+      end
+    end
   end
 
   def test_no_switch_when_dropping_db
     conn = Pool1DbA.connection
-    conn.expects(:execute_without_switching)
-    conn.expects(:_switch_connection).never
-    assert conn._host_pool_current_database
-    conn.drop_database(:some_args)
+    assert_called(conn, :execute_without_switching) do
+      refute_called(conn, :_switch_connection) do
+        assert conn._host_pool_current_database
+        conn.drop_database(:some_args)
+      end
+    end
   end
 
   def test_underlying_assumption_about_test_db
@@ -163,8 +167,9 @@ class ActiveRecordHostPoolTest < Minitest::Test
     thread_id = switch_to_klass.connection.select_value('select @@pseudo_thread_id')
 
     # now, disable our auto-switching and trigger a mysql reconnect
-    switch_to_klass.connection.unproxied.stubs(:_switch_connection).returns(true)
-    Pool2DbD.connection.execute("KILL #{thread_id}")
+    switch_to_klass.connection.unproxied.stub(:_switch_connection, true) do
+      Pool2DbD.connection.execute("KILL #{thread_id}")
+    end
 
     # and finally, did mysql reconnect correctly?
     puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
@@ -174,7 +179,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
   def test_release_connection
     pool = ActiveRecord::Base.connection_pool
     conn = pool.connection
-    pool.expects(:checkin).with(conn)
-    pool.release_connection
+    assert_called_with(pool, :checkin, [conn]) do
+      pool.release_connection
+    end
   end
 end

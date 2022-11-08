@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency("bump")
   s.add_development_dependency("minitest", ">= 5.10.0")
-  s.add_development_dependency("mocha", ">= 1.4.0")
+  s.add_development_dependency("minitest-mock_expectations", "~> 1.1.3")
   s.add_development_dependency("phenix", ">= 1.0.1")
   s.add_development_dependency("rake", '>= 12.0.0')
   s.add_development_dependency('rubocop', '~> 0.80.0')
