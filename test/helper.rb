@@ -5,7 +5,7 @@ require 'minitest/autorun'
 
 require 'active_record_host_pool'
 require 'logger'
-require 'mocha/minitest'
+require 'minitest/mock_expectations'
 require 'phenix'
 
 ENV['RAILS_ENV'] = 'test'
