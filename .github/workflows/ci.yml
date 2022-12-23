@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Linting of Ruby files
     steps:
-      - uses: zendesk/checkout@v2
+      - uses: zendesk/checkout@v3
       - name: Install Ruby, Bundler and gems
         uses: zendesk/setup-ruby@v1
         with:
@@ -85,7 +85,7 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"
     steps:
-      - uses: zendesk/checkout@v2
+      - uses: zendesk/checkout@v3
       - name: Install Ruby, Bundler and gems
         uses: zendesk/setup-ruby@v1
         with:
