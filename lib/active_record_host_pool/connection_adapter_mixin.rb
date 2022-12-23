@@ -33,11 +33,11 @@ module ActiveRecordHostPool
     end
 
     def self.ruby2_keywords(*); end unless respond_to?(:ruby2_keywords, true)
-    ruby2_keywords def execute_with_switching(*args)
+    ruby2_keywords def execute_with_switching(*args, **kwargs)
       if _host_pool_current_database && !_no_switch
         _switch_connection
       end
-      execute_without_switching(*args)
+      execute_without_switching(*args, **kwargs)
     end
 
     def drop_database_with_no_switching(*args)
