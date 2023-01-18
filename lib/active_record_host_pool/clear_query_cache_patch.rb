@@ -20,11 +20,11 @@ if ActiveRecord.version >= Gem::Version.new('6.0')
     # actively working on sharding in Rails 6 and above.
     module ClearQueryCachePatch
       def clear_query_caches_for_current_thread
-        host_pool_current_database_was = connection.unproxied._host_pool_current_database
+        host_pool_current_database_was = connection_pool._unproxied_connection._host_pool_current_database
         super
       ensure
         # restore in case clearing the cache changed the database
-        connection.unproxied._host_pool_current_database = host_pool_current_database_was
+        connection_pool._unproxied_connection._host_pool_current_database = host_pool_current_database_was
       end
 
       def clear_on_handler(handler)
