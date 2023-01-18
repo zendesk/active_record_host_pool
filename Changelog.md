@@ -6,6 +6,12 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Added
+- Add a new `ActiveRecordHostPool::PoolProxy#_unproxied_connection` method which gives access to the underlying, "real", shared connection without going through the connection proxy, which would call `#_host_pool_current_database=` on the underlying connection. (https://github.com/zendesk/active_record_host_pool/pull/104)
+
+### Fixed
+- Fix the patch for `ActiveRecord::Base.clear_on_handler` to work correctly right after the creation of a new connection pool. (https://github.com/zendesk/active_record_host_pool/pull/104)
+
 ## [1.2.1] - 2022-12-23
 ### Fixed
 - Fix forwarding of kwargs when calling `#execute` in Rails 7. (https://github.com/zendesk/active_record_host_pool/pull/101)
