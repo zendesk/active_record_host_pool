@@ -36,11 +36,15 @@ module ActiveRecordHostPool
     attr_reader :spec
 
     def connection(*args)
-      real_connection = _connection_pool.connection(*args)
+      real_connection = _unproxied_connection(*args)
       _connection_proxy_for(real_connection, @config[:database])
     rescue Mysql2::Error, ActiveRecord::NoDatabaseError
       _connection_pools.delete(_pool_key)
       Kernel.raise
+    end
+
+    def _unproxied_connection(*args)
+      _connection_pool.connection(*args)
     end
 
     # by the time we are patched into ActiveRecord, the current thread has already established

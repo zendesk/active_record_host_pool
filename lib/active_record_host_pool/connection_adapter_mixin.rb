@@ -8,11 +8,6 @@ module ActiveRecordHostPool
       base.class_eval do
         attr_reader(:_host_pool_current_database)
 
-        def _host_pool_current_database=(database)
-          @_host_pool_current_database = database
-          @config[:database] = _host_pool_current_database
-        end
-
         alias_method :execute_without_switching, :execute
         alias_method :execute, :execute_with_switching
 
@@ -30,6 +25,11 @@ module ActiveRecordHostPool
     def initialize(*)
       @_cached_current_database = nil
       super
+    end
+
+    def _host_pool_current_database=(database)
+      @_host_pool_current_database = database
+      @config[:database] = _host_pool_current_database
     end
 
     def self.ruby2_keywords(*); end unless respond_to?(:ruby2_keywords, true)

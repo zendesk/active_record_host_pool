@@ -29,10 +29,10 @@ if ActiveRecord.version >= Gem::Version.new('6.0')
 
       def clear_on_handler(handler)
         handler.all_connection_pools.each do |pool|
-          db_was = pool.connection.unproxied._host_pool_current_database
-          pool.connection.clear_query_cache if pool.active_connection?
+          db_was = pool._unproxied_connection._host_pool_current_database
+          pool._unproxied_connection.clear_query_cache if pool.active_connection?
         ensure
-          pool.connection.unproxied._host_pool_current_database = db_was
+          pool._unproxied_connection._host_pool_current_database = db_was
         end
       end
     end
