@@ -6,6 +6,10 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [1.2.3] - 2023-01-19
+### Fixed
+- Fix the patch for `ActiveRecord::Base.clear_query_caches_for_current_thread` to work correctly right after the creation of a new connection pool. (https://github.com/zendesk/active_record_host_pool/pull/105)
+
 ## [1.2.2] - 2023-01-18
 ### Added
 - Add a new `ActiveRecordHostPool::PoolProxy#_unproxied_connection` method which gives access to the underlying, "real", shared connection without going through the connection proxy, which would call `#_host_pool_current_database=` on the underlying connection. (https://github.com/zendesk/active_record_host_pool/pull/104)
