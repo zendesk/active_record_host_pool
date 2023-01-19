@@ -6,6 +6,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [1.2.3] - 2023-01-19
 ### Fixed
 - Fix the patch for `ActiveRecord::Base.clear_query_caches_for_current_thread` to work correctly right after the creation of a new connection pool. (https://github.com/zendesk/active_record_host_pool/pull/105)
 
