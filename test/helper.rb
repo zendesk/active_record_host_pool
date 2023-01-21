@@ -2,6 +2,7 @@
 
 require 'bundler/setup'
 require 'minitest/autorun'
+require 'pry-byebug'
 
 require 'active_record_host_pool'
 require 'logger'
