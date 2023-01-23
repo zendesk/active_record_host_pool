@@ -20,9 +20,16 @@ if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
       AbstractShardedModel.connected_to(role: :writing, shard: :shard_b) do
         ShardedModel.create!
         ShardedModel.create!
+
+        AbstractShardedModel.connected_to(role: :writing, shard: :shard_c) do
+          ShardedModel.create!
+        end
+
+        ShardedModel.create!
       end
 
       AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
+        ShardedModel.create!
         ShardedModel.create!
       end
 
@@ -34,12 +41,15 @@ if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
         ShardedModel.count
       end
 
+      records_on_shard_c = AbstractShardedModel.connected_to(role: :writing, shard: :shard_c) do
+        ShardedModel.count
+      end
+
       records_on_shard_d = AbstractShardedModel.connected_to(role: :writing, shard: :shard_d) do
         ShardedModel.count
       end
 
-      assert_equal 2, records_on_shard_b
-      assert_equal 1, records_on_shard_d
+      assert_equal [3, 1, 2], [records_on_shard_b, records_on_shard_c, records_on_shard_d]
       assert_equal 0, ShardedModel.count
     end
 
