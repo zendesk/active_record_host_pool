@@ -47,15 +47,23 @@ class ActiveRecordHostCachingTest < Minitest::Test
       # Remove patch that fixes an issue in Rails 6+ to ensure it still
       # exists. If this begins to fail then it may mean that Rails has fixed
       # the issue so that it no longer occurs.
-      without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
-        without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_on_handler) do
-          exception = assert_raises(ActiveRecord::StatementInvalid) do
-            ActiveRecord::Base.cache { Pool1DbC.create! }
-          end
 
-          cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
-          assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+      case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+      when '6.1', '7.0'
+        mod = ActiveRecordHostPool::ClearOnHandlerPatch
+        method_to_remove = :clear_on_handler
+      when '6.0'
+        mod = ActiveRecordHostPool::ClearQueryCachePatch
+        method_to_remove = :clear_query_caches_for_current_thread
+      end
+
+      without_module_patch(mod, method_to_remove) do
+        exception = assert_raises(ActiveRecord::StatementInvalid) do
+          ActiveRecord::Base.cache { Pool1DbC.create! }
         end
+
+        cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
+        assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
       end
     end
 
