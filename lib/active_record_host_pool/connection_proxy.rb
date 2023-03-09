@@ -50,11 +50,13 @@ module ActiveRecordHostPool
         __getobj__.send(symbol, *args, &blk)
       end
     end
+    ruby2_keywords :send if respond_to?(:ruby2_keywords, true)
 
     private
 
     def select(*args)
       @cx.__send__(:select, *args)
     end
+    ruby2_keywords :select if respond_to?(:ruby2_keywords, true)
   end
 end
