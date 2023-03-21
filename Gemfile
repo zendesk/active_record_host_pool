@@ -1,8 +1,3 @@
-source 'https://rubygems.org'
+# frozen_string_literal: true
 
-gemspec
-
-gem "activerecord", "5.1.3"
-gem "mysql2", "~> 0.4.0"
-
-eval_gemfile 'gemfiles/common.rb'
+eval_gemfile 'gemfiles/rails5.1.gemfile'
