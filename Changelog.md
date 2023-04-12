@@ -6,6 +6,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+- Drop Ruby 2.6.
+- Start testing with Ruby 3.2.
+
 ## [1.2.4] - 2023-03-20
 ### Fixed
 - Fixed the warning when using `ruby2_keywords` on `execute_with_switching`.
