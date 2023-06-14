@@ -70,7 +70,6 @@ PLATFORMS
 DEPENDENCIES
   active_record_host_pool!
   activerecord (~> 6.0.0)
-  byebug
   minitest (>= 5.10.0)
   minitest-fail-fast
   minitest-line

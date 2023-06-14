@@ -48,7 +48,6 @@ Style/StringLiterals:
   Exclude:
     - 'Gemfile'
     - 'active_record_host_pool.gemspec'
-    - 'gemfiles/common.rb'
     - 'lib/active_record_host_pool/connection_adapter_mixin.rb'
     - 'lib/active_record_host_pool/pool_proxy.rb'
     - 'lib/active_record_host_pool/version.rb'
