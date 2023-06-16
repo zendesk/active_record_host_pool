@@ -63,7 +63,11 @@ class ActiveRecordHostCachingTest < Minitest::Test
         end
 
         cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
-        assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+        if ActiveRecordHostPool.mysql2?
+          assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+        else
+          assert_equal("Trilogy::ProtocolError: 1146: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+        end
       end
     end
 

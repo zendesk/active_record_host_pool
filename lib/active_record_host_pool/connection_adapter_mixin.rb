@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-require "active_record/connection_adapters/mysql2_adapter"
+if ActiveRecordHostPool.mysql2?
+  require "active_record/connection_adapters/mysql2_adapter"
+else
+  require "trilogy_adapter/connection"
+  require "trilogy_adapter/errors"
+  ActiveRecord::Base.extend(TrilogyAdapter::Connection)
+end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
@@ -73,9 +79,16 @@ module ActiveRecordHostPool
            (_host_pool_current_database != @_cached_current_database) ||
            @connection.object_id != @_cached_connection_object_id
          )
-        log("select_db #{_host_pool_current_database}", "SQL") do
-          clear_cache! if respond_to?(:clear_cache!)
-          raw_connection.select_db(_host_pool_current_database)
+        if ActiveRecordHostPool.mysql2?
+          log("select_db #{_host_pool_current_database}", "SQL") do
+            clear_cache! if respond_to?(:clear_cache!)
+            raw_connection.select_db(_host_pool_current_database)
+          end
+        else
+          log("change_db #{_host_pool_current_database}", "SQL") do
+            clear_cache! if respond_to?(:clear_cache!)
+            raw_connection.change_db(_host_pool_current_database)
+          end
         end
         @_cached_current_database = _host_pool_current_database
         @_cached_connection_object_id = @connection.object_id
@@ -122,7 +135,11 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
+if ActiveRecordHostPool.mysql2?
+  ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
+else
+  ActiveRecord::ConnectionAdapters::TrilogyAdapter.include(ActiveRecordHostPool::DatabaseSwitch)
+end
 
 # In Rails 6.1 Connection Pools are no longer instantiated in #establish_connection but in a
 # new pool method.

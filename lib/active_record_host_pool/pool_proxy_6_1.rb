@@ -36,7 +36,7 @@ module ActiveRecordHostPool
     def connection(*args)
       real_connection = _unproxied_connection(*args)
       _connection_proxy_for(real_connection, @config[:database])
-    rescue Mysql2::Error, ActiveRecord::NoDatabaseError
+    rescue ActiveRecordHostPool.database_error_class, ActiveRecord::NoDatabaseError
       _connection_pools.delete(_pool_key)
       Kernel.raise
     end

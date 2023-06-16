@@ -29,7 +29,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.7.0"
 
   s.add_runtime_dependency("activerecord", ">= 5.1.0", "< 7.1")
-  s.add_runtime_dependency("mysql2")
 
   s.add_development_dependency("bump")
   s.add_development_dependency("minitest", ">= 5.10.0")
