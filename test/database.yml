@@ -32,7 +32,7 @@ test_pool_1_db_a:
   encoding: utf8
   database: arhp_test_db_a
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   reconnect: true
 
@@ -42,7 +42,7 @@ test_pool_1_db_a_replica:
   encoding: utf8
   database: arhp_test_db_a_replica
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   reconnect: true
   slave: true
@@ -52,7 +52,7 @@ test_pool_1_db_b:
   encoding: utf8
   database: arhp_test_db_b
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   reconnect: true
 
@@ -61,7 +61,7 @@ test_pool_1_db_not_there:
   encoding: utf8
   database: arhp_test_db_not_there
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   reconnect: true
 
@@ -70,7 +70,7 @@ test_pool_2_db_d:
   encoding: utf8
   database: arhp_test_db_d
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   port: <%= mysql.port %>
   reconnect: true
@@ -80,7 +80,7 @@ test_pool_2_db_e:
   encoding: utf8
   database: arhp_test_db_e
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   port: <%= mysql.port %>
   reconnect: true
@@ -103,6 +103,6 @@ test_pool_1_db_c:
   encoding: utf8
   database: arhp_test_db_c
   username: <%= mysql.user %>
-  password: <%= mysql.password %>
+  password: "<%= mysql.password %>"
   host: <%= mysql.host %>
   reconnect: true
