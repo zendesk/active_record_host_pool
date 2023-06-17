@@ -1,7 +1,6 @@
 require 'bundler/setup'
 require 'bundler/gem_tasks'
 require 'rake/testtask'
-require 'bump/tasks'
 require 'rubocop/rake_task'
 
 # Pushing to rubygems is handled by a github workflow
