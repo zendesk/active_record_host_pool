@@ -56,7 +56,7 @@ if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
       # Assert that we switched, and only switched, in the order we expected.
       # If this assertion starts to fail, Rails is likely calling `#connection`
       # somewhere new, and we should investigate
-      db_switches = new_logger.string.scan(/select_db (\w+)/).flatten
+      db_switches = new_logger.string.scan(/(?:select_db|change_db) (\w+)/).flatten
       assert_equal ['arhp_test_db_shard_b', 'arhp_test_db_shard_c', 'arhp_test_db_shard_b'], db_switches
 
       new_logger.string = +''
@@ -83,7 +83,7 @@ if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
 
       # If this assertion starts to fail, Rails is likely calling `#connection`
       # somewhere new, and we should investigate.
-      db_switches = new_logger.string.scan(/select_db (\w+)/).flatten
+      db_switches = new_logger.string.scan(/(?:select_db|change_db) (\w+)/).flatten
       assert_equal ['arhp_test_db_shard_c'], db_switches
 
       assert_equal [3, 1, 2], [records_on_shard_b, records_on_shard_c, records_on_shard_d]
