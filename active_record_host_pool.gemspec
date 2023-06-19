@@ -30,14 +30,4 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency("activerecord", ">= 5.1.0", "< 7.1")
   s.add_runtime_dependency("mysql2")
-
-  s.add_development_dependency("bump")
-  s.add_development_dependency("minitest", ">= 5.10.0")
-  s.add_development_dependency("minitest-fail-fast")
-  s.add_development_dependency("minitest-line")
-  s.add_development_dependency("minitest-mock_expectations", "~> 1.1.3")
-  s.add_development_dependency("phenix", ">= 1.0.1")
-  s.add_development_dependency("pry-byebug", "~> 3.9")
-  s.add_development_dependency("rake", '>= 12.0.0')
-  s.add_development_dependency('rubocop', '~> 0.80.0')
 end
