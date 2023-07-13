@@ -3,6 +3,7 @@
 require 'delegate'
 require 'active_record'
 require 'active_record_host_pool/connection_adapter_mixin'
+require 'mutex_m'
 
 # this module sits in between ConnectionHandler and a bunch of different ConnectionPools (one per host).
 # when a connection is requested, it goes like:
@@ -15,6 +16,8 @@ require 'active_record_host_pool/connection_adapter_mixin'
 module ActiveRecordHostPool
   # Sits between ConnectionHandler and a bunch of different ConnectionPools (one per host).
   class PoolProxy < Delegator
+    include Mutex_m
+
     def initialize(pool_config)
       super(pool_config)
       @pool_config = pool_config
@@ -68,9 +71,11 @@ module ActiveRecordHostPool
       p = _connection_pool(false)
       return unless p
 
-      p.disconnect!
-      p.automatic_reconnect = true
-      _clear_connection_proxy_cache
+      synchronize do
+        p.disconnect!
+        p.automatic_reconnect = true
+        _clear_connection_proxy_cache
+      end
     end
 
     def automatic_reconnect=(value)

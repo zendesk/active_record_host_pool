@@ -5,9 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
-- Drop Ruby 2.6.
+### Added
 - Start testing with Ruby 3.2.
+
+### Removed
+- Drop Ruby 2.6.
+
+### Fixed
+- Use a mutex inside `PoolProxy#disconnect!`. This might fix some `ActiveRecord::ConnectionNotEstablished` issues when a multi-threaded application is under heavy load. (Only applies when using Rails 6.1 or newer).
 
 ## [1.2.4] - 2023-03-20
 ### Fixed
