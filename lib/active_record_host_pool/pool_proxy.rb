@@ -133,7 +133,7 @@ module ActiveRecordHostPool
 
     def _pool_key
       @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/" \
-                     "#{@config[:username]}/#{replica_configuration? && 'replica'}"
+                     "#{@config[:username]}/#{replica_configuration? && "replica"}"
     end
 
     def _connection_pool(auto_create = true)

@@ -7,7 +7,7 @@ begin
 
   ActiveRecord::Schema.define(version: 1) do
     create_table "tests", force: true do |t|
-      t.string   "val"
+      t.string "val"
     end
 
     # Add a table only the shard database will have. Conditional

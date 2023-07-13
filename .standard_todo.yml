@@ -2,26 +2,11 @@
 # Remove from this list as you refactor files.
 ---
 ignore:
-- active_record_host_pool.gemspec:
-  - Layout/ExtraSpacing
-  - Gemspec/DeprecatedAttributeAssignment
 - lib/active_record_host_pool/connection_adapter_mixin.rb:
   - Style/EmptyMethod
   - Style/SingleLineMethods
   - Style/ArgumentsForwarding
-  - Layout/MultilineOperationIndentation
 - lib/active_record_host_pool/connection_proxy.rb:
   - Style/ArgumentsForwarding
 - lib/active_record_host_pool/pool_proxy.rb:
   - Style/ArgumentsForwarding
-  - Style/StringLiteralsInInterpolation
-- test/helper.rb:
-  - Performance/StringIdentifierArgument
-  - Style/EvalWithLocation
-- test/schema.rb:
-  - Layout/ExtraSpacing
-- test/test_arhp_wrong_db.rb:
-  - Style/EvalWithLocation
-  - Lint/RescueException
-- test/test_thread_safety.rb:
-  - Layout/SpaceInsideHashLiteralBraces

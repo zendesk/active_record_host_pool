@@ -70,12 +70,12 @@ class ThreadSafetyTest < Minitest::Test
     short_sleep = 0.1
 
     even_threads_do_this = [
-      { method: method(:assert_query_host_1_db_a), db_sleep_time: long_sleep },
-      { method: method(:assert_query_host_1_db_b), db_sleep_time: short_sleep }
+      {method: method(:assert_query_host_1_db_a), db_sleep_time: long_sleep},
+      {method: method(:assert_query_host_1_db_b), db_sleep_time: short_sleep}
     ]
     odd_threads_do_this = [
-      { method: method(:assert_query_host_1_db_b), db_sleep_time: short_sleep },
-      { method: method(:assert_query_host_1_db_a), db_sleep_time: long_sleep }
+      {method: method(:assert_query_host_1_db_b), db_sleep_time: short_sleep},
+      {method: method(:assert_query_host_1_db_a), db_sleep_time: long_sleep}
     ]
 
     threads = 4.times.map do |n|

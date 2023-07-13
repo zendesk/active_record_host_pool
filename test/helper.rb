@@ -44,10 +44,10 @@ module ARHPTestSetup
   private
 
   def arhp_create_models
-    return if ARHPTestSetup.const_defined?("Pool1DbA")
+    return if ARHPTestSetup.const_defined?(:Pool1DbA)
 
     if ActiveRecord::Base.legacy_connection_handling
-      eval <<-RUBY
+      eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         # The placement of the Pool1DbC class is important so that its
         # connection will not be the most recent connection established
         # for test_pool_1.
@@ -86,7 +86,7 @@ module ARHPTestSetup
         end
       RUBY
     else
-      eval <<-RUBY
+      eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         class AbstractPool1DbC < ActiveRecord::Base
           self.abstract_class = true
           connects_to database: { writing: :test_pool_1_db_c }

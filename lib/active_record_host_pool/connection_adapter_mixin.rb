@@ -76,10 +76,10 @@ module ActiveRecordHostPool
 
     def _switch_connection
       if _host_pool_current_database &&
-         (
-           (_host_pool_current_database != @_cached_current_database) ||
-           @connection.object_id != @_cached_connection_object_id
-         )
+          (
+            (_host_pool_current_database != @_cached_current_database) ||
+            @connection.object_id != @_cached_connection_object_id
+          )
         log("select_db #{_host_pool_current_database}", "SQL") do
           clear_cache!
           raw_connection.select_db(_host_pool_current_database)
