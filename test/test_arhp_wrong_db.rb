@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
+require_relative "helper"
 
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
@@ -8,7 +8,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     if ActiveRecord::Base.legacy_connection_handling
       Phenix.load_database_config
     else
-      Phenix.load_database_config 'test/three_tier_database.yml'
+      Phenix.load_database_config "test/three_tier_database.yml"
     end
   end
 

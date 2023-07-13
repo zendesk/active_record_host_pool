@@ -4,7 +4,7 @@ case ActiveRecordHostPool.loaded_db_adapter
 when :mysql2
   require "active_record/connection_adapters/mysql2_adapter"
 when :trilogy
-  require 'trilogy_adapter/connection'
+  require "trilogy_adapter/connection"
   require "trilogy_adapter/errors"
   ActiveRecord::Base.extend TrilogyAdapter::Connection
 end

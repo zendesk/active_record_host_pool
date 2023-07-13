@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
+require_relative "helper"
 
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
@@ -8,7 +8,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     if ActiveRecord::Base.legacy_connection_handling
       Phenix.rise!
     else
-      Phenix.rise! config_path: 'test/three_tier_database.yml'
+      Phenix.rise! config_path: "test/three_tier_database.yml"
     end
     arhp_create_models
   end
@@ -46,25 +46,25 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_should_select_on_correct_database
-    Pool1DbA.connection.send(:select_all, 'select 1')
-    assert_equal 'arhp_test_db_a', current_database(Pool1DbA)
+    Pool1DbA.connection.send(:select_all, "select 1")
+    assert_equal "arhp_test_db_a", current_database(Pool1DbA)
 
-    Pool2DbD.connection.send(:select_all, 'select 1')
-    assert_equal 'arhp_test_db_d', current_database(Pool2DbD)
+    Pool2DbD.connection.send(:select_all, "select 1")
+    assert_equal "arhp_test_db_d", current_database(Pool2DbD)
 
-    Pool3DbE.connection.send(:select_all, 'select 1')
-    assert_equal 'arhp_test_db_e', current_database(Pool3DbE)
+    Pool3DbE.connection.send(:select_all, "select 1")
+    assert_equal "arhp_test_db_e", current_database(Pool3DbE)
   end
 
   def test_should_insert_on_correct_database
     Pool1DbA.connection.send(:insert, "insert into tests values(NULL, 'foo')")
-    assert_equal 'arhp_test_db_a', current_database(Pool1DbA)
+    assert_equal "arhp_test_db_a", current_database(Pool1DbA)
 
     Pool2DbD.connection.send(:insert, "insert into tests values(NULL, 'foo')")
-    assert_equal 'arhp_test_db_d', current_database(Pool2DbD)
+    assert_equal "arhp_test_db_d", current_database(Pool2DbD)
 
     Pool3DbE.connection.send(:insert, "insert into tests values(NULL, 'foo')")
-    assert_equal 'arhp_test_db_e', current_database(Pool3DbE)
+    assert_equal "arhp_test_db_e", current_database(Pool3DbE)
   end
 
   def test_connection_returns_a_proxy
@@ -87,24 +87,24 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_object_creation
-    Pool1DbA.create(val: 'foo')
-    assert_equal('arhp_test_db_a', current_database(Pool1DbA))
+    Pool1DbA.create(val: "foo")
+    assert_equal("arhp_test_db_a", current_database(Pool1DbA))
 
-    Pool2DbD.create(val: 'bar')
-    assert_equal('arhp_test_db_a', current_database(Pool1DbA))
-    assert_equal('arhp_test_db_d', current_database(Pool2DbD))
+    Pool2DbD.create(val: "bar")
+    assert_equal("arhp_test_db_a", current_database(Pool1DbA))
+    assert_equal("arhp_test_db_d", current_database(Pool2DbD))
 
-    Pool1DbB.create!(val: 'bar_distinct')
-    assert_equal('arhp_test_db_b', current_database(Pool1DbB))
-    assert Pool1DbB.find_by_val('bar_distinct')
-    refute Pool1DbA.find_by_val('bar_distinct')
+    Pool1DbB.create!(val: "bar_distinct")
+    assert_equal("arhp_test_db_b", current_database(Pool1DbB))
+    assert Pool1DbB.find_by_val("bar_distinct")
+    refute Pool1DbA.find_by_val("bar_distinct")
   end
 
   def test_disconnect
-    Pool1DbA.create(val: 'foo')
+    Pool1DbA.create(val: "foo")
     unproxied = Pool1DbA.connection.unproxied
     Pool1DbA.connection_handler.clear_all_connections!
-    Pool1DbA.create(val: 'foo')
+    Pool1DbA.create(val: "foo")
     assert(unproxied != Pool1DbA.connection.unproxied)
   end
 
@@ -146,9 +146,9 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nOk, we started on #{first_db}" if debug_me
 
     switch_to_klass = case first_db
-    when 'arhp_test_db_b'
+    when "arhp_test_db_b"
       Pool1DbA
-    when 'arhp_test_db_a'
+    when "arhp_test_db_a"
       Pool1DbB
     else
       raise "Expected a database name, got #{first_db.inspect}"
@@ -160,7 +160,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     puts "\nAnd now we're on #{current_database(switch_to_klass)}" if debug_me
 
     # get the current thread id so we can shoot ourselves in the head
-    thread_id = switch_to_klass.connection.select_value('select @@pseudo_thread_id')
+    thread_id = switch_to_klass.connection.select_value("select @@pseudo_thread_id")
 
     # now, disable our auto-switching and trigger a mysql reconnect
     switch_to_klass.connection.unproxied.stub(:_switch_connection, true) do

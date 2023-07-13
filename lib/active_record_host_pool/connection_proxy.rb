@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'delegate'
+require "delegate"
 
 # the ConnectionProxy sits between user-code and a real connection and says "I expect to be on this database"
 # for each call to the connection.  upon executing a statement, the connection will switch to that database.

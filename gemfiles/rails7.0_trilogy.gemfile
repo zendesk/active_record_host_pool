@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gemspec path: '../'
+gemspec path: "../"
 
-gem 'activerecord', '~> 7.0.0'
-gem 'activerecord-trilogy-adapter', '>= 3.0'
-gem 'trilogy', '>= 2.5.0'
+gem "activerecord", "~> 7.0.0"
+gem "activerecord-trilogy-adapter", ">= 3.0"
+gem "trilogy", ">= 2.5.0"
 
-eval_gemfile 'common.rb'
+eval_gemfile "common.rb"

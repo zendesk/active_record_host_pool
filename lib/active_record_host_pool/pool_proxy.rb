@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'delegate'
-require 'active_record'
-require 'active_record_host_pool/connection_adapter_mixin'
-require 'mutex_m'
+require "delegate"
+require "active_record"
+require "active_record_host_pool/connection_adapter_mixin"
+require "mutex_m"
 
 # this module sits in between ConnectionHandler and a bunch of different ConnectionPools (one per host).
 # when a connection is requested, it goes like:
@@ -150,7 +150,7 @@ module ActiveRecordHostPool
 
       @connection_proxy_cache[key] ||= begin
         cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-        cx.execute('select 1')
+        cx.execute("select 1")
         cx
       end
     end

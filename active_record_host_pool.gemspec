@@ -1,4 +1,4 @@
-require './lib/active_record_host_pool/version'
+require "./lib/active_record_host_pool/version"
 
 Gem::Specification.new do |s|
   s.name = "active_record_host_pool"

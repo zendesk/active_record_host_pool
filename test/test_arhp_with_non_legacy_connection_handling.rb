@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
-require 'stringio'
+require_relative "helper"
+require "stringio"
 
 unless ActiveRecord::Base.legacy_connection_handling
   class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
     include ARHPTestSetup
     def setup
-      Phenix.rise! config_path: 'test/three_tier_database.yml'
+      Phenix.rise! config_path: "test/three_tier_database.yml"
       arhp_create_models
     end
 
@@ -57,9 +57,9 @@ unless ActiveRecord::Base.legacy_connection_handling
       # If this assertion starts to fail, Rails is likely calling `#connection`
       # somewhere new, and we should investigate
       db_switches = new_logger.string.scan(/select_db (\w+)/).flatten
-      assert_equal ['arhp_test_db_shard_b', 'arhp_test_db_shard_c', 'arhp_test_db_shard_b'], db_switches
+      assert_equal ["arhp_test_db_shard_b", "arhp_test_db_shard_c", "arhp_test_db_shard_b"], db_switches
 
-      new_logger.string = +''
+      new_logger.string = +""
 
       # Normally we would count the records using the replicas (`reading` role).
       # However, ActiveRecord does not mirror data from the writing DB onto the
@@ -84,7 +84,7 @@ unless ActiveRecord::Base.legacy_connection_handling
       # If this assertion starts to fail, Rails is likely calling `#connection`
       # somewhere new, and we should investigate.
       db_switches = new_logger.string.scan(/select_db (\w+)/).flatten
-      assert_equal ['arhp_test_db_shard_c'], db_switches
+      assert_equal ["arhp_test_db_shard_c"], db_switches
 
       assert_equal [3, 1, 2], [records_on_shard_b, records_on_shard_c, records_on_shard_d]
       assert_equal 0, ShardedModel.count

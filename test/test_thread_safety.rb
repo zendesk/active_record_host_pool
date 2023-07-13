@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
+require_relative "helper"
 
 class ThreadSafetyTest < Minitest::Test
   include ARHPTestSetup
@@ -9,14 +9,14 @@ class ThreadSafetyTest < Minitest::Test
     if ActiveRecord::Base.legacy_connection_handling
       Phenix.rise!
     else
-      Phenix.rise! config_path: 'test/three_tier_database.yml'
+      Phenix.rise! config_path: "test/three_tier_database.yml"
     end
 
     arhp_create_models
 
-    Pool1DbA.create!(val: 'test_Pool1DbA_value')
-    Pool1DbB.create!(val: 'test_Pool1DbB_value')
-    Pool2DbD.create!(val: 'test_Pool2DbD_value')
+    Pool1DbA.create!(val: "test_Pool1DbA_value")
+    Pool1DbB.create!(val: "test_Pool1DbB_value")
+    Pool2DbD.create!(val: "test_Pool2DbD_value")
   end
 
   def teardown
@@ -154,17 +154,17 @@ class ThreadSafetyTest < Minitest::Test
 
   def assert_query_host_1_db_a(sleep_time: 0)
     result = Pool1DbA.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
-    assert_equal('test_Pool1DbA_value', result.first.first)
+    assert_equal("test_Pool1DbA_value", result.first.first)
   end
 
   def assert_query_host_1_db_b(sleep_time: 0)
     result = Pool1DbB.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
-    assert_equal('test_Pool1DbB_value', result.first.first)
+    assert_equal("test_Pool1DbB_value", result.first.first)
   end
 
   def assert_query_host_2_db_d(sleep_time: 0)
     result = Pool2DbD.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
-    assert_equal('test_Pool2DbD_value', result.first.first)
+    assert_equal("test_Pool2DbD_value", result.first.first)
   end
 
   def checkin_connection

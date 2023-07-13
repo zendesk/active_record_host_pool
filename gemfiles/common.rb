@@ -7,5 +7,5 @@ gem "minitest-line"
 gem "minitest-mock_expectations", "~> 1.1.3"
 gem "phenix", ">= 1.0.1"
 gem "pry-byebug", "~> 3.9"
-gem "rake", '>= 12.0.0'
+gem "rake", ">= 12.0.0"
 gem "standard"
