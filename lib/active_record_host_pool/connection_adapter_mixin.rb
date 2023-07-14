@@ -74,7 +74,7 @@ module ActiveRecordHostPool
            @connection.object_id != @_cached_connection_object_id
          )
         log("select_db #{_host_pool_current_database}", "SQL") do
-          clear_cache! if respond_to?(:clear_cache!)
+          clear_cache!
           raw_connection.select_db(_host_pool_current_database)
         end
         @_cached_current_database = _host_pool_current_database
