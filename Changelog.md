@@ -6,6 +6,8 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+- Remove `mysql2` as a direct dependency, test Rails 7.0 with `mysql2` and `activerecord-trilogy-adapter`
+
 ## [1.2.5] - 2023-07-14
 ### Added
 - Start testing with Ruby 3.2.

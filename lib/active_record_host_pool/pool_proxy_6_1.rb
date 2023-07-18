@@ -18,6 +18,13 @@ module ActiveRecordHostPool
   class PoolProxy < Delegator
     include Mutex_m
 
+    case ActiveRecordHostPool.loaded_db_adapter
+    when :mysql2
+      RESCUABLE_DB_ERROR = Mysql2::Error
+    when :trilogy
+      RESCUABLE_DB_ERROR = Trilogy::ProtocolError
+    end
+
     def initialize(pool_config)
       super(pool_config)
       @pool_config = pool_config
@@ -39,7 +46,7 @@ module ActiveRecordHostPool
     def connection(*args)
       real_connection = _unproxied_connection(*args)
       _connection_proxy_for(real_connection, @config[:database])
-    rescue Mysql2::Error, ActiveRecord::NoDatabaseError
+    rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
       _connection_pools.delete(_pool_key)
       Kernel.raise
     end

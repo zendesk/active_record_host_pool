@@ -10,10 +10,10 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     else
       Phenix.load_database_config
     end
-    ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 
   def teardown
+    ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
     Phenix.burn!
   end
 

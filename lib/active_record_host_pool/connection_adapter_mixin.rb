@@ -1,9 +1,23 @@
 # frozen_string_literal: true
 
-require "active_record/connection_adapters/mysql2_adapter"
+case ActiveRecordHostPool.loaded_db_adapter
+when :mysql2
+  require "active_record/connection_adapters/mysql2_adapter"
+when :trilogy
+  require 'trilogy_adapter/connection'
+  require "trilogy_adapter/errors"
+  ActiveRecord::Base.extend TrilogyAdapter::Connection
+end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
+    case ActiveRecordHostPool.loaded_db_adapter
+    when :mysql2
+      DB_SWITCHING_METHOD = "select_db"
+    when :trilogy
+      DB_SWITCHING_METHOD = "change_db"
+    end
+
     def self.included(base)
       base.class_eval do
         attr_reader(:_host_pool_current_database)
@@ -73,13 +87,26 @@ module ActiveRecordHostPool
            (_host_pool_current_database != @_cached_current_database) ||
            @connection.object_id != @_cached_connection_object_id
          )
-        log("select_db #{_host_pool_current_database}", "SQL") do
+        log("#{DB_SWITCHING_METHOD} #{_host_pool_current_database}", "SQL") do
           clear_cache!
-          raw_connection.select_db(_host_pool_current_database)
+          _arhp_select_db(_host_pool_current_database)
         end
         @_cached_current_database = _host_pool_current_database
         @_cached_connection_object_id = @connection.object_id
       end
+    end
+
+    case ActiveRecordHostPool.loaded_db_adapter
+    when :mysql2
+      def _arhp_select_db(database)
+        raw_connection.select_db(database)
+      end
+    when :trilogy
+      # rubocop:disable Lint/DuplicateMethods
+      def _arhp_select_db(database)
+        raw_connection.change_db(database)
+      end
+      # rubocop:enable Lint/DuplicateMethods
     end
 
     # prevent different databases from sharing the same query cache
@@ -122,7 +149,12 @@ module ActiveRecord
   end
 end
 
-ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
+case ActiveRecordHostPool.loaded_db_adapter
+when :mysql2
+  ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
+when :trilogy
+  ActiveRecord::ConnectionAdapters::TrilogyAdapter.include(ActiveRecordHostPool::DatabaseSwitch)
+end
 
 # In Rails 6.1 Connection Pools are no longer instantiated in #establish_connection but in a
 # new pool method.
