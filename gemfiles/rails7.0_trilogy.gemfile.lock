@@ -60,7 +60,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     ruby-progressbar (1.13.0)
-    trilogy (2.4.1)
+    trilogy (2.5.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.6.1)
@@ -81,6 +81,7 @@ DEPENDENCIES
   pry-byebug (~> 3.9)
   rake (>= 12.0.0)
   rubocop (~> 0.80.0)
+  trilogy (>= 2.5.0)
 
 BUNDLED WITH
    2.4.13

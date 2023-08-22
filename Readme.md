@@ -43,7 +43,7 @@ test_pool_2 => 127.0.0.1/3306//root/false
 
 ## Support
 
-For now, the only backend known to work is MySQL, with the mysql2 or activerecord-trilogy-adapter gem.
+For now, the only backend known to work is MySQL, with the mysql2 or activerecord-trilogy-adapter gem. When using the activerecord-trilogy-adapter ensure that the transitive dependency Trilogy is v2.5.0+.
 Postgres, from an informal reading of the docs, will never support the concept of one server connection sharing multiple dbs.
 
 ## Installation

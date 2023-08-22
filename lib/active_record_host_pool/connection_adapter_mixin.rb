@@ -11,13 +11,6 @@ end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
-    case ActiveRecordHostPool.loaded_db_adapter
-    when :mysql2
-      DB_SWITCHING_METHOD = "select_db"
-    when :trilogy
-      DB_SWITCHING_METHOD = "change_db"
-    end
-
     def self.included(base)
       base.class_eval do
         attr_reader(:_host_pool_current_database)
@@ -87,26 +80,13 @@ module ActiveRecordHostPool
            (_host_pool_current_database != @_cached_current_database) ||
            @connection.object_id != @_cached_connection_object_id
          )
-        log("#{DB_SWITCHING_METHOD} #{_host_pool_current_database}", "SQL") do
+        log("select_db #{_host_pool_current_database}", "SQL") do
           clear_cache!
-          _arhp_select_db(_host_pool_current_database)
+          raw_connection.select_db(_host_pool_current_database)
         end
         @_cached_current_database = _host_pool_current_database
         @_cached_connection_object_id = @connection.object_id
       end
-    end
-
-    case ActiveRecordHostPool.loaded_db_adapter
-    when :mysql2
-      def _arhp_select_db(database)
-        raw_connection.select_db(database)
-      end
-    when :trilogy
-      # rubocop:disable Lint/DuplicateMethods
-      def _arhp_select_db(database)
-        raw_connection.change_db(database)
-      end
-      # rubocop:enable Lint/DuplicateMethods
     end
 
     # prevent different databases from sharing the same query cache
