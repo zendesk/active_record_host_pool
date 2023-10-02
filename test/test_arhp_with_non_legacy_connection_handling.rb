@@ -3,7 +3,7 @@
 require_relative "helper"
 require "stringio"
 
-unless ActiveRecord::Base.legacy_connection_handling
+unless LEGACY_CONNECTION_HANDLING
   class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
     include ARHPTestSetup
     def setup

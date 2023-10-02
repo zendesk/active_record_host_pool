@@ -14,7 +14,8 @@ if Gem.loaded_specs.include?("mysql2")
   require "mysql2"
   ActiveRecordHostPool.loaded_db_adapter = :mysql2
 elsif Gem.loaded_specs.include?("trilogy")
-  require "activerecord-trilogy-adapter"
+  require "trilogy"
+  require "activerecord-trilogy-adapter" if ActiveRecord.version < Gem::Version.new("7.1")
   ActiveRecordHostPool.loaded_db_adapter = :trilogy
 end
 

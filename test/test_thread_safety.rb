@@ -6,7 +6,7 @@ class ThreadSafetyTest < Minitest::Test
   include ARHPTestSetup
 
   def setup
-    if ActiveRecord::Base.legacy_connection_handling
+    if LEGACY_CONNECTION_HANDLING
       Phenix.rise!
     else
       Phenix.rise! config_path: "test/three_tier_database.yml"
@@ -153,17 +153,29 @@ class ThreadSafetyTest < Minitest::Test
   end
 
   def assert_query_host_1_db_a(sleep_time: 0)
-    result = Pool1DbA.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
+    result = if ActiveRecord.version >= Gem::Version.new("7.1")
+      Pool1DbA.connection.raw_execute("SELECT val, SLEEP(#{sleep_time}) from tests", nil)
+    else
+      Pool1DbA.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
+    end
     assert_equal("test_Pool1DbA_value", result.first.first)
   end
 
   def assert_query_host_1_db_b(sleep_time: 0)
-    result = Pool1DbB.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
+    result = if ActiveRecord.version >= Gem::Version.new("7.1")
+      Pool1DbB.connection.raw_execute("SELECT val, SLEEP(#{sleep_time}) from tests", nil)
+    else
+      Pool1DbB.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
+    end
     assert_equal("test_Pool1DbB_value", result.first.first)
   end
 
   def assert_query_host_2_db_d(sleep_time: 0)
-    result = Pool2DbD.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
+    result = if ActiveRecord.version >= Gem::Version.new("7.1")
+      Pool2DbD.connection.raw_execute("SELECT val, SLEEP(#{sleep_time}) from tests", nil)
+    else
+      Pool2DbD.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
+    end
     assert_equal("test_Pool2DbD_value", result.first.first)
   end
 

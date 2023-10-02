@@ -6,7 +6,11 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Added
+- Add support for Rails 7.1.
 - `Trilogy` is now a supported MySQL database adapter. ActiveRecordHostPool no longer requires `mysql2`, nor does it explicitly require `activerecord-trilogy-adapter`. Applications using ARHP will now need to explicitly require one of these adapters in its gemfile. When using `activerecord-trilogy-adapter` also ensure that the `trilogy` gem is locked to `v2.5.0+`.
+
+### Removed
 - Remove `mysql2` as a direct dependency, test Rails 7.0 with `mysql2` and `activerecord-trilogy-adapter`.
 - Remove support for Rails 5.1, 5.2, and 6.0.
 

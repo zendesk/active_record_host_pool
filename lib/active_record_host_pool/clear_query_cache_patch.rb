@@ -17,6 +17,15 @@
 # This is a private Rails API and may change in future releases as they're
 # actively working on sharding in Rails 6 and above.
 module ActiveRecordHostPool
+  # For Rails 7.1.
+  module ClearQueryCachePatch
+    def clear_query_caches_for_current_thread
+      connection_handler.each_connection_pool do |pool|
+        pool._unproxied_connection.clear_query_cache if pool.active_connection?
+      end
+    end
+  end
+
   # For Rails 6.1 & 7.0.
   module ClearOnHandlerPatch
     def clear_on_handler(handler)
@@ -27,4 +36,10 @@ module ActiveRecordHostPool
   end
 end
 
-ActiveRecord::Base.singleton_class.prepend(ActiveRecordHostPool::ClearOnHandlerPatch)
+case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+when "7.1"
+  # Fix https://github.com/rails/rails/commit/401e2f24161ed6047ae33c322aaf6584b7728ab9
+  ActiveRecord::Base.singleton_class.prepend(ActiveRecordHostPool::ClearQueryCachePatch)
+when "6.1", "7.0"
+  ActiveRecord::Base.singleton_class.prepend(ActiveRecordHostPool::ClearOnHandlerPatch)
+end

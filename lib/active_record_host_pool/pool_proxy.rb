@@ -144,16 +144,35 @@ module ActiveRecordHostPool
       pool
     end
 
-    def _connection_proxy_for(connection, database)
-      @connection_proxy_cache ||= {}
-      key = [connection, database]
+    # Work around https://github.com/rails/rails/pull/48061/commits/63c0d6b31bcd0fc33745ec6fd278b2d1aab9be54
+    # standard:disable Lint/DuplicateMethods
+    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+    when "6.1", "7.0"
+      def _connection_proxy_for(connection, database)
+        @connection_proxy_cache ||= {}
+        key = [connection, database]
 
-      @connection_proxy_cache[key] ||= begin
-        cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-        cx.execute("select 1")
-        cx
+        @connection_proxy_cache[key] ||= begin
+          cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
+          cx.execute("SELECT 1")
+
+          cx
+        end
+      end
+    else
+      def _connection_proxy_for(connection, database)
+        @connection_proxy_cache ||= {}
+        key = [connection, database]
+
+        @connection_proxy_cache[key] ||= begin
+          cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
+          cx.raw_execute("SELECT 1", "ARHP SWITCH DB")
+
+          cx
+        end
       end
     end
+    # standard:enable Lint/DuplicateMethods
 
     def _clear_connection_proxy_cache
       @connection_proxy_cache = {}
