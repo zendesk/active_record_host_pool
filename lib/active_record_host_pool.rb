@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
+require "active_record"
+require "active_record/base"
+require "active_record/connection_adapters/abstract_adapter"
+
 module ActiveRecordHostPool
   class << self
     attr_accessor :loaded_db_adapter
   end
 end
 
-begin
+if Gem.loaded_specs.include?("mysql2")
   require "mysql2"
   ActiveRecordHostPool.loaded_db_adapter = :mysql2
-rescue LoadError
+elsif Gem.loaded_specs.include?("trilogy")
   require "activerecord-trilogy-adapter"
   ActiveRecordHostPool.loaded_db_adapter = :trilogy
 end
-
-require "active_record"
-require "active_record/base"
-require "active_record/connection_adapters/abstract_adapter"
 
 require "active_record_host_pool/clear_query_cache_patch"
 require "active_record_host_pool/connection_proxy"
