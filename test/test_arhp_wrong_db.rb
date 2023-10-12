@@ -5,10 +5,10 @@ require_relative 'helper'
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
-      Phenix.load_database_config 'test/three_tier_database.yml'
-    else
+    if ActiveRecord::Base.legacy_connection_handling
       Phenix.load_database_config
+    else
+      Phenix.load_database_config 'test/three_tier_database.yml'
     end
   end
 

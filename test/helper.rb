@@ -14,8 +14,6 @@ ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].
 
 ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
 
-RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING = !ActiveRecord::Base.legacy_connection_handling
-
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
 Thread.abort_on_exception = true
@@ -48,7 +46,46 @@ module ARHPTestSetup
   def arhp_create_models
     return if ARHPTestSetup.const_defined?('Pool1DbA')
 
-    if RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+    if ActiveRecord::Base.legacy_connection_handling
+      eval <<-RUBY
+        # The placement of the Pool1DbC class is important so that its
+        # connection will not be the most recent connection established
+        # for test_pool_1.
+        class Pool1DbC < ActiveRecord::Base
+          establish_connection(:test_pool_1_db_c)
+        end
+
+        class Pool1DbA < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_1_db_a)
+        end
+
+        class Pool1DbAReplica < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_1_db_a_replica)
+        end
+
+        class Pool1DbB < ActiveRecord::Base
+          self.table_name =  "tests"
+          establish_connection(:test_pool_1_db_b)
+        end
+
+        class Pool2DbD < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_2_db_d)
+        end
+
+        class Pool2DbE < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_2_db_e)
+        end
+
+        class Pool3DbE < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_3_db_e)
+        end
+      RUBY
+    else
       eval <<-RUBY
         class AbstractPool1DbC < ActiveRecord::Base
           self.abstract_class = true
@@ -121,45 +158,6 @@ module ARHPTestSetup
           self.table_name = "tests"
         end
       RUBY
-    else
-      eval <<-RUBY
-        # The placement of the Pool1DbC class is important so that its
-        # connection will not be the most recent connection established
-        # for test_pool_1.
-        class Pool1DbC < ActiveRecord::Base
-          establish_connection(:test_pool_1_db_c)
-        end
-
-        class Pool1DbA < ActiveRecord::Base
-          self.table_name = "tests"
-          establish_connection(:test_pool_1_db_a)
-        end
-
-        class Pool1DbAReplica < ActiveRecord::Base
-          self.table_name = "tests"
-          establish_connection(:test_pool_1_db_a_replica)
-        end
-
-        class Pool1DbB < ActiveRecord::Base
-          self.table_name =  "tests"
-          establish_connection(:test_pool_1_db_b)
-        end
-
-        class Pool2DbD < ActiveRecord::Base
-          self.table_name = "tests"
-          establish_connection(:test_pool_2_db_d)
-        end
-
-        class Pool2DbE < ActiveRecord::Base
-          self.table_name = "tests"
-          establish_connection(:test_pool_2_db_e)
-        end
-
-        class Pool3DbE < ActiveRecord::Base
-          self.table_name = "tests"
-          establish_connection(:test_pool_3_db_e)
-        end
-      RUBY
     end
   end
 
@@ -179,7 +177,7 @@ module ARHPTestSetup
   end
 
   def simulate_rails_app_active_record_railties
-    unless RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+    if ActiveRecord::Base.legacy_connection_handling
       # Necessary for testing ActiveRecord 6.0 which uses the connection
       # handlers when clearing query caches across all handlers when
       # an operation that dirties the cache is involved (e.g. create/insert,

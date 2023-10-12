@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-unless RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+if ActiveRecord::Base.legacy_connection_handling
   class ActiveRecordHostPoolLegacyConnectiongHandlingTest < Minitest::Test
     include ARHPTestSetup
     def setup
