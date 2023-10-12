@@ -5,7 +5,7 @@ when :mysql2
   require "active_record/connection_adapters/mysql2_adapter"
 when :trilogy
   require 'trilogy_adapter/connection'
-  require "trilogy_adapter/errors"
+  require "trilogy_adapter/errors" if Gem.loaded_specs['activerecord-trilogy-adapter'].version < Gem::Version.new('3.1.1')
   ActiveRecord::Base.extend TrilogyAdapter::Connection
 end
 
