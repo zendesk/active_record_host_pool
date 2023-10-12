@@ -44,7 +44,6 @@ jobs:
           - "false"
           - "true"
         include:
-          - {ruby-version: "2.7", gemfile: rails5.2, legacy_connection_handling: "false"}
           - {ruby-version: "2.7", gemfile: rails6.0, legacy_connection_handling: "false"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile

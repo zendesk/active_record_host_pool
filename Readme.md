@@ -62,11 +62,11 @@ You need a local user called 'john-doe'.
 
 With mysql running locally, run
 
-    BUNDLE_GEMFILE=gemfiles/rails5.2.gemfile bundle exec rake test
+    BUNDLE_GEMFILE=gemfiles/rails6.0.gemfile bundle exec rake test
 
  Or
 
-    BUNDLE_GEMFILE=gemfiles/rails5.2.gemfile ruby test/test_arhp.rb --seed 19911 --verbose
+    BUNDLE_GEMFILE=gemfiles/rails6.0.gemfile ruby test/test_arhp.rb --seed 19911 --verbose
 
 ## Copyright
 

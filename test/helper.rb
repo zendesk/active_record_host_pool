@@ -184,7 +184,7 @@ module ARHPTestSetup
   end
 
   def simulate_rails_app_active_record_railties
-    if ActiveRecord.version >= Gem::Version.new('6.0') && !RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
+    unless RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING
       # Necessary for testing ActiveRecord 6.0 which uses the connection
       # handlers when clearing query caches across all handlers when
       # an operation that dirties the cache is involved (e.g. create/insert,
