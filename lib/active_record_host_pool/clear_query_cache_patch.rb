@@ -25,22 +25,6 @@ module ActiveRecordHostPool
       end
     end
   end
-
-  # For Rails 6.0.
-  module ClearQueryCachePatch
-    def clear_query_caches_for_current_thread
-      ActiveRecord::Base.connection_handlers.each_value do |handler|
-        handler.connection_pool_list.each do |pool|
-          pool._unproxied_connection.clear_query_cache if pool.active_connection?
-        end
-      end
-    end
-  end
 end
 
-case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-when '6.1', '7.0'
-  ActiveRecord::Base.singleton_class.prepend(ActiveRecordHostPool::ClearOnHandlerPatch)
-when '6.0'
-  ActiveRecord::Base.singleton_class.prepend(ActiveRecordHostPool::ClearQueryCachePatch)
-end
+ActiveRecord::Base.singleton_class.prepend(ActiveRecordHostPool::ClearOnHandlerPatch)

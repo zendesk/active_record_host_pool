@@ -44,15 +44,8 @@ class ActiveRecordHostCachingTest < Minitest::Test
     # Remove patch that fixes an issue in Rails 6+ to ensure it still
     # exists. If this begins to fail then it may mean that Rails has fixed
     # the issue so that it no longer occurs.
-
-    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when '6.1', '7.0'
-      mod = ActiveRecordHostPool::ClearOnHandlerPatch
-      method_to_remove = :clear_on_handler
-    when '6.0'
-      mod = ActiveRecordHostPool::ClearQueryCachePatch
-      method_to_remove = :clear_query_caches_for_current_thread
-    end
+    mod = ActiveRecordHostPool::ClearOnHandlerPatch
+    method_to_remove = :clear_on_handler
 
     without_module_patch(mod, method_to_remove) do
       exception = assert_raises(ActiveRecord::StatementInvalid) do

@@ -43,8 +43,6 @@ jobs:
         legacy_connection_handling:
           - "false"
           - "true"
-        include:
-          - {ruby-version: "2.7", gemfile: rails6.0, legacy_connection_handling: "false"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"

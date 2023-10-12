@@ -12,12 +12,9 @@ require 'phenix'
 ENV['RAILS_ENV'] = 'test'
 ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].nil?
 
-if ActiveRecord.version >= Gem::Version.new('6.1')
-  ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
-end
+ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
 
-RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING =
-  ActiveRecord.version >= Gem::Version.new('6.1') && !ActiveRecord::Base.legacy_connection_handling
+RAILS_6_1_WITH_NON_LEGACY_CONNECTION_HANDLING = !ActiveRecord::Base.legacy_connection_handling
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
 
@@ -38,9 +35,7 @@ module ActiveRecordHostPool
   end
 end
 
-if ActiveRecord.version >= Gem::Version.new('6.1')
-  ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend ActiveRecordHostPool::PreventWritesPatch
-end
+ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend(ActiveRecordHostPool::PreventWritesPatch)
 # END preventing_writes? patch
 
 Phenix.configure do |config|
