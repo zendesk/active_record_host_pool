@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
+require_relative "helper"
 
 class ActiveRecordHostCachingTest < Minitest::Test
   include ARHPTestSetup
@@ -8,7 +8,7 @@ class ActiveRecordHostCachingTest < Minitest::Test
     if ActiveRecord::Base.legacy_connection_handling
       Phenix.rise!
     else
-      Phenix.rise! config_path: 'test/three_tier_database.yml'
+      Phenix.rise! config_path: "test/three_tier_database.yml"
     end
     arhp_create_models
   end
@@ -22,8 +22,8 @@ class ActiveRecordHostCachingTest < Minitest::Test
   def test_should_not_share_a_query_cache
     ActiveRecord::Base.clear_query_caches_for_current_thread
 
-    Pool1DbA.create(val: 'foo')
-    Pool1DbB.create(val: 'foobar')
+    Pool1DbA.create(val: "foo")
+    Pool1DbB.create(val: "foobar")
 
     Pool1DbA.connection.cache do
       refute_equal Pool1DbA.first.val, Pool1DbB.first.val

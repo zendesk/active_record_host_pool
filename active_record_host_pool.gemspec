@@ -1,10 +1,10 @@
-require './lib/active_record_host_pool/version'
+require "./lib/active_record_host_pool/version"
 
 Gem::Specification.new do |s|
   s.name = "active_record_host_pool"
   s.version = ActiveRecordHostPool::VERSION
   s.authors = ["Benjamin Quorning", "Gabe Martin-Dempesy", "Pierre Schambacher", "Ben Osheroff"]
-  s.email   = ["bquorning@zendesk.com", "gabe@zendesk.com", "pschambacher@zendesk.com"]
+  s.email = ["bquorning@zendesk.com", "gabe@zendesk.com", "pschambacher@zendesk.com"]
   s.summary = "Allow ActiveRecord to share a connection to multiple databases on the same host"
   s.description = ""
   s.extra_rdoc_files = [
@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
     "lib/active_record_host_pool/version.rb"
   ]
   s.homepage = "https://github.com/zendesk/active_record_host_pool"
-  s.test_files = ["test/database.yml", "test/helper.rb", "test/schema.rb", "test/test_arhp.rb"]
   s.license = "MIT"
 
   s.required_ruby_version = ">= 2.7.0"

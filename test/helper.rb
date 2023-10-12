@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'minitest/autorun'
-require 'pry-byebug'
+require "bundler/setup"
+require "minitest/autorun"
+require "pry-byebug"
 
-require 'active_record_host_pool'
-require 'logger'
-require 'minitest/mock_expectations'
-require 'phenix'
+require "active_record_host_pool"
+require "logger"
+require "minitest/mock_expectations"
+require "phenix"
 
-ENV['RAILS_ENV'] = 'test'
-ENV['LEGACY_CONNECTION_HANDLING'] = 'true' if ENV['LEGACY_CONNECTION_HANDLING'].nil?
+ENV["RAILS_ENV"] = "test"
+ENV["LEGACY_CONNECTION_HANDLING"] = "true" if ENV["LEGACY_CONNECTION_HANDLING"].nil?
 
-ActiveRecord::Base.legacy_connection_handling = (ENV['LEGACY_CONNECTION_HANDLING'] == 'true')
+ActiveRecord::Base.legacy_connection_handling = (ENV["LEGACY_CONNECTION_HANDLING"] == "true")
 
-ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + '/test.log')
+ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
 
 Thread.abort_on_exception = true
 
@@ -37,17 +37,17 @@ ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend(ActiveRecordHostPool::
 # END preventing_writes? patch
 
 Phenix.configure do |config|
-  config.skip_database = ->(name, conf) { name =~ /not_there/ || conf['username'] == 'john-doe' }
+  config.skip_database = ->(name, conf) { name =~ /not_there/ || conf["username"] == "john-doe" }
 end
 
 module ARHPTestSetup
   private
 
   def arhp_create_models
-    return if ARHPTestSetup.const_defined?('Pool1DbA')
+    return if ARHPTestSetup.const_defined?(:Pool1DbA)
 
     if ActiveRecord::Base.legacy_connection_handling
-      eval <<-RUBY
+      eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         # The placement of the Pool1DbC class is important so that its
         # connection will not be the most recent connection established
         # for test_pool_1.
@@ -86,7 +86,7 @@ module ARHPTestSetup
         end
       RUBY
     else
-      eval <<-RUBY
+      eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         class AbstractPool1DbC < ActiveRecord::Base
           self.abstract_class = true
           connects_to database: { writing: :test_pool_1_db_c }
@@ -162,7 +162,7 @@ module ARHPTestSetup
   end
 
   def current_database(klass)
-    klass.connection.select_value('select DATABASE()')
+    klass.connection.select_value("select DATABASE()")
   end
 
   # Remove a method from a given module that fixes something.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
+require_relative "helper"
 
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
@@ -8,7 +8,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     if ActiveRecord::Base.legacy_connection_handling
       Phenix.load_database_config
     else
-      Phenix.load_database_config 'test/three_tier_database.yml'
+      Phenix.load_database_config "test/three_tier_database.yml"
     end
   end
 
@@ -24,13 +24,13 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     reached_second_exception = false
 
     begin
-      eval <<-RUBY
+      eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         class TestNotThere < ActiveRecord::Base
           establish_connection(:test_pool_1_db_not_there)
           connection
         end
       RUBY
-    rescue Exception => e
+    rescue => e
       assert_match(/(Unknown database|We could not find your database:) '?arhp_test_db_not_there/, e.message)
       reached_first_exception = true
     end
@@ -41,7 +41,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
 
     begin
       TestNotThere.connection
-    rescue Exception => e
+    rescue => e
       # If the pool is caching a bad connection, that connection will be used instead
       # of the intended connection.
       refute_match(/(Unknown database|We could not find your database:) '?arhp_test_db_not_there/, e.message)

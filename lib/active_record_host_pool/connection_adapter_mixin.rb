@@ -4,7 +4,7 @@ case ActiveRecordHostPool.loaded_db_adapter
 when :mysql2
   require "active_record/connection_adapters/mysql2_adapter"
 when :trilogy
-  require 'trilogy_adapter/connection'
+  require "trilogy_adapter/connection"
   require "trilogy_adapter/errors"
   ActiveRecord::Base.extend TrilogyAdapter::Connection
 end
@@ -76,10 +76,10 @@ module ActiveRecordHostPool
 
     def _switch_connection
       if _host_pool_current_database &&
-         (
-           (_host_pool_current_database != @_cached_current_database) ||
-           @connection.object_id != @_cached_connection_object_id
-         )
+          (
+            (_host_pool_current_database != @_cached_current_database) ||
+            @connection.object_id != @_cached_connection_object_id
+          )
         log("select_db #{_host_pool_current_database}", "SQL") do
           clear_cache!
           raw_connection.select_db(_host_pool_current_database)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'helper'
+require_relative "helper"
 
 if ActiveRecord::Base.legacy_connection_handling
   class ActiveRecordHostPoolLegacyConnectiongHandlingTest < Minitest::Test
