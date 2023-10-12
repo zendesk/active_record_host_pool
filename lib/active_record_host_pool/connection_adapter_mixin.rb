@@ -104,31 +104,6 @@ module ActiveRecordHostPool
   end
 end
 
-module ActiveRecord
-  module ConnectionAdapters
-    class ConnectionHandler
-      case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-      when '6.1', '7.0'
-
-        :noop
-
-      when '5.1', '5.2', '6.0'
-
-        def establish_connection(spec)
-          resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)
-          spec = resolver.spec(spec)
-
-          owner_to_pool[spec.name] = ActiveRecordHostPool::PoolProxy.new(spec)
-        end
-
-      else
-
-        raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
-      end
-    end
-  end
-end
-
 case ActiveRecordHostPool.loaded_db_adapter
 when :mysql2
   ActiveRecord::ConnectionAdapters::Mysql2Adapter.include(ActiveRecordHostPool::DatabaseSwitch)
@@ -136,9 +111,4 @@ when :trilogy
   ActiveRecord::ConnectionAdapters::TrilogyAdapter.include(ActiveRecordHostPool::DatabaseSwitch)
 end
 
-# In Rails 6.1 Connection Pools are no longer instantiated in #establish_connection but in a
-# new pool method.
-case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-when '6.1', '7.0'
-  ActiveRecord::ConnectionAdapters::PoolConfig.prepend(ActiveRecordHostPool::PoolConfigPatch)
-end
+ActiveRecord::ConnectionAdapters::PoolConfig.prepend(ActiveRecordHostPool::PoolConfigPatch)
