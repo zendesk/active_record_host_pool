@@ -154,17 +154,25 @@ class ThreadSafetyTest < Minitest::Test
 
   def assert_query_host_1_db_a(sleep_time: 0)
     result = Pool1DbA.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
-    assert_equal('test_Pool1DbA_value', result.first.first)
+    assert_equal('test_Pool1DbA_value', first_row_and_column(result))
   end
 
   def assert_query_host_1_db_b(sleep_time: 0)
     result = Pool1DbB.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
-    assert_equal('test_Pool1DbB_value', result.first.first)
+    assert_equal('test_Pool1DbB_value', first_row_and_column(result))
   end
 
   def assert_query_host_2_db_d(sleep_time: 0)
     result = Pool2DbD.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
-    assert_equal('test_Pool2DbD_value', result.first.first)
+    assert_equal('test_Pool2DbD_value', first_row_and_column(result))
+  end
+
+  def first_row_and_column(result)
+    if result.class.name == "Mysql2::Result"
+      result.first.first
+    else
+      result.rows.first.first
+    end
   end
 
   def checkin_connection
