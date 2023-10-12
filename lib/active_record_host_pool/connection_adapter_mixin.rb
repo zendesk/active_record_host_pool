@@ -112,7 +112,7 @@ module ActiveRecord
 
         :noop
 
-      when '5.1', '5.2', '6.0'
+      when '5.2', '6.0'
 
         def establish_connection(spec)
           resolver = ConnectionAdapters::ConnectionSpecification::Resolver.new(Base.configurations)

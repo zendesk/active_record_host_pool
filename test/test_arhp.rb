@@ -25,11 +25,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     # Verify that when we fork, the process doesn't crash
     pid = Process.fork do
-      if ActiveRecord.version >= Gem::Version.new('5.2')
-        assert_equal(false, ActiveRecord::Base.connected?) # New to Rails 5.2
-      else
-        assert_equal(true, ActiveRecord::Base.connected?)
-      end
+      refute ActiveRecord::Base.connected?
     end
     Process.wait(pid)
     # Cleanup any connections we may have left around
