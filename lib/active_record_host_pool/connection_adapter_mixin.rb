@@ -4,9 +4,16 @@ case ActiveRecordHostPool.loaded_db_adapter
 when :mysql2
   require "active_record/connection_adapters/mysql2_adapter"
 when :trilogy
-  require "trilogy_adapter/connection"
-  require "trilogy_adapter/errors"
-  ActiveRecord::Base.extend TrilogyAdapter::Connection
+  case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+  when "6.1", "7.0"
+    require "trilogy_adapter/connection"
+    require "trilogy_adapter/errors"
+    ActiveRecord::Base.extend(TrilogyAdapter::Connection)
+  when "7.1"
+    require "active_record/connection_adapters/trilogy_adapter"
+  else
+    raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
+  end
 end
 
 module ActiveRecordHostPool
@@ -15,8 +22,16 @@ module ActiveRecordHostPool
       base.class_eval do
         attr_reader(:_host_pool_current_database)
 
-        alias_method :execute_without_switching, :execute
-        alias_method :execute, :execute_with_switching
+        # Patch `raw_execute` instead of `execute` since this commit:
+        # https://github.com/rails/rails/commit/f69bbcbc0752ca5d5af327d55922614a26f5c7e9
+        case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+        when "7.1"
+          alias_method :raw_execute_without_switching, :raw_execute
+          alias_method :raw_execute, :raw_execute_with_switching
+        else
+          alias_method :execute_without_switching, :execute
+          alias_method :execute, :execute_with_switching
+        end
 
         alias_method :drop_database_without_no_switching, :drop_database
         alias_method :drop_database, :drop_database_with_no_switching
@@ -41,13 +56,22 @@ module ActiveRecordHostPool
 
     def self.ruby2_keywords(*); end unless respond_to?(:ruby2_keywords, true)
     # This one really does need ruby2_keywords; in Rails 6.0 the method does not take
-    # any keyword arguments, but in Rails 7.0 it does. So, we don't know whether or not
+    # any keyword arguments, but in Rails 7.0+ it does. So, we don't know whether or not
     # what we're delegating to takes kwargs, so ruby2_keywords is needed.
-    ruby2_keywords def execute_with_switching(*args)
-      if _host_pool_current_database && !_no_switch
-        _switch_connection
+    if ActiveRecord.version >= Gem::Version.new("7.1")
+      ruby2_keywords def raw_execute_with_switching(*args)
+        if _host_pool_current_database && !_no_switch
+          _switch_connection
+        end
+        raw_execute_without_switching(*args)
       end
-      execute_without_switching(*args)
+    else
+      ruby2_keywords def execute_with_switching(*args)
+        if _host_pool_current_database && !_no_switch
+          _switch_connection
+        end
+        execute_without_switching(*args)
+      end
     end
 
     def drop_database_with_no_switching(*args)

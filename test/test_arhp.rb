@@ -5,7 +5,7 @@ require_relative "helper"
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    if ActiveRecord::Base.legacy_connection_handling
+    if LEGACY_CONNECTION_HANDLING
       Phenix.rise!
     else
       Phenix.rise! config_path: "test/three_tier_database.yml"
@@ -29,7 +29,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     end
     Process.wait(pid)
     # Cleanup any connections we may have left around
-    ActiveRecord::Base.connection_handler.clear_all_connections!
+    ActiveRecord::Base.connection_handler.clear_all_connections!(:all)
   end
 
   def test_models_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
@@ -103,7 +103,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   def test_disconnect
     Pool1DbA.create(val: "foo")
     unproxied = Pool1DbA.connection.unproxied
-    Pool1DbA.connection_handler.clear_all_connections!
+    Pool1DbA.connection_handler.clear_all_connections!(:writing)
     Pool1DbA.create(val: "foo")
     assert(unproxied != Pool1DbA.connection.unproxied)
   end
@@ -118,7 +118,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_creating_db
     conn = Pool1DbA.connection
-    assert_called(conn, :execute_without_switching) do
+    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute_without_switching : :execute_without_switching
+    assert_called(conn, meth) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_current_database
         conn.create_database(:some_args)
@@ -128,7 +129,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_dropping_db
     conn = Pool1DbA.connection
-    assert_called(conn, :execute_without_switching) do
+    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute_without_switching : :execute_without_switching
+    assert_called(conn, meth) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_current_database
         conn.drop_database(:some_args)
@@ -137,6 +139,9 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_underlying_assumption_about_test_db
+    # I am not sure how reconnection works with Trilogy
+    skip if ActiveRecordHostPool.loaded_db_adapter == :trilogy && ActiveRecord.version >= Gem::Version.new("7.1")
+
     debug_me = false
     # ensure connection
     Pool1DbA.first

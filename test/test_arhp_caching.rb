@@ -5,7 +5,7 @@ require_relative "helper"
 class ActiveRecordHostCachingTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    if ActiveRecord::Base.legacy_connection_handling
+    if LEGACY_CONNECTION_HANDLING
       Phenix.rise!
     else
       Phenix.rise! config_path: "test/three_tier_database.yml"
@@ -44,8 +44,14 @@ class ActiveRecordHostCachingTest < Minitest::Test
     # Remove patch that fixes an issue in Rails 6+ to ensure it still
     # exists. If this begins to fail then it may mean that Rails has fixed
     # the issue so that it no longer occurs.
-    mod = ActiveRecordHostPool::ClearOnHandlerPatch
-    method_to_remove = :clear_on_handler
+    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+    when "7.1"
+      mod = ActiveRecordHostPool::ClearQueryCachePatch
+      method_to_remove = :clear_query_caches_for_current_thread
+    when "6.1", "7.0"
+      mod = ActiveRecordHostPool::ClearOnHandlerPatch
+      method_to_remove = :clear_on_handler
+    end
 
     without_module_patch(mod, method_to_remove) do
       exception = assert_raises(ActiveRecord::StatementInvalid) do

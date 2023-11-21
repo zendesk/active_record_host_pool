@@ -15,7 +15,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: rake test Gemfile ${{ matrix.gemfile }} and Ruby ${{ matrix.ruby-version }} (LCH ${{ matrix.legacy_connection_handling }})
+    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} (LCH ${{ matrix.legacy_connection_handling }})
     services:
       mysql:
         image: mysql:5.7
@@ -40,9 +40,14 @@ jobs:
           - rails6.1
           - rails7.0_mysql2
           - rails7.0_trilogy
+          - rails7.1_mysql2
+          - rails7.1_trilogy
         legacy_connection_handling:
           - "false"
           - "true"
+        exclude:
+          - {gemfile: rails7.1_mysql2,  legacy_connection_handling: "true"}
+          - {gemfile: rails7.1_trilogy, legacy_connection_handling: "true"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"

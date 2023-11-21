@@ -12,7 +12,12 @@ require "phenix"
 ENV["RAILS_ENV"] = "test"
 ENV["LEGACY_CONNECTION_HANDLING"] = "true" if ENV["LEGACY_CONNECTION_HANDLING"].nil?
 
-ActiveRecord::Base.legacy_connection_handling = (ENV["LEGACY_CONNECTION_HANDLING"] == "true")
+if ActiveRecord.version < Gem::Version.new("7.1")
+  ActiveRecord::Base.legacy_connection_handling = (ENV["LEGACY_CONNECTION_HANDLING"] == "true")
+end
+
+LEGACY_CONNECTION_HANDLING =
+  ActiveRecord.version < Gem::Version.new("7.1") && ActiveRecord::Base.legacy_connection_handling
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/test.log")
 
@@ -46,7 +51,7 @@ module ARHPTestSetup
   def arhp_create_models
     return if ARHPTestSetup.const_defined?(:Pool1DbA)
 
-    if ActiveRecord::Base.legacy_connection_handling
+    if LEGACY_CONNECTION_HANDLING
       eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         # The placement of the Pool1DbC class is important so that its
         # connection will not be the most recent connection established
@@ -177,7 +182,7 @@ module ARHPTestSetup
   end
 
   def simulate_rails_app_active_record_railties
-    if ActiveRecord::Base.legacy_connection_handling
+    if LEGACY_CONNECTION_HANDLING
       # Necessary for testing ActiveRecord 6.0 which uses the connection
       # handlers when clearing query caches across all handlers when
       # an operation that dirties the cache is involved (e.g. create/insert,

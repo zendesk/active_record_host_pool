@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     active_record_host_pool (1.2.5)
-      activerecord (>= 6.1.0, < 7.1)
+      activerecord (>= 6.1.0, < 7.2)
 
 GEM
   remote: https://rubygems.org/
@@ -41,8 +41,8 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
-    phenix (1.1.0)
-      activerecord (>= 4.2, < 7.1)
+    phenix (1.2.0)
+      activerecord (>= 4.2, < 7.2)
       bundler
     pry (0.14.2)
       coderay (~> 1.1)
