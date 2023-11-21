@@ -6,7 +6,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
-## [2.0.0.pre.1]
+## [2.0.0.pre.2]
 
 ### Added
 - Add support for Rails 7.1.
