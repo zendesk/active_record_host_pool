@@ -11,17 +11,7 @@ Gem::Specification.new do |s|
     "MIT-LICENSE",
     "Readme.md"
   ]
-  s.files = [
-    "Readme.md",
-    "lib/active_record_host_pool.rb",
-    "lib/active_record_host_pool/clear_query_cache_patch.rb",
-    "lib/active_record_host_pool/connection_adapter_mixin.rb",
-    "lib/active_record_host_pool/connection_proxy.rb",
-    "lib/active_record_host_pool/pool_proxy.rb",
-    "lib/active_record_host_pool/pool_proxy_6_1.rb",
-    "lib/active_record_host_pool/pool_proxy_legacy.rb",
-    "lib/active_record_host_pool/version.rb"
-  ]
+  s.files = Dir.glob("lib/**/*") + %w[Readme.md Changelog.md]
   s.homepage = "https://github.com/zendesk/active_record_host_pool"
   s.license = "MIT"
 
