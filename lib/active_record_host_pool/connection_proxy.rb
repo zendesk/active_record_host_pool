@@ -6,6 +6,7 @@ require "delegate"
 # for each call to the connection.  upon executing a statement, the connection will switch to that database.
 module ActiveRecordHostPool
   class ConnectionProxy < Delegator
+    attr_reader :database
     def initialize(cx, database)
       super(cx)
       @cx = cx
@@ -51,6 +52,18 @@ module ActiveRecordHostPool
       end
     end
     ruby2_keywords :send if respond_to?(:ruby2_keywords, true)
+
+    def ==(other)
+      self.class == other.class &&
+        other.respond_to?(:unproxied) && @cx == other.unproxied &&
+        other.respond_to?(:database) && @database == other.database
+    end
+
+    alias_method :eql?, :==
+
+    def hash
+      [self.class, @cx, @database].hash
+    end
 
     private
 

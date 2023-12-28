@@ -137,16 +137,16 @@ class ThreadSafetyTest < Minitest::Test
 
     sleep 0.01 until threads.all? { |t| t[:done] }
 
-    # Each thread only saw one connection
-    threads_to_connections.each do |_thread, connections|
-      assert_equal(1, connections.uniq.length)
+    # Each thread saw two connections (one for each database)
+    threads_to_connections.each_value do |connections|
+      assert_equal(2, connections.uniq.length)
       assert_equal(1, connections.map(&:unproxied).uniq.length)
     end
 
-    # Each thread's connection was unique
+    # Connections were unique to a thread
     connections = threads_to_connections.values.flatten
-    assert_equal(3, connections.uniq.length)
-    assert_equal(3, connections.map(&:unproxied).uniq.length)
+    assert_equal(6, connections.uniq.length) # 3 threads at 2 connections per thread
+    assert_equal(3, connections.map(&:unproxied).uniq.length) # 1 unique underlying connection per thread
 
     threads.each(&:wakeup)
     threads.each(&:join)

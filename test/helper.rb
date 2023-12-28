@@ -65,6 +65,11 @@ module ARHPTestSetup
           establish_connection(:test_pool_1_db_a)
         end
 
+        class Pool1DbAOther < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_1_db_a)
+        end
+
         class Pool1DbAReplica < ActiveRecord::Base
           self.table_name = "tests"
           establish_connection(:test_pool_1_db_a_replica)
@@ -109,6 +114,10 @@ module ARHPTestSetup
         end
 
         class Pool1DbA < AbstractPool1DbA
+          self.table_name = "tests"
+        end
+
+        class Pool1DbAOther < AbstractPool1DbA
           self.table_name = "tests"
         end
 
