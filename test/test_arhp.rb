@@ -86,6 +86,20 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert_equal true, Pool1DbA.connection.send(:test_private_method)
   end
 
+  def test_connection_proxy_equality
+    # Refer to same underlying connection and same database
+    assert_same Pool1DbA.connection.raw_connection, Pool1DbAOther.connection.raw_connection
+    assert Pool1DbA.connection == Pool1DbAOther.connection
+    assert Pool1DbA.connection.eql?(Pool1DbAOther.connection)
+    assert_equal Pool1DbA.connection.hash, Pool1DbAOther.connection.hash
+
+    # Refer to same underlying connection but with a different database
+    assert_same Pool1DbA.connection.raw_connection, Pool1DbB.connection.raw_connection
+    refute Pool1DbA.connection == Pool1DbB.connection
+    refute Pool1DbA.connection.eql?(Pool1DbB.connection)
+    refute_equal Pool1DbA.connection.hash, Pool1DbB.connection.hash
+  end
+
   def test_object_creation
     Pool1DbA.create(val: "foo")
     assert_equal("arhp_test_db_a", current_database(Pool1DbA))

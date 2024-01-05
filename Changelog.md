@@ -6,6 +6,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Fixed
+- Implement equality for connection proxies to consider database; allows fixture loading for different databases
+
 ## [2.0.0.pre.2]
 
 ### Added
