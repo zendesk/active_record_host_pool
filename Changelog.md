@@ -6,10 +6,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
-### Fixed
-- Implement equality for connection proxies to consider database; allows fixture loading for different databases
-
-## [2.0.0.pre.2]
+## [2.0.0]
 
 ### Added
 - Add support for Rails 7.1.
@@ -18,6 +15,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 ### Removed
 - Remove `mysql2` as a direct dependency, test Rails 7.0 with `mysql2` and `activerecord-trilogy-adapter`.
 - Remove support for Rails 5.1, 5.2, and 6.0.
+
+### Fixed
+- Implement equality for connection proxies to consider database; allows fixture loading for different databases
 
 ## [1.2.5] - 2023-07-14
 ### Added
