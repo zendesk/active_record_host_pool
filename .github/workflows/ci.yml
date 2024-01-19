@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Linting of Ruby files
     steps:
-      - uses: zendesk/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Ruby, Bundler and gems
-        uses: zendesk/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
           bundler-cache: true
@@ -18,7 +18,7 @@ jobs:
     name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} (LCH ${{ matrix.legacy_connection_handling }})
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         ports:
           - 3306:3306
         env:
@@ -53,9 +53,9 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"
     steps:
-      - uses: zendesk/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Ruby, Bundler and gems
-        uses: zendesk/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
