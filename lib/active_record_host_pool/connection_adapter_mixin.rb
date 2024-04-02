@@ -54,36 +54,32 @@ module ActiveRecordHostPool
       @config[:database] = _host_pool_current_database
     end
 
-    def self.ruby2_keywords(*); end unless respond_to?(:ruby2_keywords, true)
-    # This one really does need ruby2_keywords; in Rails 6.0 the method does not take
-    # any keyword arguments, but in Rails 7.0+ it does. So, we don't know whether or not
-    # what we're delegating to takes kwargs, so ruby2_keywords is needed.
     if ActiveRecord.version >= Gem::Version.new("7.1")
-      ruby2_keywords def raw_execute_with_switching(*args)
+      def raw_execute_with_switching(...)
         if _host_pool_current_database && !_no_switch
           _switch_connection
         end
-        raw_execute_without_switching(*args)
+        raw_execute_without_switching(...)
       end
     else
-      ruby2_keywords def execute_with_switching(*args)
+      def execute_with_switching(...)
         if _host_pool_current_database && !_no_switch
           _switch_connection
         end
-        execute_without_switching(*args)
+        execute_without_switching(...)
       end
     end
 
-    def drop_database_with_no_switching(*args)
+    def drop_database_with_no_switching(...)
       self._no_switch = true
-      drop_database_without_no_switching(*args)
+      drop_database_without_no_switching(...)
     ensure
       self._no_switch = false
     end
 
-    def create_database_with_no_switching(*args)
+    def create_database_with_no_switching(...)
       self._no_switch = true
-      create_database_without_no_switching(*args)
+      create_database_without_no_switching(...)
     ensure
       self._no_switch = false
     end

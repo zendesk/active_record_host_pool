@@ -44,14 +44,13 @@ module ActiveRecordHostPool
       __getobj__.private_methods(all) | super
     end
 
-    def send(symbol, *args, &blk)
+    def send(symbol, ...)
       if respond_to?(symbol, true) && !__getobj__.respond_to?(symbol, true)
         super
       else
-        __getobj__.send(symbol, *args, &blk)
+        __getobj__.send(symbol, ...)
       end
     end
-    ruby2_keywords :send if respond_to?(:ruby2_keywords, true)
 
     def ==(other)
       self.class == other.class &&
@@ -67,9 +66,8 @@ module ActiveRecordHostPool
 
     private
 
-    def select(*args)
-      @cx.__send__(:select, *args)
+    def select(...)
+      @cx.__send__(:select, ...)
     end
-    ruby2_keywords :select if respond_to?(:ruby2_keywords, true)
   end
 end
