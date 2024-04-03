@@ -43,7 +43,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   # Mimic configurations as read by active_record_shards/ar_flexmaster
   test_pool_1_db_a_replica:
@@ -53,7 +52,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
     replica: true
 
   test_pool_1_db_b:
@@ -63,7 +61,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   test_pool_1_db_c:
     adapter: <%= adapter %>
@@ -72,7 +69,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   test_pool_1_db_not_there:
     adapter: <%= adapter %>
@@ -81,7 +77,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   test_pool_1_db_shard_a:
     adapter: <%= adapter %>
@@ -90,7 +85,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   test_pool_1_db_shard_b:
     adapter: <%= adapter %>
@@ -99,7 +93,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   test_pool_1_db_shard_b_replica:
     adapter: <%= adapter %>
@@ -108,7 +101,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
     replica: true
 
   test_pool_1_db_shard_c:
@@ -118,7 +110,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
 
   test_pool_1_db_shard_c_replica:
     adapter: <%= adapter %>
@@ -127,7 +118,6 @@ test:
     username: <%= mysql.user %>
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
-    reconnect: true
     replica: true
 
   test_pool_2_db_shard_d:
@@ -138,7 +128,6 @@ test:
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
     port: <%= mysql.port %>
-    reconnect: true
 
   test_pool_2_db_shard_d_replica:
     adapter: <%= adapter %>
@@ -148,7 +137,6 @@ test:
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
     port: <%= mysql.port %>
-    reconnect: true
     replica: true
 
   test_pool_2_db_d:
@@ -159,7 +147,6 @@ test:
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
     port: <%= mysql.port %>
-    reconnect: true
 
   test_pool_2_db_e:
     adapter: <%= adapter %>
@@ -169,7 +156,6 @@ test:
     password: "<%= mysql.password %>"
     host: <%= mysql.host %>
     port: <%= mysql.port %>
-    reconnect: true
 
   test_pool_3_db_e:
     adapter: <%= adapter %>
@@ -179,4 +165,3 @@ test:
     password:
     host: <%= mysql.host %>
     port: <%= mysql.port %>
-    reconnect: true

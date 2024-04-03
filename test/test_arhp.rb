@@ -186,6 +186,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
       Pool2DbD.connection.execute("KILL #{thread_id}")
     end
 
+    switch_to_klass.connection.reconnect!
+
     # and finally, did mysql reconnect correctly?
     puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
     assert_equal expected_database, current_database(switch_to_klass)
