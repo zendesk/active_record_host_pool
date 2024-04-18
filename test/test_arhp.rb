@@ -132,7 +132,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_creating_db
     conn = Pool1DbA.connection
-    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute_without_switching : :execute_without_switching
+    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute : :execute
     assert_called(conn, meth) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_current_database
@@ -143,7 +143,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_dropping_db
     conn = Pool1DbA.connection
-    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute_without_switching : :execute_without_switching
+    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute : :execute
     assert_called(conn, meth) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_current_database
@@ -185,6 +185,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
     switch_to_klass.connection.unproxied.stub(:_switch_connection, true) do
       Pool2DbD.connection.execute("KILL #{thread_id}")
     end
+
+    switch_to_klass.connection.reconnect!
 
     # and finally, did mysql reconnect correctly?
     puts "\nAnd now we end up on #{current_database(switch_to_klass)}" if debug_me
