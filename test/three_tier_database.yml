@@ -5,7 +5,7 @@
 #
 # ARHP creates separate connection pools based on the pool key.
 # The pool key is defined as:
-#   host / port / socket / username / replica
+#   host / port / socket / username / replica / shard
 #
 # Therefore two databases with identical host, port, socket, username, and replica status will share a connection pool.
 # If any part (host, port, etc.) of the pool key differ, two databases will _not_ share a connection pool.
@@ -26,6 +26,7 @@
 # | socket   |                |                |
 # | username | root           | root           |
 # | replica  | false          | false          |
+# | shard    | shard          |               |
 #
 # The configuration items must be explicitly defined or they will be blank in the pool key.
 # Configurations with matching _implicit_ items but differing _explicit_ items will create separate pools.

@@ -133,7 +133,8 @@ module ActiveRecordHostPool
 
     def _pool_key
       @_pool_key ||= "#{@config[:host]}/#{@config[:port]}/#{@config[:socket]}/" \
-                     "#{@config[:username]}/#{replica_configuration? && "replica"}"
+        "#{@config[:username]}/#{replica_configuration? && "replica"}/" \
+        "#{shard_config? && "shard"}"
     end
 
     def _connection_pool(auto_create = true)
@@ -180,6 +181,11 @@ module ActiveRecordHostPool
 
     def replica_configuration?
       @config[:replica] || @config[:slave]
+    end
+
+    # This used to have separate pools in dev/test env to avoid problems when we tried to query sharded tables after querying the non-shared DB.
+    def shard_config?
+      @config[:database].include? "shard"
     end
   end
 end

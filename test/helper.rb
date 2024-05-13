@@ -94,6 +94,11 @@ module ARHPTestSetup
           self.table_name = "tests"
           establish_connection(:test_pool_3_db_e)
         end
+        
+        class Pool1DbShard < ActiveRecord::Base
+          self.table_name = "tests"
+          establish_connection(:test_pool_1_db_shard)
+        end
       RUBY
     else
       eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)

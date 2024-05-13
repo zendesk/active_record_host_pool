@@ -3,9 +3,9 @@
 
 # ARHP creates separate connection pools based on the pool key.
 # The pool key is defined as:
-#   host / port / socket / username / replica
+#   host / port / socket / username / replica / shard
 #
-# Therefore two databases with identical host, port, socket, username, and replica status will share a connection pool.
+# Therefore two databases with identical host, port, socket, username, replica status and shard status (based on the DB name) will share a connection pool.
 # If any part (host, port, etc.) of the pool key differ, two databases will _not_ share a connection pool.
 #
 # Below, "test_pool_1..." and "test_pool_2..." have identical host, username, socket, and replica status but the port information differs.
@@ -19,6 +19,7 @@
 # | socket   |                |                |
 # | username | root           | root           |
 # | replica  | false          | false          |
+# | shard    | shard           |               |
 # |----------+----------------+----------------|
 #
 # Note: The configuration items must be explicitly defined or will be blank in the pool key.
@@ -26,8 +27,8 @@
 #       e.g. "test_pool_1" will default to port 3306 but because it is not explicitly defined it will not share a pool with test_pool_2
 #
 #       ARHP will therefore create the following pool keys:
-#       test_pool_1 => 127.0.0.1///root/false
-#       test_pool_2 => 127.0.0.1/3306//root/false
+#       test_pool_1 => 127.0.0.1///root/false/true
+#       test_pool_2 => 127.0.0.1/3306//root/false/false
 
 test_pool_1_db_a:
   adapter: <%= adapter %>
@@ -89,6 +90,14 @@ test_pool_3_db_e:
   password:
   host: <%= mysql.host %>
   port: <%= mysql.port %>
+
+test_pool_1_db_shard:
+  adapter: <%= adapter %>
+  encoding: utf8
+  database: arhp_test_db_shard
+  username: <%= mysql.user %>
+  password: "<%= mysql.password %>"
+  host: <%= mysql.host %>
 
 # test_pool_1_db_c needs to be the last database defined in the file
 # otherwise the test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
