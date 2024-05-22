@@ -153,7 +153,7 @@ class ThreadSafetyTest < Minitest::Test
   end
 
   def assert_query_host_1_db_a(sleep_time: 0)
-    result = if ActiveRecord.version >= Gem::Version.new("7.1")
+    result = if ActiveRecord.version >= Gem::Version.new("7.1") || ActiveRecordHostPool.loaded_db_adapter == :trilogy
       Pool1DbA.connection.raw_execute("SELECT val, SLEEP(#{sleep_time}) from tests", nil)
     else
       Pool1DbA.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
@@ -162,7 +162,7 @@ class ThreadSafetyTest < Minitest::Test
   end
 
   def assert_query_host_1_db_b(sleep_time: 0)
-    result = if ActiveRecord.version >= Gem::Version.new("7.1")
+    result = if ActiveRecord.version >= Gem::Version.new("7.1") || ActiveRecordHostPool.loaded_db_adapter == :trilogy
       Pool1DbB.connection.raw_execute("SELECT val, SLEEP(#{sleep_time}) from tests", nil)
     else
       Pool1DbB.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")
@@ -171,7 +171,7 @@ class ThreadSafetyTest < Minitest::Test
   end
 
   def assert_query_host_2_db_d(sleep_time: 0)
-    result = if ActiveRecord.version >= Gem::Version.new("7.1")
+    result = if ActiveRecord.version >= Gem::Version.new("7.1") || ActiveRecordHostPool.loaded_db_adapter == :trilogy
       Pool2DbD.connection.raw_execute("SELECT val, SLEEP(#{sleep_time}) from tests", nil)
     else
       Pool2DbD.connection.execute("SELECT val, SLEEP(#{sleep_time}) from tests")

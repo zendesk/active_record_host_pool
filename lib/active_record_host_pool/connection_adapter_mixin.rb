@@ -29,7 +29,7 @@ module ActiveRecordHostPool
       @config[:database] = _host_pool_current_database
     end
 
-    if ActiveRecord.version >= Gem::Version.new("7.1")
+    if ActiveRecord.version >= Gem::Version.new("7.1") || ActiveRecordHostPool.loaded_db_adapter == :trilogy
       # Patch `raw_execute` instead of `execute` since this commit:
       # https://github.com/rails/rails/commit/f69bbcbc0752ca5d5af327d55922614a26f5c7e9
       def raw_execute(...)

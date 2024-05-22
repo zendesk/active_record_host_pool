@@ -6,6 +6,12 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Fixed
+- Fixed using ActiveRecordHostPool and the `activerecord-trilogy-adapter v3.1+`.
+
+### Changed
+-  ActiveRecordHostPool will now raise an exception if you try to use a version of `activerecord-trilogy-adapter < 3.1`.
+
 ## [2.1.0]
 
 ### Changed
