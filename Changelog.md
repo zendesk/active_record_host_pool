@@ -6,6 +6,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Added
+- Rails 6.1 testing with Trilogy.
+
 ### Fixed
 - Fixed using ActiveRecordHostPool and the `activerecord-trilogy-adapter v3.1+`.
 

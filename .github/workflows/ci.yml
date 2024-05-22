@@ -37,7 +37,8 @@ jobs:
           - "3.2"
           - "3.3"
         gemfile:
-          - rails6.1
+          - rails6.1_mysql2
+          - rails6.1_trilogy
           - rails7.0_mysql2
           - rails7.0_trilogy
           - rails7.1_mysql2

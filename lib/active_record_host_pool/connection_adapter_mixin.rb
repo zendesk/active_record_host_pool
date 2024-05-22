@@ -7,7 +7,6 @@ when :trilogy
   case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
   when "6.1", "7.0"
     require "trilogy_adapter/connection"
-    require "trilogy_adapter/errors"
     ActiveRecord::Base.extend(TrilogyAdapter::Connection)
   when "7.1"
     require "active_record/connection_adapters/trilogy_adapter"
