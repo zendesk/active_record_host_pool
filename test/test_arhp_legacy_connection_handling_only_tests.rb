@@ -24,5 +24,9 @@ if LEGACY_CONNECTION_HANDLING
       simulate_rails_app_active_record_railties
       assert_equal(Pool1DbA.connection.raw_connection, Pool1DbC.connection.raw_connection)
     end
+
+    def test_shards_and_non_shards_should_not_share_a_connection
+      refute_equal(Pool1DbA.connection.raw_connection, Pool1DbShard.connection.raw_connection)
+    end
   end
 end
