@@ -1,0 +1,5 @@
+# .git-blame-ignore-revs
+# Fix StandardRB Style/StringLiterals offenses
+bb2db8fa836254c7b3f2ba0eb4313a9a5ba17bcd
+# Fix almost all StandardRb offenses
+eb96d02c2bce7d7cd4a8a35e6ce206d83bbcd2c1

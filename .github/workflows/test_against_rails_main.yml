@@ -1,21 +1,14 @@
 name: CI
-on: push
-jobs:
-  linting:
-    runs-on: ubuntu-latest
-    name: Linting of Ruby files
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Ruby, Bundler and gems
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.1"
-          bundler-cache: true
-      - run: bundle exec standardrb
 
+on:
+  schedule:
+    - cron: "0 0 * * *" # Run every day at 00:00 UTC
+  workflow_dispatch:
+
+jobs:
   tests:
     runs-on: ubuntu-latest
-    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} (LCH ${{ matrix.legacy_connection_handling }})
+    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }}
     services:
       mysql:
         image: mysql:8.0
@@ -36,21 +29,10 @@ jobs:
           - "3.2"
           - "3.3"
         gemfile:
-          - rails6.1_mysql2
-          - rails6.1_trilogy
-          - rails7.0_mysql2
-          - rails7.0_trilogy
-          - rails7.1_mysql2
-          - rails7.1_trilogy
-        legacy_connection_handling:
-          - "false"
-          - "true"
-        exclude:
-          - {gemfile: rails7.1_mysql2,  legacy_connection_handling: "true"}
-          - {gemfile: rails7.1_trilogy, legacy_connection_handling: "true"}
+          - "rails_main_mysql2"
+          - "rails_main_trilogy"
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
-      LEGACY_CONNECTION_HANDLING: "${{ matrix.legacy_connection_handling }}"
     steps:
       - uses: actions/checkout@v4
       - name: Install Ruby, Bundler and gems
