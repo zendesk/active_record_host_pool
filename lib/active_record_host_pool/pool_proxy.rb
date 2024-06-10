@@ -43,16 +43,43 @@ module ActiveRecordHostPool
 
     attr_reader :pool_config
 
-    def connection(*args)
-      real_connection = _unproxied_connection(*args)
-      _connection_proxy_for(real_connection, @config[:database])
-    rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
-      _connection_pools.delete(_pool_key)
-      Kernel.raise
+
+    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+    when "6.1", "7.0", "7.1"
+      def connection
+        real_connection = _unproxied_connection
+        _connection_proxy_for(real_connection, @config[:database])
+      rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+        _connection_pools.delete(_pool_key)
+        Kernel.raise
+      end
+    else
+      def lease_connection
+        real_connection = _unproxied_connection
+        _connection_proxy_for(real_connection, @config[:database])
+      rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+        _connection_pools.delete(_pool_key)
+        Kernel.raise
+      end
+
+      def active_connection
+        real_connection = _connection_pool.active_connection
+        _connection_proxy_for(real_connection, @config[:database])
+      rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+        _connection_pools.delete(_pool_key)
+        Kernel.raise
+      end
     end
 
-    def _unproxied_connection(*args)
-      _connection_pool.connection(*args)
+    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+    when "6.1", "7.0", "7.1"
+      def _unproxied_connection(*args)
+        _connection_pool.connection(*args)
+      end
+    else
+      def _unproxied_connection(*args)
+        _connection_pool.lease_connection(*args)
+      end
     end
 
     # by the time we are patched into ActiveRecord, the current thread has already established
@@ -67,7 +94,7 @@ module ActiveRecordHostPool
       _connection_pool.checkin(cx)
     end
 
-    def with_connection
+    def with_connection(*)
       cx = checkout
       yield cx
     ensure
@@ -165,11 +192,11 @@ module ActiveRecordHostPool
         key = [connection, database]
 
         @connection_proxy_cache[key] ||= begin
-          cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-          cx.raw_execute("SELECT 1", "ARHP SWITCH DB")
+                                           cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
+                                           cx.raw_execute("SELECT 1", "ARHP SWITCH DB")
 
-          cx
-        end
+                                           cx
+                                         end
       end
     end
     # standard:enable Lint/DuplicateMethods
