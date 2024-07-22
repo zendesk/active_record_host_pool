@@ -6,13 +6,7 @@ class ThreadSafetyTest < Minitest::Test
   include ARHPTestSetup
 
   def setup
-    if LEGACY_CONNECTION_HANDLING
-      Phenix.rise!
-    else
-      Phenix.rise! config_path: "test/three_tier_database.yml"
-    end
-
-    arhp_create_models
+    Phenix.rise! config_path: "test/three_tier_database.yml"
 
     Pool1DbA.create!(val: "test_Pool1DbA_value")
     Pool1DbB.create!(val: "test_Pool1DbB_value")
