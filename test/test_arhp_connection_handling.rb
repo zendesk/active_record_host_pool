@@ -7,7 +7,6 @@ class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
   include ARHPTestSetup
   def setup
     Phenix.rise! config_path: "test/three_tier_database.yml"
-    arhp_create_models
   end
 
   def teardown

@@ -5,6 +5,8 @@ require_relative "helper"
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
   def setup
+    ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
+    Phenix.burn!
     Phenix.load_database_config "test/three_tier_database.yml"
   end
 

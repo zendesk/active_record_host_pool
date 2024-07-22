@@ -8,8 +8,6 @@ class ThreadSafetyTest < Minitest::Test
   def setup
     Phenix.rise! config_path: "test/three_tier_database.yml"
 
-    arhp_create_models
-
     Pool1DbA.create!(val: "test_Pool1DbA_value")
     Pool1DbB.create!(val: "test_Pool1DbB_value")
     Pool2DbD.create!(val: "test_Pool2DbD_value")

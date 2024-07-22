@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "helper"
-
 begin
   ActiveRecordHostPool.allowing_writes = true
 
