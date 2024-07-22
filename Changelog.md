@@ -6,6 +6,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [2.2.0]
 ### Removed
 - Support for Ruby 3.0.
 
