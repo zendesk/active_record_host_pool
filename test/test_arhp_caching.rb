@@ -5,11 +5,7 @@ require_relative "helper"
 class ActiveRecordHostCachingTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    if LEGACY_CONNECTION_HANDLING
-      Phenix.rise!
-    else
-      Phenix.rise! config_path: "test/three_tier_database.yml"
-    end
+    Phenix.rise! config_path: "test/three_tier_database.yml"
     arhp_create_models
   end
 
@@ -31,8 +27,6 @@ class ActiveRecordHostCachingTest < Minitest::Test
   end
 
   def test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
-    simulate_rails_app_active_record_railties
-
     # Reset the connections post-setup so that we ensure the last DB isn't arhp_test_db_c
     ActiveRecord::Base.connection.discard!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
@@ -70,7 +64,6 @@ class ActiveRecordHostCachingTest < Minitest::Test
   end
 
   def test_models_with_matching_hosts_and_non_matching_databases_do_not_mix_up_underlying_database
-    simulate_rails_app_active_record_railties
     # ActiveRecord will clear the query cache after any action that dirties the cache (create, update, etc)
     # Because we're testing the patch we want to ensure it runs at least once
     ActiveRecord::Base.clear_query_caches_for_current_thread

@@ -5,11 +5,7 @@ require_relative "helper"
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
   def setup
-    if LEGACY_CONNECTION_HANDLING
-      Phenix.rise!
-    else
-      Phenix.rise! config_path: "test/three_tier_database.yml"
-    end
+    Phenix.rise! config_path: "test/three_tier_database.yml"
     arhp_create_models
   end
 

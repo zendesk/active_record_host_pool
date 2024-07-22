@@ -6,7 +6,11 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Removed
+- Support for ActiveRecord's legacy connection handling.
+
 ## [2.2.0]
+
 ### Removed
 - Support for Ruby 3.0.
 
