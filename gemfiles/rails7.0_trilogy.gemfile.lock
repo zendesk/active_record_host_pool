@@ -53,7 +53,7 @@ GEM
     rainbow (3.1.1)
     rake (13.2.1)
     regexp_parser (2.9.2)
-    rexml (3.3.2)
+    rexml (3.3.4)
       strscan
     rubocop (1.64.1)
       json (~> 2.3)
@@ -108,4 +108,4 @@ DEPENDENCIES
   trilogy (>= 2.5.0)
 
 BUNDLED WITH
-   2.5.14
+   2.5.17
