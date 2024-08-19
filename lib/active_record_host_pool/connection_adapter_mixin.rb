@@ -73,9 +73,9 @@ module ActiveRecordHostPool
     def _switch_connection
       if _host_pool_desired_database &&
           (
-            (_host_pool_desired_database != @_cached_current_database) ||
-            @connection.object_id != @_cached_connection_object_id
-          )
+           _desired_database_changed? ||
+            _real_connection_changed?
+         )
         log("select_db #{_host_pool_desired_database}", "SQL") do
           clear_cache!
           raw_connection.select_db(_host_pool_desired_database)
@@ -83,6 +83,14 @@ module ActiveRecordHostPool
         @_cached_current_database = _host_pool_desired_database
         @_cached_connection_object_id = @connection.object_id
       end
+    end
+
+    def _desired_database_changed?
+      _host_pool_desired_database != @_cached_current_database
+    end
+
+    def _real_connection_changed?
+      @connection.object_id != @_cached_connection_object_id
     end
 
     # prevent different databases from sharing the same query cache
