@@ -1,5 +1,6 @@
 pkg/*
 .bundle
 *.log
+gemfiles/rails_main*.lock
 localgems
 tmp
