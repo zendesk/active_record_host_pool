@@ -17,29 +17,29 @@ end
 
 module ActiveRecordHostPool
   module DatabaseSwitch
-    attr_reader :_host_pool_current_database
+    attr_reader :_host_pool_desired_database
     def initialize(*)
       @_cached_current_database = nil
       super
     end
 
-    def _host_pool_current_database=(database)
-      @_host_pool_current_database = database
-      @config[:database] = _host_pool_current_database
+    def _host_pool_desired_database=(database)
+      @_host_pool_desired_database = database
+      @config[:database] = _host_pool_desired_database
     end
 
     if ActiveRecord.version >= Gem::Version.new("7.1") || ActiveRecordHostPool.loaded_db_adapter == :trilogy
       # Patch `raw_execute` instead of `execute` since this commit:
       # https://github.com/rails/rails/commit/f69bbcbc0752ca5d5af327d55922614a26f5c7e9
       def raw_execute(...)
-        if _host_pool_current_database && !_no_switch
+        if _host_pool_desired_database && !_no_switch
           _switch_connection
         end
         super
       end
     else
       def execute(...)
-        if _host_pool_current_database && !_no_switch
+        if _host_pool_desired_database && !_no_switch
           _switch_connection
         end
         super
@@ -71,23 +71,23 @@ module ActiveRecordHostPool
     attr_accessor :_no_switch
 
     def _switch_connection
-      if _host_pool_current_database &&
+      if _host_pool_desired_database &&
           (
-            (_host_pool_current_database != @_cached_current_database) ||
+            (_host_pool_desired_database != @_cached_current_database) ||
             @connection.object_id != @_cached_connection_object_id
           )
-        log("select_db #{_host_pool_current_database}", "SQL") do
+        log("select_db #{_host_pool_desired_database}", "SQL") do
           clear_cache!
-          raw_connection.select_db(_host_pool_current_database)
+          raw_connection.select_db(_host_pool_desired_database)
         end
-        @_cached_current_database = _host_pool_current_database
+        @_cached_current_database = _host_pool_desired_database
         @_cached_connection_object_id = @connection.object_id
       end
     end
 
     # prevent different databases from sharing the same query cache
     def cache_sql(sql, *args)
-      super(_host_pool_current_database.to_s + "/" + sql, *args)
+      super(_host_pool_desired_database.to_s + "/" + sql, *args)
     end
   end
 

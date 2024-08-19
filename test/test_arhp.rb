@@ -130,7 +130,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute : :execute
     assert_called(conn, meth) do
       refute_called(conn, :_switch_connection) do
-        assert conn._host_pool_current_database
+        assert conn._host_pool_desired_database
         conn.create_database(:some_args)
       end
     end
@@ -141,7 +141,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute : :execute
     assert_called(conn, meth) do
       refute_called(conn, :_switch_connection) do
-        assert conn._host_pool_current_database
+        assert conn._host_pool_desired_database
         conn.drop_database(:some_args)
       end
     end
