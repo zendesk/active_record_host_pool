@@ -14,7 +14,7 @@ module ActiveRecordHostPool
     end
 
     def __getobj__
-      @cx._host_pool_current_database = @database
+      @cx._host_pool_desired_database = @database
       @cx
     end
 
