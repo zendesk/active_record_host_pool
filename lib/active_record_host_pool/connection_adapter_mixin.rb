@@ -81,7 +81,7 @@ module ActiveRecordHostPool
           raw_connection.select_db(_host_pool_desired_database)
         end
         @_cached_current_database = _host_pool_desired_database
-        @_cached_connection_object_id = @connection.object_id
+        @_cached_connection_object_id = _real_connection_object_id
       end
     end
 
@@ -89,8 +89,12 @@ module ActiveRecordHostPool
       _host_pool_desired_database != @_cached_current_database
     end
 
+    def _real_connection_object_id
+      @connection.object_id
+    end
+
     def _real_connection_changed?
-      @connection.object_id != @_cached_connection_object_id
+      _real_connection_object_id != @_cached_connection_object_id
     end
 
     # prevent different databases from sharing the same query cache
