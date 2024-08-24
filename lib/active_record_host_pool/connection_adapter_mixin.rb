@@ -101,8 +101,6 @@ module ActiveRecordHostPool
 
   module PoolConfigPatch
     def pool
-      ActiveSupport::ForkTracker.check!
-
       @pool || synchronize { @pool ||= ActiveRecordHostPool::PoolProxy.new(self) }
     end
   end
