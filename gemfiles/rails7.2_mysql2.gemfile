@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gemspec path: "../"
+
+gem "activerecord", "~> 7.2.0"
+gem "mysql2", "~> 0.5"
+
+eval_gemfile "common.rb"

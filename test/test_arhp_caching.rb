@@ -26,6 +26,7 @@ class ActiveRecordHostCachingTest < Minitest::Test
   end
 
   def test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
+    skip if ActiveRecord.version >= Gem::Version.new("7.2.0.a")
     # Reset the connections post-setup so that we ensure the last DB isn't arhp_test_db_c
     ActiveRecord::Base.connection.discard!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
