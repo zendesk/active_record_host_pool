@@ -6,6 +6,8 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [3.0.0]
+
 ### Added
 - Support and testing for Rails 7.2 & Rails main.
 
