@@ -42,6 +42,11 @@ jobs:
           - rails7.0_trilogy
           - rails7.1_mysql2
           - rails7.1_trilogy
+          - rails7.2_mysql2
+          - rails7.2_trilogy
+        include:
+          - {ruby-version: "3.3", gemfile: "rails_main_mysql2"}
+          - {ruby-version: "3.3", gemfile: "rails_main_trilogy"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:

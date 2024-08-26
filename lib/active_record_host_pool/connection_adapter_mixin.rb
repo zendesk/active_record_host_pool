@@ -8,7 +8,7 @@ when :trilogy
   when "6.1", "7.0"
     require "trilogy_adapter/connection"
     ActiveRecord::Base.extend(TrilogyAdapter::Connection)
-  when "7.1"
+  when "7.1", "7.2", "8.0"
     require "active_record/connection_adapters/trilogy_adapter"
   else
     raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
@@ -81,7 +81,7 @@ module ActiveRecordHostPool
           raw_connection.select_db(_host_pool_desired_database)
         end
         @_cached_current_database = _host_pool_desired_database
-        @_cached_connection_object_id = @connection.object_id
+        @_cached_connection_object_id = _real_connection_object_id
       end
     end
 
@@ -89,8 +89,21 @@ module ActiveRecordHostPool
       _host_pool_desired_database != @_cached_current_database
     end
 
+    # rubocop:disable Lint/DuplicateMethods
+    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
+    when "6.1", "7.0", "7.1"
+      def _real_connection_object_id
+        @connection.object_id
+      end
+    else
+      def _real_connection_object_id
+        @raw_connection.object_id
+      end
+    end
+    # rubocop:enable Lint/DuplicateMethods
+
     def _real_connection_changed?
-      @connection.object_id != @_cached_connection_object_id
+      _real_connection_object_id != @_cached_connection_object_id
     end
 
     # prevent different databases from sharing the same query cache
@@ -101,8 +114,6 @@ module ActiveRecordHostPool
 
   module PoolConfigPatch
     def pool
-      ActiveSupport::ForkTracker.check!
-
       @pool || synchronize { @pool ||= ActiveRecordHostPool::PoolProxy.new(self) }
     end
   end
