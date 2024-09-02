@@ -27,6 +27,13 @@ class ActiveRecordHostPoolTest < Minitest::Test
     ActiveRecord::Base.connection_handler.clear_all_connections!(:all)
   end
 
+  def tests_switching_databases_on_the_same_pool_produces_a_clean_connection
+    skip unless Pool1DbA.connection.respond_to?(:clean!)
+    Pool1DbA.connection.clean!
+
+    refute(Pool1DbB.connection.unproxied.instance_variable_get(:@raw_connection_dirty))
+  end
+
   def test_models_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
     assert_equal(Pool1DbA.connection.raw_connection, Pool1DbB.connection.raw_connection)
     assert_equal(Pool2DbD.connection.raw_connection, Pool2DbE.connection.raw_connection)
