@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module ActiveRecordHostPool
-  VERSION = "3.0.0"
+  VERSION = "3.1.0"
 end
