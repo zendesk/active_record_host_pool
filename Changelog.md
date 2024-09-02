@@ -6,6 +6,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Fixed
+- A typo causing `#clean!` to not run. 
+
 ## [3.1.0]
 
 ### Added
