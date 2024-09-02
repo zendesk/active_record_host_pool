@@ -6,6 +6,11 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [3.1.0]
+
+### Added
+- Calls `#clean!` on the connection after switching databases.
+
 ## [3.0.0]
 
 ### Added
