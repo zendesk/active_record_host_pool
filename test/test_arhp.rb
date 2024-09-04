@@ -27,11 +27,20 @@ class ActiveRecordHostPoolTest < Minitest::Test
     ActiveRecord::Base.connection_handler.clear_all_connections!(:all)
   end
 
-  def tests_switching_databases_on_the_same_pool_produces_a_clean_connection
+  def test_switching_databases_on_the_same_pool_produces_a_clean_connection
     skip unless Pool1DbA.connection.respond_to?(:clean!)
-    Pool1DbA.connection.clean!
 
-    refute(Pool1DbB.connection.unproxied.instance_variable_get(:@raw_connection_dirty))
+    unproxied_connection = Pool1DbA.connection.unproxied
+
+    # Clean and verify the connection before we end up calling `raw_connection.select_db` again.
+    # We want to ensure that the connection stays clean and verified.
+    Pool1DbA.connection.clean!
+    Pool1DbA.connection.send(:verified!)
+
+    unproxied_connection.stub :verify!, -> { raise "`verify!` should not get called again" } do
+      assert(Pool1DbB.connection.unproxied.instance_variable_get(:@verified))
+      refute(Pool1DbB.connection.unproxied.instance_variable_get(:@raw_connection_dirty))
+    end
   end
 
   def test_models_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection

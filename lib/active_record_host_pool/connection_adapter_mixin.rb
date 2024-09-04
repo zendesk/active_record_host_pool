@@ -79,7 +79,10 @@ module ActiveRecordHostPool
         log("select_db #{_host_pool_desired_database}", "SQL") do
           clear_cache!
           raw_connection.select_db(_host_pool_desired_database)
-          clean! if respond_to?(:clean!)
+          if respond_to?(:clean!)
+            clean!
+            verified!
+          end
         end
         @_cached_current_database = _host_pool_desired_database
         @_cached_connection_object_id = _real_connection_object_id

@@ -6,6 +6,9 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Added
+- Calls `#verified!` on the connection after `#clean!`.
+
 ## [3.1.1]
 
 ### Fixed
