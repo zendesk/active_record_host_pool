@@ -219,12 +219,7 @@ module ActiveRecordHostPool
         @connection_proxy_cache ||= {}
         key = [connection, database]
 
-        @connection_proxy_cache[key] ||= begin
-          cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-          cx.raw_execute("SELECT 1", "ARHP SWITCH DB")
-
-          cx
-        end
+        @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(connection, database)
       end
     end
     # standard:enable Lint/DuplicateMethods

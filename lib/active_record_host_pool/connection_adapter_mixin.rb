@@ -28,20 +28,23 @@ module ActiveRecordHostPool
       @config[:database] = _host_pool_desired_database
     end
 
-    if ActiveRecord.version >= Gem::Version.new("7.1") || ActiveRecordHostPool.loaded_db_adapter == :trilogy
-      # Patch `raw_execute` instead of `execute` since this commit:
-      # https://github.com/rails/rails/commit/f69bbcbc0752ca5d5af327d55922614a26f5c7e9
-      def raw_execute(...)
-        if _host_pool_desired_database && !_no_switch
-          _switch_connection
+    if ActiveRecord.version >= Gem::Version.new("7.1")
+      def with_raw_connection(...)
+        super do |real_connection|
+          _switch_connection(real_connection) if _host_pool_desired_database && !_no_switch
+          yield real_connection
         end
-        super
+      end
+    elsif ActiveRecordHostPool.loaded_db_adapter == :trilogy
+      def with_trilogy_connection(...)
+        super do |real_connection|
+          _switch_connection(real_connection) if _host_pool_desired_database && !_no_switch
+          yield real_connection
+        end
       end
     else
       def execute(...)
-        if _host_pool_desired_database && !_no_switch
-          _switch_connection
-        end
+        _switch_connection(raw_connection) if _host_pool_desired_database && !_no_switch
         super
       end
     end
@@ -70,7 +73,7 @@ module ActiveRecordHostPool
 
     attr_accessor :_no_switch
 
-    def _switch_connection
+    def _switch_connection(real_connection)
       if _host_pool_desired_database &&
           (
            _desired_database_changed? ||
@@ -78,11 +81,7 @@ module ActiveRecordHostPool
          )
         log("select_db #{_host_pool_desired_database}", "SQL") do
           clear_cache!
-          raw_connection.select_db(_host_pool_desired_database)
-          if respond_to?(:clean!)
-            clean!
-            verified!
-          end
+          real_connection.select_db(_host_pool_desired_database)
         end
         @_cached_current_database = _host_pool_desired_database
         @_cached_connection_object_id = _real_connection_object_id
