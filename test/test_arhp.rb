@@ -43,6 +43,46 @@ class ActiveRecordHostPoolTest < Minitest::Test
     end
   end
 
+  def test_active_record_does_not_reconnect_and_retry_if_allow_retry_is_false
+    skip unless ActiveRecord.version >= Gem::Version.new("7.1")
+
+    # Ensure we're connected to the database.
+    Pool1DbA.connection.execute("select 1")
+    # We use `instance_variable_get(:@raw_connection)` because the `#raw_connection` method "dirties" the connection.
+    # If a connection is "dirty" then Rails won't retry.
+    raw_connection = Pool1DbA.connection.unproxied.instance_variable_get(:@raw_connection)
+
+    # Stub `#select_db` on the current raw connection to raise an exception.
+    raw_connection.stub(:select_db, proc { raise ActiveRecord::ConnectionFailed }) do
+      # We use Pool1DbB here because it shares a real connection with Pool1DbA and given that we're currently
+      # connected to DbA we will be forced to call `select_db`.
+      assert_raises(ActiveRecord::ConnectionFailed) { Pool1DbB.connection.execute("select 1", allow_retry: false) }
+    end
+
+    # Rails should not have reconnected to the database.
+    assert_same(raw_connection, Pool1DbB.connection.unproxied.instance_variable_get(:@raw_connection))
+  end
+
+  def test_passing_allow_retry_will_reconnect_and_retry_when_a_connection_error_is_raised
+    skip unless ActiveRecord.version >= Gem::Version.new("7.1")
+
+    # Ensure we're connected to the database.
+    Pool1DbA.connection.execute("select 1")
+    # We use `instance_variable_get(:@raw_connection)` so that we don't "dirty" the connection.
+    # If a connection is "dirty" then Rails won't retry.
+    raw_connection = Pool1DbA.connection.unproxied.instance_variable_get(:@raw_connection)
+
+    # Stub `#select_db` on the current raw connection to raise an exception.
+    raw_connection.stub(:select_db, proc { raise ActiveRecord::ConnectionFailed }) do
+      # We use Pool1DbB here because it shares a real connection with Pool1DbA and given that we're currently
+      # connected to DbA we will be forced to call `select_db`.
+      Pool1DbB.connection.execute("select 1", allow_retry: true)
+    end
+
+    # Rails should have reconnected to the database, giving us a new raw connection.
+    refute_same(raw_connection, Pool1DbB.connection.unproxied.instance_variable_get(:@raw_connection))
+  end
+
   def test_models_with_matching_hosts_ports_sockets_usernames_and_replica_status_should_share_a_connection
     assert_equal(Pool1DbA.connection.raw_connection, Pool1DbB.connection.raw_connection)
     assert_equal(Pool2DbD.connection.raw_connection, Pool2DbE.connection.raw_connection)

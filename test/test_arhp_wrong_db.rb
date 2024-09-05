@@ -15,7 +15,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     Phenix.burn!
   end
 
-  # rake db:create uses a pattern where it tries to connect to a non-existant database.
+  # rake db:create uses a pattern where it tries to connect to a non-existent database.
   # but then we had this left in the connection pool cache.
   def test_connecting_to_wrong_db_first
     reached_first_exception = false
@@ -25,8 +25,9 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
       eval(<<-RUBY, binding, __FILE__, __LINE__ + 1)
         class TestNotThere < ActiveRecord::Base
           establish_connection(:test_pool_1_db_not_there)
-          connection
         end
+
+        TestNotThere.connection.execute("SELECT 1")
       RUBY
     rescue => e
       assert_match(/(Unknown database|We could not find your database:) '?arhp_test_db_not_there/, e.message)
@@ -38,7 +39,7 @@ class ActiveRecordHostPoolWrongDBTest < Minitest::Test
     TestNotThere.establish_connection(:test_pool_1_db_a)
 
     begin
-      TestNotThere.connection
+      TestNotThere.connection.execute("SELECT 1")
     rescue => e
       # If the pool is caching a bad connection, that connection will be used instead
       # of the intended connection.

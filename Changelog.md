@@ -6,6 +6,13 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Changed
+- Moved `select_db` inside of the `with_raw_connection` block of the `#raw_execute` method. This should allow for using Rails' built-in reconnect & retry logic with the Trilogy adapter or Rails 7.1+.
+- In Rails 7.1+, when a new ConnectionProxy is instantiated the database switch is lazily triggered by the subsequent database query instead of immediately.
+
+### Removed
+- Calling `#clean!` and `#verified!` on connections because it is no longer necessary.
+
 ## [3.2.0]
 
 ### Added
