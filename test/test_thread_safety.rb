@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "helper"
+require "benchmark"
 
 class ThreadSafetyTest < Minitest::Test
   include ARHPTestSetup
@@ -94,7 +95,7 @@ class ThreadSafetyTest < Minitest::Test
     end
 
     sleep 0.01 until threads.all? { |t| t[:ready] }
-    execution_time = Benchmark.realtime do
+    execution_time = ::Benchmark.realtime do
       threads.each(&:wakeup)
       sleep 0.01 until threads.all? { |t| t[:done] }
     end
