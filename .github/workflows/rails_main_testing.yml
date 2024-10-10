@@ -1,4 +1,4 @@
-name: CI
+name: Test against Rails main
 
 on:
   schedule:
