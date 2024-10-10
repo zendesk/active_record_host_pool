@@ -26,7 +26,7 @@ module ActiveRecordHostPool
     end
 
     def initialize(pool_config)
-      super(pool_config)
+      super
       @pool_config = pool_config
       @config = pool_config.db_config.configuration_hash
     end
