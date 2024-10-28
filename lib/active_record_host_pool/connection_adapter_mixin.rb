@@ -8,7 +8,7 @@ when :trilogy
   when "6.1", "7.0"
     require "trilogy_adapter/connection"
     ActiveRecord::Base.extend(TrilogyAdapter::Connection)
-  when "7.1", "7.2", "8.0"
+  when "7.1", "7.2", "8.0", "8.1"
     require "active_record/connection_adapters/trilogy_adapter"
   else
     raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
