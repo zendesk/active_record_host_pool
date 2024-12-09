@@ -58,7 +58,7 @@ class ActiveRecordHostCachingTest < Minitest::Test
       when :mysql2
         assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
       when :trilogy
-        assert_equal("Trilogy::ProtocolError: 1146: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
+        assert_equal("Trilogy::ProtocolError: 1146: Table '#{cached_db}.pool1_db_cs' doesn't exist (trilogy_query_recv)", exception.message)
       end
     end
   end
