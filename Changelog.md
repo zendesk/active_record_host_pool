@@ -6,6 +6,11 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [4.1.0]
+
+### Changed
+- Remove dependency on `mutex_m`, instead using `Thread::Mutex` directly.
+
 ## [4.0.0]
 
 ### Changed
@@ -23,7 +28,7 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 ## [3.1.1]
 
 ### Fixed
-- A typo causing `#clean!` to not run. 
+- A typo causing `#clean!` to not run.
 
 ## [3.1.0]
 

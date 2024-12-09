@@ -3,7 +3,6 @@
 require "delegate"
 require "active_record"
 require "active_record_host_pool/connection_adapter_mixin"
-require "mutex_m"
 
 # this module sits in between ConnectionHandler and a bunch of different ConnectionPools (one per host).
 # when a connection is requested, it goes like:
@@ -16,8 +15,6 @@ require "mutex_m"
 module ActiveRecordHostPool
   # Sits between ConnectionHandler and a bunch of different ConnectionPools (one per host).
   class PoolProxy < Delegator
-    include Mutex_m
-
     case ActiveRecordHostPool.loaded_db_adapter
     when :mysql2
       RESCUABLE_DB_ERROR = Mysql2::Error
@@ -29,6 +26,7 @@ module ActiveRecordHostPool
       super
       @pool_config = pool_config
       @config = pool_config.db_config.configuration_hash
+      @mutex = Mutex.new
     end
 
     def __getobj__
@@ -133,7 +131,7 @@ module ActiveRecordHostPool
       p = _connection_pool(false)
       return unless p
 
-      synchronize do
+      @mutex.synchronize do
         p.disconnect!
         p.automatic_reconnect = true
         _clear_connection_proxy_cache
