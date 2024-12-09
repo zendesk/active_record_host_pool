@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gemspec path: "../"
+
+gem "activerecord", "~> 8.0.0"
+gem "trilogy", "~> 2.7"
+
+eval_gemfile "common.rb"
