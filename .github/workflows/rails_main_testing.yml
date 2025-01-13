@@ -24,9 +24,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version:
-          - "3.2"
-          - "3.3"
         gemfile:
           - "rails_main_mysql2"
           - "rails_main_trilogy"
@@ -37,7 +34,7 @@ jobs:
       - name: Install Ruby, Bundler and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby-version }}
+          ruby-version: '3.4'
           bundler-cache: true
       - name: Create user 'john-doe' in MySQL
         run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"

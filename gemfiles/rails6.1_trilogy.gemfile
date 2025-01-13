@@ -9,3 +9,6 @@ gem "activerecord-trilogy-adapter", ">= 3.1"
 gem "trilogy", ">= 2.5.0"
 
 eval_gemfile "common.rb"
+gem "base64"
+gem "bigdecimal"
+gem "mutex_m"
