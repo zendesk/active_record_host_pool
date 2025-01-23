@@ -16,18 +16,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }}
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-        options: >-
-          --health-cmd "mysql -uroot -e 'show databases'"
-          --health-interval 2s
-          --health-timeout 1s
-          --health-retries 10
     strategy:
       fail-fast: false
       matrix:
@@ -50,15 +38,20 @@ jobs:
           - {ruby-version: "3.4", gemfile: "rails_main_trilogy"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      MYSQL_URL: 'mysql://root:root@127.0.0.1:3306'
     steps:
+      - name: Start MySQL service
+        run: sudo systemctl start mysql.service
       - uses: actions/checkout@v4
       - name: Install Ruby, Bundler and gems
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
+      - name: Check MySQL service health
+        run: mysql -uroot -proot -e 'show databases'
       - name: Create user 'john-doe' in MySQL
-        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
+        run: mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
       - run: bundle exec rake test
 
   tests_successful:
