@@ -50,6 +50,7 @@ jobs:
           - {ruby-version: "3.4", gemfile: "rails_main_trilogy"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      SEED: "44873"
     steps:
       - uses: actions/checkout@v4
       - name: Install Ruby, Bundler and gems
