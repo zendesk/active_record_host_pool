@@ -51,6 +51,8 @@ jobs:
           bundler-cache: true
       - name: Check MySQL service health
         run: mysql -uroot -proot -e 'show databases'
+      - run: mysql -uroot -proot -e "SHOW GLOBAL VARIABLES LIKE '%time%'"
+      - run: mysql -uroot -proot -e "SHOW SESSION VARIABLES LIKE '%time%'"
       - name: Create user 'john-doe' in MySQL
         run: mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
       - run: bundle exec rake test
