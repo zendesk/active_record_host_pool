@@ -39,6 +39,7 @@ jobs:
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       MYSQL_URL: 'mysql://root:root@127.0.0.1:3306'
+      SEED: "44873"
     steps:
       - name: Start MySQL service
         run: sudo systemctl start mysql.service
