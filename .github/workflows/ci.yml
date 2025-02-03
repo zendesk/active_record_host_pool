@@ -60,6 +60,8 @@ jobs:
           bundler-cache: true
       - name: Create user 'john-doe' in MySQL
         run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
+      - name: Dump variables
+        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW VARIABLES;"
       - run: bundle exec rake test
 
   tests_successful:
