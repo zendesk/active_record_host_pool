@@ -2,7 +2,7 @@ name: CI
 on: push
 jobs:
   linting:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Linting of Ruby files
     steps:
       - uses: actions/checkout@v4
@@ -14,7 +14,7 @@ jobs:
       - run: bundle exec standardrb
 
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }}
     services:
       mysql:
@@ -68,7 +68,7 @@ jobs:
     name: Tests passing?
     needs: tests
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - run: |
           if ${{ needs.tests.result == 'success' }}
