@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     active_record_host_pool (4.1.0)
-      activerecord (>= 6.1.0)
+      activerecord (>= 7.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -118,4 +118,4 @@ DEPENDENCIES
   trilogy (>= 2.5.0)
 
 BUNDLED WITH
-   2.6.2
+   2.6.8

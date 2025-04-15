@@ -44,8 +44,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_active_record_does_not_reconnect_and_retry_if_allow_retry_is_false
-    skip unless ActiveRecord.version >= Gem::Version.new("7.1")
-
     # Ensure we're connected to the database.
     Pool1DbA.connection.execute("select 1")
     # We use `instance_variable_get(:@raw_connection)` because the `#raw_connection` method "dirties" the connection.
@@ -64,8 +62,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_passing_allow_retry_will_reconnect_and_retry_when_a_connection_error_is_raised
-    skip unless ActiveRecord.version >= Gem::Version.new("7.1")
-
     # Ensure we're connected to the database.
     Pool1DbA.connection.execute("select 1")
     # We use `instance_variable_get(:@raw_connection)` so that we don't "dirty" the connection.
@@ -183,8 +179,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_creating_db
     conn = Pool1DbA.connection
-    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute : :execute
-    assert_called(conn, meth) do
+    assert_called(conn, :raw_execute) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_desired_database
         conn.create_database(:some_args)
@@ -194,8 +189,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_dropping_db
     conn = Pool1DbA.connection
-    meth = (ActiveRecord.version >= Gem::Version.new("7.1")) ? :raw_execute : :execute
-    assert_called(conn, meth) do
+    assert_called(conn, :raw_execute) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_desired_database
         conn.drop_database(:some_args)
@@ -205,7 +199,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_underlying_assumption_about_test_db
     # I am not sure how reconnection works with Trilogy
-    skip if ActiveRecordHostPool.loaded_db_adapter == :trilogy && ActiveRecord.version >= Gem::Version.new("7.1")
+    skip if ActiveRecordHostPool.loaded_db_adapter == :trilogy
 
     debug_me = false
     # ensure connection

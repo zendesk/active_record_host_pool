@@ -35,19 +35,10 @@ class ActiveRecordHostCachingTest < Minitest::Test
     # Ensure this works _with_ the patch
     ActiveRecord::Base.cache { Pool1DbC.create! }
 
-    # Remove patch that fixes an issue in Rails 6+ to ensure it still
+    # Remove patch that fixes an issue in Rails 7.1 to ensure it still
     # exists. If this begins to fail then it may mean that Rails has fixed
     # the issue so that it no longer occurs.
-    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "7.1"
-      mod = ActiveRecordHostPool::ClearQueryCachePatch
-      method_to_remove = :clear_query_caches_for_current_thread
-    when "6.1", "7.0"
-      mod = ActiveRecordHostPool::ClearOnHandlerPatch
-      method_to_remove = :clear_on_handler
-    end
-
-    without_module_patch(mod, method_to_remove) do
+    without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
       exception = assert_raises(ActiveRecord::StatementInvalid) do
         ActiveRecord::Base.cache { Pool1DbC.create! }
       end

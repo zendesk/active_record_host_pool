@@ -6,6 +6,13 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Added
+- Testing with Rails 8.0.
+
+### Removed
+- Support for Rails 6.1 & 7.0.
+- Support for Ruby 3.1.
+
 ## [4.1.0]
 
 ### Changed
