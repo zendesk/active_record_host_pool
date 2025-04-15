@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/zendesk/active_record_host_pool"
   s.license = "MIT"
 
-  s.required_ruby_version = ">= 3.1.0"
+  s.required_ruby_version = ">= 3.2.0"
 
-  s.add_runtime_dependency("activerecord", ">= 6.1.0")
+  s.add_runtime_dependency("activerecord", ">= 7.1.0")
 end

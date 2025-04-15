@@ -4,15 +4,7 @@ case ActiveRecordHostPool.loaded_db_adapter
 when :mysql2
   require "active_record/connection_adapters/mysql2_adapter"
 when :trilogy
-  case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-  when "6.1", "7.0"
-    require "trilogy_adapter/connection"
-    ActiveRecord::Base.extend(TrilogyAdapter::Connection)
-  when "7.1", "7.2", "8.0", "8.1"
-    require "active_record/connection_adapters/trilogy_adapter"
-  else
-    raise "Unsupported version of Rails (v#{ActiveRecord::VERSION::STRING})"
-  end
+  require "active_record/connection_adapters/trilogy_adapter"
 end
 
 module ActiveRecordHostPool
@@ -28,24 +20,10 @@ module ActiveRecordHostPool
       @config[:database] = _host_pool_desired_database
     end
 
-    if ActiveRecord.version >= Gem::Version.new("7.1")
-      def with_raw_connection(...)
-        super do |real_connection|
-          _switch_connection(real_connection) if _host_pool_desired_database && !_no_switch
-          yield real_connection
-        end
-      end
-    elsif ActiveRecordHostPool.loaded_db_adapter == :trilogy
-      def with_trilogy_connection(...)
-        super do |real_connection|
-          _switch_connection(real_connection) if _host_pool_desired_database && !_no_switch
-          yield real_connection
-        end
-      end
-    else
-      def execute(...)
-        _switch_connection(raw_connection) if _host_pool_desired_database && !_no_switch
-        super
+    def with_raw_connection(...)
+      super do |real_connection|
+        _switch_connection(real_connection) if _host_pool_desired_database && !_no_switch
+        yield real_connection
       end
     end
 
@@ -94,7 +72,7 @@ module ActiveRecordHostPool
 
     # rubocop:disable Lint/DuplicateMethods
     case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "6.1", "7.0", "7.1"
+    when "7.1"
       def _real_connection_object_id
         @connection.object_id
       end

@@ -43,7 +43,7 @@ module ActiveRecordHostPool
 
     # rubocop:disable Lint/DuplicateMethods
     case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "6.1", "7.0", "7.1"
+    when "7.1"
       def connection(*args)
         real_connection = _unproxied_connection(*args)
         _connection_proxy_for(real_connection, @config[:database])
@@ -84,7 +84,7 @@ module ActiveRecordHostPool
     end
 
     case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "6.1", "7.0", "7.1"
+    when "7.1"
       def with_connection
         cx = checkout
         yield cx
@@ -197,30 +197,12 @@ module ActiveRecordHostPool
       pool
     end
 
-    # Work around https://github.com/rails/rails/pull/48061/commits/63c0d6b31bcd0fc33745ec6fd278b2d1aab9be54
-    # standard:disable Lint/DuplicateMethods
-    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "6.1", "7.0"
-      def _connection_proxy_for(connection, database)
-        @connection_proxy_cache ||= {}
-        key = [connection, database]
+    def _connection_proxy_for(connection, database)
+      @connection_proxy_cache ||= {}
+      key = [connection, database]
 
-        @connection_proxy_cache[key] ||= begin
-          cx = ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-          cx.execute("SELECT 1")
-
-          cx
-        end
-      end
-    else
-      def _connection_proxy_for(connection, database)
-        @connection_proxy_cache ||= {}
-        key = [connection, database]
-
-        @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(connection, database)
-      end
+      @connection_proxy_cache[key] ||= ActiveRecordHostPool::ConnectionProxy.new(connection, database)
     end
-    # standard:enable Lint/DuplicateMethods
 
     def _clear_connection_proxy_cache
       @connection_proxy_cache = {}
