@@ -97,6 +97,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop-performance (~> 1.22.0)
     timeout (0.4.3)
+    trilogy (2.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.6.0)
@@ -112,11 +113,12 @@ DEPENDENCIES
   minitest-fail-fast
   minitest-line
   minitest-mock_expectations
-  mysql2 (~> 0.5)
+  mysql2
   phenix (>= 1.0.1)
   pry-byebug (~> 3.9)
   rake (>= 12.0.0)
   standard
+  trilogy (>= 2.5.0)
 
 BUNDLED WITH
    2.6.8

@@ -41,7 +41,7 @@ class ActiveRecordHostCachingTest < Minitest::Test
 
       cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
 
-      case ActiveRecordHostPool.loaded_db_adapter
+      case TEST_ADAPTER_MYSQL
       when :mysql2
         assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
       when :trilogy

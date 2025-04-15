@@ -202,7 +202,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_underlying_assumption_about_test_db
     # I am not sure how reconnection works with Trilogy
-    skip if ActiveRecordHostPool.loaded_db_adapter == :trilogy
+    skip if TEST_ADAPTER_MYSQL == :trilogy
 
     debug_me = false
     # ensure connection

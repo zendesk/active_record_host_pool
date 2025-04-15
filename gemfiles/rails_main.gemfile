@@ -4,7 +4,6 @@ source "https://rubygems.org"
 
 gemspec path: "../"
 
-gem "activerecord", "~> 7.2.0"
-gem "trilogy", ">= 2.5.0"
+gem "activerecord", github: "rails/rails", branch: "main"
 
 eval_gemfile "common.rb"

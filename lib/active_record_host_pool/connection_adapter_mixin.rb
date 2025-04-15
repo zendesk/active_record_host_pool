@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
-case ActiveRecordHostPool.loaded_db_adapter
-when :mysql2
+begin
   require "active_record/connection_adapters/mysql2_adapter"
-when :trilogy
+rescue LoadError
+  :noop
+end
+
+begin
   require "active_record/connection_adapters/trilogy_adapter"
+rescue LoadError
+  :noop
 end
 
 module ActiveRecordHostPool
@@ -100,11 +105,6 @@ module ActiveRecordHostPool
   end
 end
 
-case ActiveRecordHostPool.loaded_db_adapter
-when :mysql2
-  ActiveRecord::ConnectionAdapters::Mysql2Adapter.prepend(ActiveRecordHostPool::DatabaseSwitch)
-when :trilogy
-  ActiveRecord::ConnectionAdapters::TrilogyAdapter.prepend(ActiveRecordHostPool::DatabaseSwitch)
-end
-
+ActiveRecord::ConnectionAdapters::Mysql2Adapter.prepend(ActiveRecordHostPool::DatabaseSwitch) if defined?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
+ActiveRecord::ConnectionAdapters::TrilogyAdapter.prepend(ActiveRecordHostPool::DatabaseSwitch) if defined?(ActiveRecord::ConnectionAdapters::TrilogyAdapter)
 ActiveRecord::ConnectionAdapters::PoolConfig.prepend(ActiveRecordHostPool::PoolConfigPatch)

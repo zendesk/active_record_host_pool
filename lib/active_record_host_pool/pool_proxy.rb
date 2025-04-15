@@ -15,12 +15,22 @@ require "active_record_host_pool/connection_adapter_mixin"
 module ActiveRecordHostPool
   # Sits between ConnectionHandler and a bunch of different ConnectionPools (one per host).
   class PoolProxy < Delegator
-    case ActiveRecordHostPool.loaded_db_adapter
-    when :mysql2
-      RESCUABLE_DB_ERROR = Mysql2::Error
-    when :trilogy
-      RESCUABLE_DB_ERROR = Trilogy::ProtocolError
+    rescuable_db_error = []
+    begin
+      require "mysql2"
+      rescuable_db_error << Mysql2::Error
+    rescue LoadError
+      :noop
     end
+
+    begin
+      require "trilogy"
+      rescuable_db_error << Trilogy::ProtocolError
+    rescue LoadError
+      :noop
+    end
+
+    RESCUABLE_DB_ERROR = rescuable_db_error.freeze
 
     def initialize(pool_config)
       super
@@ -47,7 +57,7 @@ module ActiveRecordHostPool
       def connection(*args)
         real_connection = _unproxied_connection(*args)
         _connection_proxy_for(real_connection, @config[:database])
-      rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+      rescue *RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
         _connection_pools.delete(_pool_key)
         Kernel.raise
       end
@@ -59,7 +69,7 @@ module ActiveRecordHostPool
       def lease_connection(*args)
         real_connection = _unproxied_connection(*args)
         _connection_proxy_for(real_connection, @config[:database])
-      rescue RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+      rescue *RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
         _connection_pools.delete(_pool_key)
         Kernel.raise
       end

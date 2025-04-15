@@ -1,5 +1,5 @@
 <% mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306') %>
-<% adapter = ActiveRecordHostPool.loaded_db_adapter %>
+<% adapter = TEST_ADAPTER_MYSQL %>
 
 # This .yml file is loaded in Rails 6.1 when ActiveRecord::Base.legacy_connection_handling = false
 #
