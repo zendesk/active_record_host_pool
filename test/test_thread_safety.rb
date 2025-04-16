@@ -7,17 +7,15 @@ class ThreadSafetyTest < Minitest::Test
   include ARHPTestSetup
 
   def setup
-    Phenix.rise! config_path: "test/three_tier_database.yml"
-
     Pool1DbA.create!(val: "test_Pool1DbA_value")
     Pool1DbB.create!(val: "test_Pool1DbB_value")
     Pool2DbD.create!(val: "test_Pool2DbD_value")
   end
 
   def teardown
+    delete_all_records
     ActiveRecord::Base.connection.disconnect!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
-    Phenix.burn!
   end
 
   def test_main_and_spawned_thread_switch_db_when_querying_same_host

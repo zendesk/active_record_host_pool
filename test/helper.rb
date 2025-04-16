@@ -45,6 +45,21 @@ require_relative "models"
 module ARHPTestSetup
   private
 
+  def delete_all_records
+    Pool1DbC.delete_all
+    Pool1DbA.delete_all
+    Pool1DbAOther.delete_all
+    Pool1DbB.delete_all
+    Pool2DbD.delete_all
+    Pool2DbE.delete_all
+    Pool3DbE.delete_all
+
+    AbstractShardedModel.connected_to(shard: :default, role: :writing) { ShardedModel.delete_all }
+    AbstractShardedModel.connected_to(shard: :shard_b, role: :writing) { ShardedModel.delete_all }
+    AbstractShardedModel.connected_to(shard: :shard_c, role: :writing) { ShardedModel.delete_all }
+    AbstractShardedModel.connected_to(shard: :shard_b, role: :writing) { ShardedModel.delete_all }
+  end
+
   def current_database(klass)
     klass.connection.select_value("select DATABASE()")
   end
