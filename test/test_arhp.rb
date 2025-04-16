@@ -4,18 +4,16 @@ require_relative "helper"
 
 class ActiveRecordHostPoolTest < Minitest::Test
   include ARHPTestSetup
-  def setup
-    Phenix.rise! config_path: "test/three_tier_database.yml"
-  end
 
   def teardown
+    delete_all_records
     ActiveRecord::Base.connection.disconnect!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
-    Phenix.burn!
   end
 
   def test_process_forking_with_connections
     # Ensure we have a connection already
+    ActiveRecord::Base.connection.execute("SELECT 1")
     assert_equal(true, ActiveRecord::Base.connected?)
 
     # Verify that when we fork, the process doesn't crash

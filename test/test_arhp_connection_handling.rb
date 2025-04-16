@@ -5,14 +5,11 @@ require "stringio"
 
 class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
   include ARHPTestSetup
-  def setup
-    Phenix.rise! config_path: "test/three_tier_database.yml"
-  end
 
   def teardown
+    delete_all_records
     ActiveRecord::Base.connection.disconnect!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
-    Phenix.burn!
   end
 
   def test_correctly_writes_to_sharded_databases_and_only_switches_dbs_when_necessary
