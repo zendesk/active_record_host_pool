@@ -50,7 +50,7 @@ Postgres, from an informal reading of the docs, will never support the concept o
 
     $ gem install active_record_host_pool
 
-and make sure to require 'active\_record\_host\_pool' in some way.
+and make sure to require 'active_record_host_pool' in some way.
 
 ## Testing
 You need a local user called 'john-doe'.
@@ -67,6 +67,21 @@ With mysql running locally, run
  Or
 
     BUNDLE_GEMFILE=gemfiles/rails6.1.gemfile ruby test/test_arhp.rb --seed 19911 --verbose
+
+### Releasing a new version
+A new version is published to RubyGems.org every time a change to `version.rb` is pushed to the `main` branch.
+In short, follow these steps:
+1. Update `version.rb`,
+2. update version in all `Gemfile.lock` files,
+3. merge this change into `main`, and
+4. look at [the action](https://github.com/zendesk/active_record_host_pool/actions/workflows/publish.yml) for output.
+
+To create a pre-release from a non-main branch:
+1. change the version in `version.rb` to something like `1.2.0.pre.1` or `2.0.0.beta.2`,
+2. push this change to your branch,
+3. go to [Actions → “Publish to RubyGems.org” on GitHub](https://github.com/zendesk/active_record_host_pool/actions/workflows/publish.yml),
+4. click the “Run workflow” button,
+5. pick your branch from a dropdown.
 
 ## Copyright
 
