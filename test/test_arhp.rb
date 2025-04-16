@@ -7,7 +7,6 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def teardown
     delete_all_records
-    ActiveRecord::Base.connection.disconnect!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 
@@ -175,8 +174,14 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert(c2 == connection)
   end
 
-  def test_no_switch_when_creating_db
+  def test_no_switch_when_creating_db_foo
+    # Ensure we have a connection already established.
+    Pool1DbA.connection.reconnect!
+
+    assert Pool1DbA.connected?
+
     conn = Pool1DbA.connection
+
     assert_called(conn, :raw_execute) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_desired_database

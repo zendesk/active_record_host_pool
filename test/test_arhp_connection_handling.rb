@@ -8,7 +8,6 @@ class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
 
   def teardown
     delete_all_records
-    ActiveRecord::Base.connection.disconnect!
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end
 
