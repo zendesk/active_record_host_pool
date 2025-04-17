@@ -23,3 +23,7 @@ jobs:
       - name: Install dependencies
         run: bundle install
       - uses: rubygems/release-gem@v1
+      - name: Summary
+        run:
+          new_gem_tag="$(ruby -r "bundler" -e 'puts Bundler::GemHelper.new.send(:version_tag)')"
+          echo "**$new_gem_tag** published to Artifactory :rocket:" >> $GITHUB_STEP_SUMMARY
