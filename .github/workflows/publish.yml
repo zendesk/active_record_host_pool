@@ -1,12 +1,29 @@
-name: Publish Gem
+name: Publish to RubyGems.org
 
 on:
   push:
-    tags: v*
+    branches: main
+    paths: lib/active_record_host_pool/version.rb
+  workflow_dispatch:
 
 jobs:
-  call-workflow:
-    uses: zendesk/gw/.github/workflows/ruby-gem-publication.yml@main
-    secrets:
-      RUBY_GEMS_API_KEY: ${{ secrets.RUBY_GEMS_API_KEY }}
-      RUBY_GEMS_TOTP_DEVICE: ${{ secrets.RUBY_GEMS_TOTP_DEVICE }}
+  publish:
+    runs-on: ubuntu-latest
+    environment: rubygems-publish
+    if: github.repository_owner == 'zendesk'
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: false
+      - name: Install dependencies
+        run: bundle install
+      - uses: rubygems/release-gem@v1
+      - name: Summary
+        run:
+          new_gem_tag="$(ruby -r "bundler" -e 'puts Bundler::GemHelper.new.send(:version_tag)')"
+          echo "**$new_gem_tag** published to Artifactory :rocket:" >> $GITHUB_STEP_SUMMARY
