@@ -15,7 +15,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }}
+    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} & ${{ matrix.adapter_mysql }}
     services:
       mysql:
         image: mysql:8.0
@@ -36,17 +36,18 @@ jobs:
           - "3.3"
           - "3.4"
         gemfile:
-          - rails7.1_mysql2
-          - rails7.1_trilogy
-          - rails7.2_mysql2
-          - rails7.2_trilogy
-          - rails8.0_mysql2
-          - rails8.0_trilogy
+          - rails7.1
+          - rails7.2
+          - rails8.0
+        adapter_mysql:
+          - "mysql2"
+          - "trilogy"
         include:
-          - {ruby-version: "3.4", gemfile: "rails_main_mysql2"}
-          - {ruby-version: "3.4", gemfile: "rails_main_trilogy"}
+          - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "mysql2"}
+          - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "trilogy"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      TEST_ADAPTER_MYSQL: ${{ matrix.adapter_mysql }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Ruby, Bundler and gems

@@ -6,6 +6,11 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [4.2.0]
+
+### Changed
+- ActiveRecordHostPool can now work with `mysql2` and `trilogy` if both gems are loaded.
+
 ### Added
 - Testing with Rails 8.0.
 

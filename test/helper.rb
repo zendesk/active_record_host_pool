@@ -10,6 +10,7 @@ require "minitest/mock_expectations"
 require "phenix"
 
 ENV["RAILS_ENV"] = "test"
+TEST_ADAPTER_MYSQL = ENV.fetch("TEST_ADAPTER_MYSQL") { :mysql2 }.to_sym
 
 ActiveRecord::Base.legacy_connection_handling = false if ActiveRecord::Base.respond_to?(:legacy_connection_handling)
 
