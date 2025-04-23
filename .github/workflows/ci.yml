@@ -40,8 +40,8 @@ jobs:
           - rails7.2
           - rails8.0
         adapter_mysql:
-          - "mysql2"
-          - "trilogy"
+          - mysql2
+          - trilogy
         include:
           - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "mysql2"}
           - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "trilogy"}
