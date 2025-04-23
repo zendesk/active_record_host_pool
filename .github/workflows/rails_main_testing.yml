@@ -25,10 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         gemfile:
-          - "rails_main_mysql2"
+          - rails_main
         adapter_mysql:
-          - "mysql2"
-          - "trilogy"
+          - mysql2
+          - trilogy
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       TEST_ADAPTER_MYSQL: ${{ matrix.adapter_mysql }}
