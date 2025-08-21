@@ -174,7 +174,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
     assert(c2 == connection)
   end
 
-  def test_no_switch_when_creating_db_foo
+  def test_no_switch_when_creating_db
     # Ensure we have a connection already established.
     Pool1DbA.connection.reconnect!
 
