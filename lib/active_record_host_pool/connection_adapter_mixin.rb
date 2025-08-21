@@ -75,18 +75,9 @@ module ActiveRecordHostPool
       _host_pool_desired_database != @_cached_current_database
     end
 
-    # rubocop:disable Lint/DuplicateMethods
-    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "7.1"
-      def _real_connection_object_id
-        @connection.object_id
-      end
-    else
-      def _real_connection_object_id
-        @raw_connection.object_id
-      end
+    def _real_connection_object_id
+      @raw_connection.object_id
     end
-    # rubocop:enable Lint/DuplicateMethods
 
     def _real_connection_changed?
       _real_connection_object_id != @_cached_connection_object_id

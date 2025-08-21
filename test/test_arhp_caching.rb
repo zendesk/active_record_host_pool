@@ -21,35 +21,6 @@ class ActiveRecordHostCachingTest < Minitest::Test
     end
   end
 
-  def test_models_with_matching_hosts_and_non_matching_databases_issue_exists_without_arhp_patch
-    skip if ActiveRecord.version >= Gem::Version.new("7.2.0.a")
-    # Reset the connections post-setup so that we ensure the last DB isn't arhp_test_db_c
-    ActiveRecord::Base.connection.discard!
-    ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
-    ActiveRecord::Base.establish_connection(:test_pool_1_db_a)
-
-    # Ensure this works _with_ the patch
-    ActiveRecord::Base.cache { Pool1DbC.create! }
-
-    # Remove patch that fixes an issue in Rails 7.1 to ensure it still
-    # exists. If this begins to fail then it may mean that Rails has fixed
-    # the issue so that it no longer occurs.
-    without_module_patch(ActiveRecordHostPool::ClearQueryCachePatch, :clear_query_caches_for_current_thread) do
-      exception = assert_raises(ActiveRecord::StatementInvalid) do
-        ActiveRecord::Base.cache { Pool1DbC.create! }
-      end
-
-      cached_db = Pool1DbC.connection.unproxied.pool.connections.first.instance_variable_get(:@_cached_current_database)
-
-      case TEST_ADAPTER_MYSQL
-      when :mysql2
-        assert_equal("Mysql2::Error: Table '#{cached_db}.pool1_db_cs' doesn't exist", exception.message)
-      when :trilogy
-        assert_equal("Trilogy::ProtocolError: 1146: Table '#{cached_db}.pool1_db_cs' doesn't exist (trilogy_query_recv)", exception.message)
-      end
-    end
-  end
-
   def test_models_with_matching_hosts_and_non_matching_databases_do_not_mix_up_underlying_database
     # ActiveRecord will clear the query cache after any action that dirties the cache (create, update, etc)
     # Because we're testing the patch we want to ensure it runs at least once

@@ -16,7 +16,6 @@ rescue LoadError
   :noop
 end
 
-require "active_record_host_pool/clear_query_cache_patch"
 require "active_record_host_pool/connection_proxy"
 require "active_record_host_pool/pool_proxy"
 require "active_record_host_pool/connection_adapter_mixin"
