@@ -119,8 +119,8 @@ class ActiveRecordHostPoolTestWithNonlegacyConnectionHandling < Minitest::Test
   # The role name for a replica/reader database is :reading
   def test_writers_should_not_share_a_connection_with_replicas
     refute_equal(
-      (AbstractPool1DbA.connected_to(role: :writing) { Pool1DbA.connection.raw_connection }),
-      (AbstractPool1DbA.connected_to(role: :reading) { Pool1DbA.connection.raw_connection })
+      AbstractPool1DbA.connected_to(role: :writing) { Pool1DbA.connection.raw_connection },
+      AbstractPool1DbA.connected_to(role: :reading) { Pool1DbA.connection.raw_connection }
     )
   end
 

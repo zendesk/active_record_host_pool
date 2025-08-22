@@ -51,35 +51,18 @@ module ActiveRecordHostPool
 
     attr_reader :pool_config
 
-    # rubocop:disable Lint/DuplicateMethods
-    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "7.1"
-      def connection(*args)
-        real_connection = _unproxied_connection(*args)
-        _connection_proxy_for(real_connection, @config[:database])
-      rescue *RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
-        _connection_pools.delete(_pool_key)
-        Kernel.raise
-      end
-
-      def _unproxied_connection(*args)
-        _connection_pool.connection(*args)
-      end
-    else
-      def lease_connection(*args)
-        real_connection = _unproxied_connection(*args)
-        _connection_proxy_for(real_connection, @config[:database])
-      rescue *RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
-        _connection_pools.delete(_pool_key)
-        Kernel.raise
-      end
-      alias_method :connection, :lease_connection
-
-      def _unproxied_connection(*args)
-        _connection_pool.lease_connection(*args)
-      end
+    def lease_connection(*args)
+      real_connection = _unproxied_connection(*args)
+      _connection_proxy_for(real_connection, @config[:database])
+    rescue *RESCUABLE_DB_ERROR, ActiveRecord::NoDatabaseError, ActiveRecord::StatementInvalid
+      _connection_pools.delete(_pool_key)
+      Kernel.raise
     end
-    # rubocop:enable Lint/DuplicateMethods
+    alias_method :connection, :lease_connection
+
+    def _unproxied_connection(*args)
+      _connection_pool.lease_connection(*args)
+    end
 
     # by the time we are patched into ActiveRecord, the current thread has already established
     # a connection.  thus we need to patch both connection and checkout/checkin
@@ -93,48 +76,38 @@ module ActiveRecordHostPool
       _connection_pool.checkin(cx)
     end
 
-    case "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
-    when "7.1"
-      def with_connection
-        cx = checkout
-        yield cx
-      ensure
-        checkin cx
-      end
-    else
-      def with_connection(prevent_permanent_checkout: false) # rubocop:disable Lint/DuplicateMethods
-        real_connection_lease = _connection_pool.send(:connection_lease)
-        sticky_was = real_connection_lease.sticky
-        real_connection_lease.sticky = false if prevent_permanent_checkout
+    def with_connection(prevent_permanent_checkout: false) # rubocop:disable Lint/DuplicateMethods
+      real_connection_lease = _connection_pool.send(:connection_lease)
+      sticky_was = real_connection_lease.sticky
+      real_connection_lease.sticky = false if prevent_permanent_checkout
 
-        if real_connection_lease.connection
-          begin
-            yield _connection_proxy_for(real_connection_lease.connection, @config[:database])
-          ensure
-            real_connection_lease.sticky = sticky_was if prevent_permanent_checkout && !sticky_was
-          end
-        else
-          begin
-            real_connection_lease.connection = _unproxied_connection
-            yield _connection_proxy_for(real_connection_lease.connection, @config[:database])
-          ensure
-            real_connection_lease.sticky = sticky_was if prevent_permanent_checkout && !sticky_was
-            _connection_pool.release_connection(real_connection_lease) unless real_connection_lease.sticky
-          end
+      if real_connection_lease.connection
+        begin
+          yield _connection_proxy_for(real_connection_lease.connection, @config[:database])
+        ensure
+          real_connection_lease.sticky = sticky_was if prevent_permanent_checkout && !sticky_was
+        end
+      else
+        begin
+          real_connection_lease.connection = _unproxied_connection
+          yield _connection_proxy_for(real_connection_lease.connection, @config[:database])
+        ensure
+          real_connection_lease.sticky = sticky_was if prevent_permanent_checkout && !sticky_was
+          _connection_pool.release_connection(real_connection_lease) unless real_connection_lease.sticky
         end
       end
+    end
 
-      def active_connection?
-        real_connection_lease = _connection_pool.send(:connection_lease)
-        if real_connection_lease.connection
-          _connection_proxy_for(real_connection_lease.connection, @config[:database])
-        end
+    def active_connection?
+      real_connection_lease = _connection_pool.send(:connection_lease)
+      if real_connection_lease.connection
+        _connection_proxy_for(real_connection_lease.connection, @config[:database])
       end
-      alias_method :active_connection, :active_connection?
+    end
+    alias_method :active_connection, :active_connection?
 
-      def schema_cache
-        @schema_cache ||= ActiveRecord::ConnectionAdapters::BoundSchemaReflection.new(_connection_pool.schema_reflection, self)
-      end
+    def schema_cache
+      @schema_cache ||= ActiveRecord::ConnectionAdapters::BoundSchemaReflection.new(_connection_pool.schema_reflection, self)
     end
 
     def disconnect!
