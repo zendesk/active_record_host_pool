@@ -6,7 +6,11 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+### Changed
+- `.class_eval` now raises an exception when called on `ConnectionProxy`. Use `.arhp_connection_proxy_class_eval` if you _really_ need to modify the `ConnectionProxy` class.
+
 ### Removed
+- `ConnectionProxy` no longer overrides `#class` to return the class of the proxied connection adapter.
 - Support for Rails 7.1.
 
 ## [4.2.0]

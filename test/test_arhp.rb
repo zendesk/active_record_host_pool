@@ -116,8 +116,7 @@ class ActiveRecordHostPoolTest < Minitest::Test
   end
 
   def test_connection_proxy_handles_private_methods
-    # Relies on connection.class returning the real class
-    Pool1DbA.connection.class.class_eval do
+    Pool1DbA.connection.unproxied.class.class_eval do
       private
 
       def test_private_method
