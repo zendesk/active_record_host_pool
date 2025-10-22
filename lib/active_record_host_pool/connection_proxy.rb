@@ -6,6 +6,16 @@ require "delegate"
 # for each call to the connection.  upon executing a statement, the connection will switch to that database.
 module ActiveRecordHostPool
   class ConnectionProxy < Delegator
+    class << self
+      def class_eval
+        raise "You probably want to call .class_eval on the ActiveRecord connection adapter and not on ActiveRecordHostPool's connection proxy. Use .arhp_connection_proxy_class_eval if you _really_ know what you're doing."
+      end
+
+      def arhp_connection_proxy_class_eval(...)
+        method(:class_eval).super_method.call(...)
+      end
+    end
+
     attr_reader :database
     def initialize(cx, database)
       super(cx)
@@ -24,11 +34,6 @@ module ActiveRecordHostPool
 
     def unproxied
       @cx
-    end
-
-    # this is bad.  I know.  but it allows folks who class_eval on connection.class to do so
-    def class
-      @cx.class
     end
 
     def expects(*args)
