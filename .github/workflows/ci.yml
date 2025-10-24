@@ -16,18 +16,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} & ${{ matrix.adapter_mysql }}
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-        options: >-
-          --health-cmd "mysql -uroot -e 'show databases'"
-          --health-interval 2s
-          --health-timeout 1s
-          --health-retries 10
     strategy:
       fail-fast: false
       matrix:
@@ -54,8 +42,6 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
-      - name: Create user 'john-doe' in MySQL
-        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "CREATE USER 'john-doe'; GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON *.* TO 'john-doe'; FLUSH PRIVILEGES;"
       - run: bundle exec rake test
 
   tests_successful:

@@ -1,4 +1,3 @@
-<% mysql = URI(ENV['MYSQL_URL'] || 'mysql://root@127.0.0.1:3306') %>
 <% adapter = TEST_ADAPTER_MYSQL %>
 
 # This .yml file is loaded in Rails 6.1 when ActiveRecord::Base.legacy_connection_handling = false
@@ -22,140 +21,154 @@
 # |          |  test_pool_1   |  test_pool_2   |
 # |----------|----------------|----------------|
 # | host     | 127.0.0.1      | 127.0.0.1      |
-# | port     |                | 3306           |
+# | port     | 54795          | 54811          |
 # | socket   |                |                |
 # | username | root           | root           |
 # | replica  | false          | false          |
 #
+# Node that the port numbers are examples. TestContainers will assign random
+# port numbers on each test run.
+#
 # The configuration items must be explicitly defined or they will be blank in the pool key.
 # Configurations with matching _implicit_ items but differing _explicit_ items will create separate pools.
-# e.g. `test_pool_1` will default to port 3306 but because it is not explicitly defined it will not share a pool with `test_pool_2`
+# e.g. an undefined port will default to port 3306, but because it is not explicitly defined it will not share the same
+# host pool as a connection explicitly configured to use port 3306.
 #
 # ARHP will therefore create the following pool keys:
-#   test_pool_1 => 127.0.0.1///root/false
-#   test_pool_2 => 127.0.0.1/3306//root/false
+#   test_pool_1 => 127.0.0.1/54795//root/false
+#   test_pool_2 => 127.0.0.1/54811//root/false
 
 test:
   test_pool_1_db_a:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_a
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   # Mimic configurations as read by active_record_shards/ar_flexmaster
   test_pool_1_db_a_replica:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_a_replica
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
     replica: true
 
   test_pool_1_db_b:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_b
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   test_pool_1_db_c:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_c
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   test_pool_1_db_not_there:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_not_there
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   test_pool_1_db_shard_a:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_a
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   test_pool_1_db_shard_b:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_b
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   test_pool_1_db_shard_b_replica:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_b_replica
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
     replica: true
 
   test_pool_1_db_shard_c:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_c
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
 
   test_pool_1_db_shard_c_replica:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_c_replica
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
+    username: root
+    password:
+    host: <%= TC.pool_1.host %>
+    port: <%= TC.pool_1.first_mapped_port %>
     replica: true
 
   test_pool_2_db_shard_d:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_d
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
-    port: <%= mysql.port %>
+    username: root
+    password:
+    host: <%= TC.pool_2.host %>
+    port: <%= TC.pool_2.first_mapped_port %>
 
   test_pool_2_db_shard_d_replica:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_shard_d_replica
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
-    port: <%= mysql.port %>
+    username: root
+    password:
+    host: <%= TC.pool_2.host %>
+    port: <%= TC.pool_2.first_mapped_port %>
     replica: true
 
   test_pool_2_db_d:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_d
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
-    port: <%= mysql.port %>
+    username: root
+    password:
+    host: <%= TC.pool_2.host %>
+    port: <%= TC.pool_2.first_mapped_port %>
 
   test_pool_2_db_e:
     adapter: <%= adapter %>
     encoding: utf8
     database: arhp_test_db_e
-    username: <%= mysql.user %>
-    password: "<%= mysql.password %>"
-    host: <%= mysql.host %>
-    port: <%= mysql.port %>
+    username: root
+    password:
+    host: <%= TC.pool_2.host %>
+    port: <%= TC.pool_2.first_mapped_port %>
 
   test_pool_3_db_e:
     adapter: <%= adapter %>
@@ -163,5 +176,5 @@ test:
     database: arhp_test_db_e
     username: john-doe
     password:
-    host: <%= mysql.host %>
-    port: <%= mysql.port %>
+    host: <%= TC.pool_2.host %>
+    port: <%= TC.pool_2.first_mapped_port %>

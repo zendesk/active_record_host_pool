@@ -8,6 +8,7 @@ gem "phenix", ">= 1.0.1"
 gem "pry-byebug", "~> 3.9"
 gem "rake", ">= 12.0.0"
 gem "standard"
+gem "testcontainers-mysql"
 
 gem "mysql2"
 gem "trilogy", ">= 2.5.0"
