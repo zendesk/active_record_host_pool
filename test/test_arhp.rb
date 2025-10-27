@@ -230,7 +230,9 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     # now, disable our auto-switching and trigger a mysql reconnect
     switch_to_klass.connection.unproxied.stub(:_switch_connection, true) do
-      Pool2DbD.connection.execute("KILL #{thread_id}")
+      switch_to_klass.connection.execute("KILL #{thread_id}")
+    rescue ActiveRecord::QueryCanceled
+      :ok
     end
 
     switch_to_klass.connection.reconnect!
