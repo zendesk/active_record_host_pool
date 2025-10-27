@@ -34,12 +34,20 @@ end
 ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend(ActiveRecordHostPool::PreventWritesPatch)
 # END preventing_writes? patch
 
+require_relative "support/tc"
+
+TC.start_mysql
+
 Phenix.configure do |config|
   config.skip_database = ->(name, conf) { name =~ /not_there/ || conf["username"] == "john-doe" }
 end
 
 Phenix.rise! config_path: "test/three_tier_database.yml"
 require_relative "models"
+
+Minitest.after_run do
+  TC.stop_mysql
+end
 
 module ARHPTestSetup
   private

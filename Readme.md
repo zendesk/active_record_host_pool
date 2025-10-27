@@ -53,18 +53,14 @@ Postgres, from an informal reading of the docs, will never support the concept o
 and make sure to require 'active_record_host_pool' in some way.
 
 ## Testing
-You need a local user called 'john-doe'.
 
-    mysql -uroot
-    CREATE USER 'john-doe'@'localhost';
-    GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX  ON *.* TO 'john-doe'@'localhost';
-    FLUSH PRIVILEGES;
+TestContainers will take care of setting up the necessary MySQL servers for you. You just need to have e.g. Docker running.
 
-With mysql running locally, run
+Run e.g.
 
     BUNDLE_GEMFILE=gemfiles/rails6.1.gemfile bundle exec rake test
 
- Or
+or
 
     BUNDLE_GEMFILE=gemfiles/rails6.1.gemfile ruby test/test_arhp.rb --seed 19911 --verbose
 
