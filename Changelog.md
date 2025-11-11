@@ -6,6 +6,8 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [4.3.0]
+
 ### Changed
 - `.class_eval` now raises an exception when called on `ConnectionProxy`. Use `.arhp_connection_proxy_class_eval` if you _really_ need to modify the `ConnectionProxy` class.
 
