@@ -82,3 +82,11 @@ module ARHPTestSetup
     mod.define_method(method_name, method_body)
   end
 end
+
+def with_debug_event_reporting(&block)
+  if ActiveRecord.version < Gem::Version.new("8.2.a")
+    yield
+  else
+    ActiveSupport.event_reporter.with_debug(&block)
+  end
+end
