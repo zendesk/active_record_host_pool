@@ -4,6 +4,7 @@ require_relative "helper"
 
 class ActiveRecordHostPoolWrongDBTest < Minitest::Test
   include ARHPTestSetup
+
   def setup
     ActiveRecordHostPool::PoolProxy.class_variable_set(:@@_connection_pools, {})
   end

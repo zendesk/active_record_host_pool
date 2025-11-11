@@ -62,12 +62,22 @@ module ActiveRecordHostPool
            _desired_database_changed? ||
             _real_connection_changed?
          )
-        log("select_db #{_host_pool_desired_database}", "SQL") do
+        log(select_db_log_arg, "SQL") do
           clear_cache!
           real_connection.select_db(_host_pool_desired_database)
         end
         @_cached_current_database = _host_pool_desired_database
         @_cached_connection_object_id = _real_connection_object_id
+      end
+    end
+
+    if ActiveRecord.version < Gem::Version.new("8.2.a")
+      def select_db_log_arg
+        "select_db #{_host_pool_desired_database}"
+      end
+    else
+      def select_db_log_arg
+        ActiveRecord::ConnectionAdapters::QueryIntent.new(processed_sql: "select_db #{_host_pool_desired_database}")
       end
     end
 
