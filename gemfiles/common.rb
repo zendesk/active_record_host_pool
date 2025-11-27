@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+gem "benchmark"
+gem "irb" # unlisted dependency of pry-byebug
 gem "minitest", ">= 5.10.0"
 gem "minitest-fail-fast"
 gem "minitest-line"
