@@ -28,19 +28,27 @@ GEM
       uri (>= 0.13.1)
     ast (2.4.3)
     base64 (0.3.0)
+    benchmark (0.5.0)
     bigdecimal (3.3.1)
     byebug (12.0.0)
     coderay (1.1.3)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
+    date (3.5.0)
     docker-api (2.4.0)
       excon (>= 0.64.0)
       multi_json
     drb (2.2.3)
+    erb (6.0.0)
     excon (1.3.1)
       logger
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    io-console (0.8.1)
+    irb (1.15.3)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     json (2.16.0)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
@@ -62,6 +70,9 @@ GEM
     phenix (1.4.0)
       activerecord (>= 6.1)
       bundler
+    pp (0.6.3)
+      prettyprint
+    prettyprint (0.2.0)
     prism (1.6.0)
     pry (0.15.2)
       coderay (~> 1.1)
@@ -69,10 +80,19 @@ GEM
     pry-byebug (3.11.0)
       byebug (~> 12.0)
       pry (>= 0.13, < 0.16)
+    psych (5.2.6)
+      date
+      stringio
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.3.1)
+    rdoc (6.16.0)
+      erb
+      psych (>= 4.0.0)
+      tsort
     regexp_parser (2.11.3)
+    reline (0.6.3)
+      io-console (~> 0.5)
     rubocop (1.80.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -105,12 +125,14 @@ GEM
     standard-performance (1.8.0)
       lint_roller (~> 1.1)
       rubocop-performance (~> 1.25.0)
+    stringio (3.1.8)
     testcontainers-core (0.2.0)
       docker-api (~> 2.2)
     testcontainers-mysql (0.2.0)
       testcontainers-core (~> 0.1)
     timeout (0.4.4)
     trilogy (2.9.0)
+    tsort (0.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.2.0)
@@ -124,6 +146,8 @@ PLATFORMS
 DEPENDENCIES
   active_record_host_pool!
   activerecord (~> 8.1.0)
+  benchmark
+  irb
   minitest (>= 5.10.0)
   minitest-fail-fast
   minitest-line

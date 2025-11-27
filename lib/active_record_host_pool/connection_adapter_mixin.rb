@@ -77,7 +77,7 @@ module ActiveRecordHostPool
       end
     else
       def select_db_log_arg
-        ActiveRecord::ConnectionAdapters::QueryIntent.new(processed_sql: "select_db #{_host_pool_desired_database}")
+        ActiveRecord::ConnectionAdapters::QueryIntent.new(adapter: self, processed_sql: "select_db #{_host_pool_desired_database}")
       end
     end
 
