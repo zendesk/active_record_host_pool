@@ -46,12 +46,12 @@ module TC
 
     def stop_pool_1
       @pool_1.stop if @pool_1.running?
-      @pool_1.remove
+      @pool_1.remove if @pool_1.exists?
     end
 
     def stop_pool_2
       @pool_2.stop if @pool_2.running?
-      @pool_2.remove
+      @pool_2.remove if @pool_2.exists?
     end
   end
 end
