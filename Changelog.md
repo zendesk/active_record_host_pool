@@ -6,6 +6,10 @@ and as of v1.0.0 this project adheres to [Semantic Versioning](https://semver.or
 
 ## [Unreleased]
 
+## [4.3.1]
+
+- Better compatibility with Rails 8.2 alpha.
+
 ## [4.3.0]
 
 ### Changed
