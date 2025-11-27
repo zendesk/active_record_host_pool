@@ -181,7 +181,8 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
     conn = Pool1DbA.connection
 
-    assert_called(conn, :raw_execute) do
+    execute_method = (ActiveRecord.version < Gem::Version.new("8.2.a")) ? :raw_execute : :execute_intent
+    assert_called(conn, execute_method) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_desired_database
         conn.create_database(:some_args)
@@ -191,7 +192,9 @@ class ActiveRecordHostPoolTest < Minitest::Test
 
   def test_no_switch_when_dropping_db
     conn = Pool1DbA.connection
-    assert_called(conn, :raw_execute) do
+
+    execute_method = (ActiveRecord.version < Gem::Version.new("8.2.a")) ? :raw_execute : :execute_intent
+    assert_called(conn, execute_method) do
       refute_called(conn, :_switch_connection) do
         assert conn._host_pool_desired_database
         conn.drop_database(:some_args)
