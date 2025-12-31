@@ -53,7 +53,7 @@ GEM
     lint_roller (1.1.0)
     logger (1.7.0)
     method_source (1.1.0)
-    minitest (5.26.1)
+    minitest (5.27.0)
     minitest-fail-fast (0.1.0)
       minitest (~> 5)
     minitest-line (0.6.5)
@@ -136,7 +136,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
-    unicode-emoji (4.1.0)
+    unicode-emoji (4.2.0)
 
 PLATFORMS
   ruby
@@ -159,4 +159,4 @@ DEPENDENCIES
   trilogy (>= 2.5.0)
 
 BUNDLED WITH
-   2.7.2
+  4.0.3
