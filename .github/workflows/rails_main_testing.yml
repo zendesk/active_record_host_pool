@@ -4,30 +4,28 @@ on:
   schedule:
     - cron: "0 0 * * *" # Run every day at 00:00 UTC
   workflow_dispatch:
+  pull_request:
 
 jobs:
   tests:
     runs-on: ubuntu-latest
-    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} & ${{ matrix.adapter_mysql }}
-    strategy:
-      fail-fast: false
-      matrix:
-        gemfile:
-          - rails_main
-        adapter_mysql:
-          - mysql2
-          - trilogy
+    name: Test rails_main with Ruby ${{ matrix.ruby-version }}
     env:
-      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
-      TEST_ADAPTER_MYSQL: ${{ matrix.adapter_mysql }}
+      BUNDLE_GEMFILE: gemfiles/rails_main.gemfile
     steps:
       - uses: actions/checkout@v7
       - name: Install Ruby, Bundler and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4'
+          ruby-version: '4.0'
           bundler-cache: true
-      - run: bundle exec rake test
+      - parallel:
+          - name: Test with mysql2
+            run: bundle exec rake test
+            env: {TEST_ADAPTER_MYSQL: mysql2}
+          - name: Test with trilogy
+            run: bundle exec rake test
+            env: {TEST_ADAPTER_MYSQL: trilogy}
 
   tests_successful:
     name: Tests passing?

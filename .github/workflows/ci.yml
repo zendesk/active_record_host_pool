@@ -15,7 +15,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }} & ${{ matrix.adapter_mysql }}
+    name: Test ${{ matrix.gemfile }} with Ruby ${{ matrix.ruby-version }}
     strategy:
       fail-fast: false
       matrix:
@@ -28,15 +28,8 @@ jobs:
           - rails7.2
           - rails8.0
           - rails8.1
-        adapter_mysql:
-          - mysql2
-          - trilogy
-        include:
-          - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "mysql2"}
-          - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "trilogy"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
-      TEST_ADAPTER_MYSQL: ${{ matrix.adapter_mysql }}
     steps:
       - uses: actions/checkout@v7
       - name: Install Ruby, Bundler and gems
@@ -44,7 +37,13 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
-      - run: bundle exec rake test
+      - parallel:
+          - name: Test with mysql2
+            run: bundle exec rake test
+            env: {TEST_ADAPTER_MYSQL: mysql2}
+          - name: Test with trilogy
+            run: bundle exec rake test
+            env: {TEST_ADAPTER_MYSQL: trilogy}
 
   tests_successful:
     name: Tests passing?

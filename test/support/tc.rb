@@ -4,6 +4,13 @@ require "testcontainers/mysql"
 
 module TC
   class << self
+    attr_reader :scope
+
+    def scope=(scope)
+      scope = scope.to_s.downcase.gsub(/\W/, "_")
+      @scope = "arhp_#{scope}"
+    end
+
     def start_mysql
       puts "Starting test containers"
 
@@ -23,7 +30,7 @@ module TC
     private
 
     def start_pool_1
-      @pool_1 = Testcontainers::MysqlContainer.new("mysql:8.0", name: "arhp_pool_1", username: "root", password: "")
+      @pool_1 = Testcontainers::MysqlContainer.new("mysql:8.0", name: "#{scope}_pool_1", username: "root", password: "")
       @pool_1.start
     rescue
       stop_pool_1
@@ -31,7 +38,7 @@ module TC
     end
 
     def start_pool_2
-      @pool_2 = Testcontainers::MysqlContainer.new("mysql:8.0", name: "arhp_pool_2", username: "root", password: "")
+      @pool_2 = Testcontainers::MysqlContainer.new("mysql:8.0", name: "#{scope}_pool_2", username: "root", password: "")
       @pool_2.start
 
       sql =
