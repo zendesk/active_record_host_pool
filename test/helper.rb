@@ -36,6 +36,7 @@ ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend(ActiveRecordHostPool::
 
 require_relative "support/tc"
 
+TC.scope = TEST_ADAPTER_MYSQL
 TC.start_mysql
 
 Phenix.configure do |config|
