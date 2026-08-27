@@ -70,9 +70,9 @@ module ActiveRecordHostPool
     def _switch_connection(real_connection)
       if _host_pool_desired_database &&
           (
-           _desired_database_changed? ||
-            _real_connection_changed?
-         )
+            _desired_database_changed? ||
+             _real_connection_changed?
+          )
         _log_select_db do
           clear_cache!
           real_connection.select_db(_host_pool_desired_database)
