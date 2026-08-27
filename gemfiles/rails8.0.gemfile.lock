@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    active_record_host_pool (4.3.1)
+    active_record_host_pool (4.3.2)
       activerecord (>= 7.2.0)
 
 GEM
@@ -165,7 +165,7 @@ DEPENDENCIES
   trilogy (>= 2.5.0)
 
 CHECKSUMS
-  active_record_host_pool (4.3.1)
+  active_record_host_pool (4.3.2)
   activemodel (8.0.5) sha256=c796813d46dc1373f4c6c0ec91dfc520b53683ea773c3b3f9a12c4b3eb145bc2
   activerecord (8.0.5) sha256=89b261b6cd910c9431cf2475f3f6e5e2f5ce589805043a33ef2b004376a129e6
   activesupport (8.0.5) sha256=37f213ff6a37cf3fadfa1a28c1a9678e2cb73b59bb9ebd0eeeca653cccadcb23
