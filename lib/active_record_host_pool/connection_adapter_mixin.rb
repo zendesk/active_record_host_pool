@@ -32,6 +32,17 @@ module ActiveRecordHostPool
       end
     end
 
+    # Rails 8.2 executes queries via QueryIntent -> execute_intent -> perform_query,
+    # bypassing with_raw_connection, so the switch must happen here instead. Raising
+    # from here (e.g. a lost connection during select_db) feeds into the intent's
+    # retry/reconnect machinery, matching the old with_raw_connection semantics.
+    if ActiveRecord.version >= Gem::Version.new("8.2.a")
+      def perform_query(raw_connection, intent)
+        _switch_connection(raw_connection) if _host_pool_desired_database && !_no_switch
+        super
+      end
+    end
+
     def drop_database(...)
       self._no_switch = true
       super
@@ -59,10 +70,10 @@ module ActiveRecordHostPool
     def _switch_connection(real_connection)
       if _host_pool_desired_database &&
           (
-           _desired_database_changed? ||
-            _real_connection_changed?
-         )
-        log(select_db_log_arg, "SQL") do
+            _desired_database_changed? ||
+             _real_connection_changed?
+          )
+        _log_select_db do
           clear_cache!
           real_connection.select_db(_host_pool_desired_database)
         end
@@ -71,13 +82,26 @@ module ActiveRecordHostPool
       end
     end
 
-    if ActiveRecord.version < Gem::Version.new("8.2.a")
-      def select_db_log_arg
-        "select_db #{_host_pool_desired_database}"
+    if ActiveRecord.version >= Gem::Version.new("8.1")
+      def _log_select_db(&block)
+        instrumenter.instrument(
+          "sql.active_record",
+          sql: "select_db #{_host_pool_desired_database}",
+          name: "SQL",
+          binds: [],
+          type_casted_binds: [],
+          async: false,
+          allow_retry: false,
+          connection: self,
+          transaction: current_transaction.user_transaction.presence,
+          affected_rows: 0,
+          row_count: 0,
+          &block
+        )
       end
     else
-      def select_db_log_arg
-        ActiveRecord::ConnectionAdapters::QueryIntent.new(adapter: self, processed_sql: "select_db #{_host_pool_desired_database}")
+      def _log_select_db(&block)
+        log("select_db #{_host_pool_desired_database}", "SQL", &block)
       end
     end
 

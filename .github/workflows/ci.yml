@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Linting of Ruby files
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Ruby, Bundler and gems
         uses: ruby/setup-ruby@v1
         with:
@@ -37,7 +37,7 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       TEST_ADAPTER_MYSQL: ${{ matrix.adapter_mysql }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install Ruby, Bundler and gems
         uses: ruby/setup-ruby@v1
         with:
