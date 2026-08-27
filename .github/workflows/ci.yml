@@ -31,9 +31,6 @@ jobs:
         adapter_mysql:
           - mysql2
           - trilogy
-        include:
-          - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "mysql2"}
-          - {ruby-version: "3.4", gemfile: "rails_main", adapter_mysql: "trilogy"}
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
       TEST_ADAPTER_MYSQL: ${{ matrix.adapter_mysql }}
